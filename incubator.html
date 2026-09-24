@@ -3,138 +3,153 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Incubator - Berkeley Summit House</title>
+<title>Incubator · Berkeley Summit House</title>
 <meta name="description" content="The Berkeley Summit House Incubator co-develops consumer-first AI with founders in education, wellbeing, legal and the arts.">
+<meta name="theme-color" content="#E85A2E">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="assets/site.css">
-<script src="assets/partials.js"></script>
-<script src="assets/site.js" defer></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400;500;600&family=Funnel+Sans:wght@400;500;600&family=Geist+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/chrome.js"></script>
+<script src="assets/terrain.js" defer></script>
+<script src="assets/app.js" defer></script>
 </head>
-<body id="top">
-<bsh-globalnav current="incubator"></bsh-globalnav>
-<bsh-localnav title="Incubator" links="Overview:#overview|Focus Areas:#focus|How We Work:#how" cta="Co-build" cta-href="join.html#founder"></bsh-localnav>
+<body>
+<bsh-header current="incubator"></bsh-header>
 
 <main id="main">
-  <section class="hero hero--pad t-light" aria-labelledby="hero-title">
-    <div class="hero-copy wrap">
-      <p class="eyebrow-hero"><span class="grad">Incubator</span></p>
-      <h1 class="hero-title balance" id="hero-title">Consumer-first AI. Built together.</h1>
-      <p class="intro">We co-develop AI with founders to bridge the gap in technology access, and make essential services available to everyone.</p>
-      <div class="ctas">
-        <a class="btn btn-primary" href="join.html#founder">Co-build with us</a>
-        <a class="btn btn-secondary" href="#focus">See where we build</a>
+  <section class="page-hero f-poppy" data-terrain-wrap aria-labelledby="hero-title">
+    <canvas data-terrain data-animate data-seed="33" data-peaks="a:.78,.3,1,.1;b:.93,.72,.75,.08;c:.6,.9,.5,.07" data-peaks-narrow="a:.8,.2,1,.3" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <div class="ph-copy">
+        <p class="label">Incubator</p>
+        <h1 class="d-xl balance" id="hero-title">Consumer-first AI, built together.</h1>
+        <p class="lede">We co-develop AI with founders to bridge the gap in technology access, and make essential services available to everyone.</p>
+        <div class="actions">
+          <a class="btn" href="join.html#founder">Co-build with us <bsh-icon name="arrow"></bsh-icon></a>
+          <a class="btn btn-ghost" href="#focus">See where we build</a>
+        </div>
       </div>
-    </div>
-    <ul class="apps hero-apps" aria-label="Where we co-build">
-      <li class="app app--edu"><span class="app-icon"><bsh-icon name="book"></bsh-icon></span><span class="app-label">Education</span></li>
-      <li class="app app--well"><span class="app-icon"><bsh-icon name="heart"></bsh-icon></span><span class="app-label">Wellbeing</span></li>
-      <li class="app app--law"><span class="app-icon"><bsh-icon name="scales"></bsh-icon></span><span class="app-label">Legal</span></li>
-      <li class="app app--arts"><span class="app-icon"><bsh-icon name="brush"></bsh-icon></span><span class="app-label">Arts</span></li>
-    </ul>
-  </section>
-
-  <section class="section t-dark" id="overview" aria-label="Overview">
-    <div class="wrap">
-      <p class="lit statement" data-lit>We engage deeply with founders to bridge capability gaps and build market-ready AI solutions that democratize essential services.</p>
+      <dl class="ph-facts">
+        <div><dt>Model</dt><dd>Co-development</dd></div>
+        <div><dt>Focus</dt><dd>Consumer-first AI</dd></div>
+        <div><dt>Areas</dt><dd>Education, wellbeing, legal, arts</dd></div>
+      </dl>
     </div>
   </section>
 
-  <section class="section t-light" id="focus" aria-labelledby="focus-title">
+  <section class="sec f-paper" aria-label="Overview">
     <div class="wrap">
-      <header class="sec-head">
-        <h2 class="headline" id="focus-title">Four areas. One mission.</h2>
-        <p class="intro">Co-developing consumer-first AI to bridge the gap in technology access.</p>
+      <p class="statement">We engage deeply with founders to bridge capability gaps and build <em>market-ready AI solutions that democratize essential services.</em></p>
+    </div>
+  </section>
+
+  <section class="sec sec--flush-top f-paper" id="focus" aria-labelledby="focus-title">
+    <div class="wrap">
+      <header class="sec-hd">
+        <p class="label" data-tone="poppy">Focus areas</p>
+        <h2 class="h2" id="focus-title">Four areas. One mission.</h2>
+        <p class="lede">Co-developing consumer-first AI to bridge the gap in technology access.</p>
       </header>
-      <div data-tabs>
-        <div class="segmented" role="tablist" aria-label="Focus areas">
-          <button type="button" role="tab" id="tab-edu" aria-controls="panel-edu" aria-selected="true">Education</button>
-          <button type="button" role="tab" id="tab-well" aria-controls="panel-well" aria-selected="false" tabindex="-1">Wellbeing</button>
-          <button type="button" role="tab" id="tab-law" aria-controls="panel-law" aria-selected="false" tabindex="-1">Legal</button>
-          <button type="button" role="tab" id="tab-arts" aria-controls="panel-arts" aria-selected="false" tabindex="-1">Arts</button>
-        </div>
-        <div class="tabpanel" role="tabpanel" id="panel-edu" aria-labelledby="tab-edu">
-          <div class="app app--edu app--xl"><span class="app-icon"><bsh-icon name="book"></bsh-icon></span></div>
-          <div class="copy-block">
-            <p class="eyebrow fg-2">Education</p>
-            <h3 class="headline-sm">Learning that adapts to every student.</h3>
-            <p class="copy">We transform learning through personalized, adaptive AI. We co-develop accessible knowledge systems that democratize high-quality education for students everywhere.</p>
+      <div class="areas">
+        <details class="area" name="area" open>
+          <summary>
+            <span class="area-num">01</span>
+            <span class="area-name">Education</span>
+            <span class="area-line">Learning that adapts to every student.</span>
+            <span class="area-toggle" aria-hidden="true"><bsh-icon name="plus"></bsh-icon></span>
+          </summary>
+          <div class="area-body">
+            <div class="area-copy">
+              <p>We transform learning through personalized, adaptive AI. We co-develop accessible knowledge systems that democratize high-quality education for students everywhere.</p>
+              <a class="link" href="join.html#founder">Building in education? <bsh-icon name="arrow"></bsh-icon></a>
+            </div>
+            <div class="area-art f-poppy" data-terrain-wrap><canvas data-terrain data-seed="41" data-peaks="a:.72,.42,1,.2;b:.2,.9,.5,.14" data-peaks-narrow="a:.7,.4,1,.3" aria-hidden="true"></canvas><span class="mono">01 · Education</span></div>
           </div>
-        </div>
-        <div class="tabpanel" role="tabpanel" id="panel-well" aria-labelledby="tab-well" hidden>
-          <div class="app app--well app--xl"><span class="app-icon"><bsh-icon name="heart"></bsh-icon></span></div>
-          <div class="copy-block">
-            <p class="eyebrow fg-2">Wellbeing</p>
-            <h3 class="headline-sm">Care, on demand.</h3>
-            <p class="copy">We expand access to essential support through AI companions and wellness platforms. We co-develop tools that provide personalized, on-demand care, making mental well-being a reality for all.</p>
+        </details>
+        <details class="area" name="area">
+          <summary>
+            <span class="area-num">02</span>
+            <span class="area-name">Wellbeing</span>
+            <span class="area-line">Care, on demand.</span>
+            <span class="area-toggle" aria-hidden="true"><bsh-icon name="plus"></bsh-icon></span>
+          </summary>
+          <div class="area-body">
+            <div class="area-copy">
+              <p>We expand access to essential support through AI companions and wellness platforms. We co-develop tools that provide personalized, on-demand care, making mental well-being a reality for all.</p>
+              <a class="link" href="join.html#founder">Building in wellbeing? <bsh-icon name="arrow"></bsh-icon></a>
+            </div>
+            <div class="area-art f-poppy" data-terrain-wrap><canvas data-terrain data-seed="44" data-peaks="a:.35,.5,1,.18;b:.8,.3,.7,.14" data-peaks-narrow="a:.4,.5,1,.3" aria-hidden="true"></canvas><span class="mono">02 · Wellbeing</span></div>
           </div>
-        </div>
-        <div class="tabpanel" role="tabpanel" id="panel-law" aria-labelledby="tab-law" hidden>
-          <div class="app app--law app--xl"><span class="app-icon"><bsh-icon name="scales"></bsh-icon></span></div>
-          <div class="copy-block">
-            <p class="eyebrow fg-2">Legal</p>
-            <h3 class="headline-sm">Justice, within reach.</h3>
-            <p class="copy">We empower individuals to navigate the law with AI-driven agents. We co-develop accessible tools to understand rights and complex procedures, breaking down the financial barriers to justice.</p>
+        </details>
+        <details class="area" name="area">
+          <summary>
+            <span class="area-num">03</span>
+            <span class="area-name">Legal</span>
+            <span class="area-line">Justice, within reach.</span>
+            <span class="area-toggle" aria-hidden="true"><bsh-icon name="plus"></bsh-icon></span>
+          </summary>
+          <div class="area-body">
+            <div class="area-copy">
+              <p>We empower individuals to navigate the law with AI-driven agents. We co-develop accessible tools to understand rights and complex procedures, breaking down the financial barriers to justice.</p>
+              <a class="link" href="join.html#founder">Building in legal? <bsh-icon name="arrow"></bsh-icon></a>
+            </div>
+            <div class="area-art f-poppy" data-terrain-wrap><canvas data-terrain data-seed="47" data-peaks="a:.55,.6,1,.16;b:.15,.2,.6,.12;c:.9,.2,.6,.12" data-peaks-narrow="a:.5,.55,1,.3" aria-hidden="true"></canvas><span class="mono">03 · Legal</span></div>
           </div>
-        </div>
-        <div class="tabpanel" role="tabpanel" id="panel-arts" aria-labelledby="tab-arts" hidden>
-          <div class="app app--arts app--xl"><span class="app-icon"><bsh-icon name="brush"></bsh-icon></span></div>
-          <div class="copy-block">
-            <p class="eyebrow fg-2">Arts</p>
-            <h3 class="headline-sm">Creativity, amplified.</h3>
-            <p class="copy">We expand the horizon of creative expression through AI-driven tools. We co-develop platforms that augment human talent, making sophisticated content creation accessible to every creator.</p>
+        </details>
+        <details class="area" name="area">
+          <summary>
+            <span class="area-num">04</span>
+            <span class="area-name">Arts</span>
+            <span class="area-line">Creativity, amplified.</span>
+            <span class="area-toggle" aria-hidden="true"><bsh-icon name="plus"></bsh-icon></span>
+          </summary>
+          <div class="area-body">
+            <div class="area-copy">
+              <p>We expand the horizon of creative expression through AI-driven tools. We co-develop platforms that augment human talent, making sophisticated content creation accessible to every creator.</p>
+              <a class="link" href="join.html#founder">Building in the arts? <bsh-icon name="arrow"></bsh-icon></a>
+            </div>
+            <div class="area-art f-poppy" data-terrain-wrap><canvas data-terrain data-seed="52" data-peaks="a:.25,.35,.9,.16;b:.7,.65,1,.18" data-peaks-narrow="a:.6,.6,1,.3" aria-hidden="true"></canvas><span class="mono">04 · Arts</span></div>
           </div>
-        </div>
+        </details>
       </div>
     </div>
   </section>
 
-  <section class="section t-alt" id="how" aria-labelledby="how-title">
+  <section class="sec f-stone" id="how" aria-labelledby="how-title">
     <div class="wrap">
-      <header class="sec-head">
-        <h2 class="headline" id="how-title">Side by side.</h2>
-        <p class="intro">We engage deeply with founders, not from a distance.</p>
+      <header class="sec-hd">
+        <p class="label" data-tone="poppy">How we work</p>
+        <h2 class="h2" id="how-title">Side by side.</h2>
+        <p class="lede">We engage deeply with founders, not from a distance.</p>
       </header>
-      <div class="bento">
-        <article class="card span-2 reveal">
-          <bsh-icon name="people"></bsh-icon>
-          <h3 class="card-title">Engage deeply</h3>
-          <p class="copy">We work with founders on the product itself, in the same room whenever we can.</p>
-        </article>
-        <article class="card span-2 reveal" style="--d:.1s">
-          <bsh-icon name="link"></bsh-icon>
-          <h3 class="card-title">Bridge capability gaps</h3>
-          <p class="copy">We help close the gaps in expertise, networks and resources that a young team hasn’t filled yet.</p>
-        </article>
-        <article class="card span-2 reveal" style="--d:.2s">
-          <bsh-icon name="box"></bsh-icon>
-          <h3 class="card-title">Build market-ready</h3>
-          <p class="copy">The goal is AI people can use and afford today: consumer-first and accessible.</p>
-        </article>
-      </div>
+      <ol class="steps" data-tone="poppy">
+        <li class="rv"><h3 class="h3">Engage deeply</h3><p>We work with founders on the product itself, in the same room whenever we can.</p></li>
+        <li class="rv" style="--d:.08s"><h3 class="h3">Bridge capability gaps</h3><p>We help close the gaps in expertise, networks and resources that a young team hasn’t filled yet.</p></li>
+        <li class="rv" style="--d:.16s"><h3 class="h3">Build market-ready</h3><p>The goal is AI people can use and afford today: consumer-first and accessible.</p></li>
+      </ol>
     </div>
   </section>
 
-  <section class="section t-dark" aria-label="Get involved">
-    <div class="wrap">
-      <div class="pair">
-        <div class="card">
-          <h2 class="card-title">Building in one of these areas?</h2>
-          <p class="copy">Tell us about the problem you’re solving and who it’s for.</p>
-          <div class="ctas ctas--left"><a class="btn btn-primary" href="join.html#founder">Co-build with us</a></div>
-        </div>
-        <div class="card">
-          <h2 class="card-title">Have expertise to share?</h2>
-          <p class="copy">Operators and executives help our founders bridge the gaps that matter most.</p>
-          <div class="ctas ctas--left"><a class="btn btn-primary" href="join.html#cxo">Join as a CXO</a></div>
-        </div>
+  <section class="sec f-paper" aria-label="Get involved">
+    <div class="wrap duo">
+      <div class="duo-card">
+        <p class="label" data-tone="poppy">Founders</p>
+        <h2 class="h3">Building in one of these areas?</h2>
+        <p class="body">Tell us about the problem you’re solving and who it’s for.</p>
+        <div class="actions"><a class="btn" href="join.html#founder">Co-build with us <bsh-icon name="arrow"></bsh-icon></a></div>
+      </div>
+      <div class="duo-card">
+        <p class="label" data-tone="poppy">Operators</p>
+        <h2 class="h3">Have expertise to share?</h2>
+        <p class="body">Operators and executives help our founders bridge the gaps that matter most.</p>
+        <div class="actions"><a class="btn" href="join.html#cxo">Join as a CXO <bsh-icon name="arrow"></bsh-icon></a></div>
       </div>
     </div>
   </section>
 </main>
 
-<bsh-footer crumb="Incubator"></bsh-footer>
+<bsh-footer></bsh-footer>
 </body>
 </html>

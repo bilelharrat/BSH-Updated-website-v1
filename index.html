@@ -4,199 +4,219 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Berkeley Summit House</title>
-<meta name="description" content="A global innovation community born in a white house in the Berkeley Hills. Ventures, an AI incubator, and a foundation for innovators aged 15 to 35.">
+<meta name="description" content="Berkeley Summit House is a community for entrepreneurial dreamers, with a venture fund, an incubator and a foundation, born in a white house in the Berkeley Hills.">
+<meta name="theme-color" content="#FFFFFF">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="assets/site.css">
-<script src="assets/partials.js"></script>
-<script src="assets/site.js" defer></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400;500;600&family=Funnel+Sans:wght@400;500;600&family=Geist+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/chrome.js"></script>
+<script src="assets/terrain.js" defer></script>
+<script src="assets/app.js" defer></script>
 </head>
-<body id="top">
-<bsh-globalnav current="home" dark></bsh-globalnav>
+<body>
+<bsh-header current="home"></bsh-header>
 
 <main id="main">
-  <section class="hero hero--pad t-dark" aria-labelledby="hero-title">
-    <div class="hero-copy wrap">
-      <p class="eyebrow-hero">Berkeley Summit House</p>
-      <h1 class="hero-title" id="hero-title"><span class="grad">Dream. Build. Grow.</span></h1>
-      <p class="intro">A global innovation community, born in a white house in the Berkeley Hills. Where every entrepreneurial dreamer gets a chance to be believed in.</p>
-      <div class="ctas">
-        <a class="btn btn-primary" href="join.html">Join the community</a>
-        <a class="btn btn-secondary" href="story.html">Our story</a>
+  <section class="home-hero f-paper" aria-labelledby="hero-title">
+    <div class="home-map" data-terrain-wrap>
+      <canvas data-terrain data-animate data-seed="11"
+        data-peaks="house:.71,.44,1.05,.085;ventures:.6,.78,.72,.068;incubator:.88,.6,.8,.072;foundation:.86,.16,.66,.062;events:.58,.24,.5,.056;:.97,.96,.45,.08;:.4,.95,.3,.1"
+        data-peaks-narrow="house:.46,.5,1,.2;ventures:.2,.84,.7,.13;incubator:.8,.7,.75,.13;foundation:.8,.1,.6,.12;events:.14,.3,.5,.12"
+        aria-hidden="true"></canvas>
+      <a class="peak peak--home" data-peak="house" data-tone="ink" href="story.html" style="left:71%;top:44%">
+        <span class="peak-dot" aria-hidden="true"></span>
+        <span class="peak-card"><span class="peak-name">The House <bsh-icon name="arrow"></bsh-icon></span><span class="peak-note">Our story · since 2024</span></span>
+      </a>
+      <a class="peak" data-peak="ventures" data-tone="cobalt" href="ventures.html" style="left:60%;top:78%">
+        <span class="peak-dot" aria-hidden="true"></span>
+        <span class="peak-card"><span class="peak-name">Ventures <bsh-icon name="arrow"></bsh-icon></span><span class="peak-note">Human-centered AI</span></span>
+      </a>
+      <a class="peak" data-peak="incubator" data-tone="poppy" href="incubator.html" style="left:88%;top:60%">
+        <span class="peak-dot" aria-hidden="true"></span>
+        <span class="peak-card"><span class="peak-name">Incubator <bsh-icon name="arrow"></bsh-icon></span><span class="peak-note">Consumer-first AI</span></span>
+      </a>
+      <a class="peak" data-peak="foundation" data-tone="gold" href="foundation.html" style="left:86%;top:16%">
+        <span class="peak-dot" aria-hidden="true"></span>
+        <span class="peak-card"><span class="peak-name">Foundation <bsh-icon name="arrow"></bsh-icon></span><span class="peak-note">Ages 15 to 35</span></span>
+      </a>
+      <a class="peak" data-peak="events" data-tone="ink" href="events.html" style="left:58%;top:24%">
+        <span class="peak-dot" aria-hidden="true"></span>
+        <span class="peak-card"><span class="peak-name">Events <bsh-icon name="arrow"></bsh-icon></span><span class="peak-note">Dinners and retreats</span></span>
+      </a>
+      <p class="map-legend mono" aria-hidden="true"><span class="rule-demo">Index contour</span><span class="rule-demo rule-demo--minor">Contour</span><span>Not to scale</span></p>
+    </div>
+
+    <div class="home-copy wrap">
+      <p class="label">Berkeley Hills · Since 2024</p>
+      <h1 class="d-l balance" id="hero-title">Where dreamers come to build.</h1>
+      <p class="lede">Berkeley Summit House is a community for founders, investors and young innovators, with a venture fund, an incubator and a foundation. It all began in a white house in the Berkeley Hills.</p>
+      <div class="actions">
+        <a class="btn" href="#way-in">Find your way in <bsh-icon name="arrow"></bsh-icon></a>
+        <a class="btn btn-ghost" href="join.html">Join the community</a>
       </div>
     </div>
-    <figure>
-      <div class="hero-media" data-hero-scale>
-        <img src="https://bsh-static.neuship.co/AIAgentInActionPanel.jpg" width="1702" height="1276" fetchpriority="high" alt="A packed room under the white arched ceilings of Berkeley Summit House.">
-      </div>
-      <figcaption class="media-note">Inside the house during AI Agents in Action, June 2025.</figcaption>
-    </figure>
   </section>
 
-  <div class="tiles">
-    <section class="tile t-alt" aria-labelledby="tile-ventures">
-      <div class="tile-copy">
-        <h2 class="headline" id="tile-ventures">Ventures</h2>
-        <p class="subhead">Backing human-centered AI.</p>
-        <div class="ctas">
-          <a class="btn btn-primary" href="ventures.html">Learn more</a>
-          <a class="btn btn-secondary" href="join.html#founder">Pitch us</a>
-        </div>
-      </div>
-      <div class="tile-visual">
-        <div class="tile-photo">
-          <img src="https://bsh-static.neuship.co/InceptionCohort191.jpg" width="2255" height="1290" loading="lazy" decoding="async" alt="A full room of founders and investors at a cohort demo day.">
-        </div>
-      </div>
-    </section>
-
-    <section class="tile t-dark" aria-labelledby="tile-incubator">
-      <div class="tile-copy">
-        <h2 class="headline" id="tile-incubator">Incubator</h2>
-        <p class="subhead">Consumer-first AI. Built together.</p>
-        <div class="ctas">
-          <a class="btn btn-primary" href="incubator.html">Learn more</a>
-          <a class="btn btn-secondary" href="join.html#founder">Co-build with us</a>
-        </div>
-      </div>
-      <div class="tile-visual tile-visual--center">
-        <ul class="apps" aria-label="Where we co-build">
-          <li class="app app--edu"><span class="app-icon"><bsh-icon name="book"></bsh-icon></span><span class="app-label">Education</span></li>
-          <li class="app app--well"><span class="app-icon"><bsh-icon name="heart"></bsh-icon></span><span class="app-label">Wellbeing</span></li>
-          <li class="app app--law"><span class="app-icon"><bsh-icon name="scales"></bsh-icon></span><span class="app-label">Legal</span></li>
-          <li class="app app--arts"><span class="app-icon"><bsh-icon name="brush"></bsh-icon></span><span class="app-label">Arts</span></li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="tile t-light" aria-labelledby="tile-foundation">
-      <div class="tile-copy">
-        <h2 class="headline" id="tile-foundation">Foundation</h2>
-        <p class="subhead">Pathways for innovators aged 15 to 35.</p>
-        <div class="ctas">
-          <a class="btn btn-primary" href="foundation.html">Learn more</a>
-          <a class="btn btn-secondary" href="join.html#young-leader">Get involved</a>
-        </div>
-      </div>
-      <div class="tile-visual">
-        <div class="tile-photo">
-          <img src="https://bsh-static.neuship.co/YBVChallenge2.jpg" width="2048" height="1366" loading="lazy" decoding="async" alt="Students in suits together at the Youth Business Ventures Challenge.">
-        </div>
-      </div>
-    </section>
-
-    <div class="tile-grid">
-      <section class="tile t-dark" aria-labelledby="tile-story">
-        <div class="tile-copy">
-          <h2 class="headline" id="tile-story">Our Story</h2>
-          <p class="subhead">It started with a house.</p>
-          <div class="ctas"><a class="btn btn-primary" href="story.html">Read the story</a></div>
-        </div>
-        <div class="tile-visual">
-          <div class="tile-photo">
-            <img src="https://www.berkeleysummithouse.org/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fpolaroid-house.fa9820f8.png&amp;w=1080&amp;q=75" width="1080" height="1080" loading="lazy" decoding="async" alt="The white house in the Berkeley Hills, framed by tall trees." style="object-position:50% 30%">
-          </div>
-        </div>
-      </section>
-
-      <section class="tile t-alt" aria-labelledby="tile-events">
-        <div class="tile-copy">
-          <h2 class="headline" id="tile-events">Events</h2>
-          <p class="subhead">Where builders gather.</p>
-          <div class="ctas">
-            <a class="btn btn-primary" href="events.html">See events</a>
-            <a class="btn btn-secondary" href="https://luma.com/berkeleysummithouse" target="_blank" rel="noopener">Calendar<span class="visually-hidden"> on Luma (opens in a new tab)</span></a>
-          </div>
-        </div>
-        <div class="tile-visual">
-          <div class="tile-photo">
-            <img src="https://bsh-static.neuship.co/NapaFoundersRetreat1-1.jpg" width="1707" height="1280" loading="lazy" decoding="async" alt="Retreat participants cheering behind a Berkeley Summit House banner in Napa.">
-          </div>
-        </div>
-      </section>
-
-      <section class="tile t-alt" aria-labelledby="tile-values">
-        <div class="tile-copy">
-          <h2 class="headline" id="tile-values">Our Values</h2>
-          <p class="subhead">Boundless by design.</p>
-          <div class="ctas"><a class="more" href="story.html#values">Learn more <bsh-icon name="chevronRight"></bsh-icon></a></div>
-        </div>
-        <div class="tile-visual tile-visual--center">
-          <ul class="value-dots">
-            <li class="value-dot"><span><bsh-icon name="globe"></bsh-icon></span><span>No Limitation</span></li>
-            <li class="value-dot"><span><bsh-icon name="flame"></bsh-icon></span><span>Courage</span></li>
-            <li class="value-dot"><span><bsh-icon name="heart"></bsh-icon></span><span>In Service of Humanity</span></li>
-            <li class="value-dot"><span><bsh-icon name="ripples"></bsh-icon></span><span>Collective Growth</span></li>
-          </ul>
-        </div>
-      </section>
-
-      <section class="tile tile--join" aria-labelledby="tile-join">
-        <div class="tile-copy">
-          <h2 class="headline" id="tile-join">Join</h2>
-          <p class="subhead">Pull up a chair.</p>
-          <div class="ctas"><a class="btn btn-primary" href="join.html">Join the community</a></div>
-        </div>
-        <div class="tile-visual tile-visual--center">
-          <ul class="chips" aria-label="Join as">
-            <li><a class="chip" href="join.html#founder">Founder</a></li>
-            <li><a class="chip" href="join.html#cxo">CXO</a></li>
-            <li><a class="chip" href="join.html#investor">Investor</a></li>
-            <li><a class="chip" href="join.html#scholar">Scholar</a></li>
-            <li><a class="chip" href="join.html#scout">Scout</a></li>
-            <li><a class="chip" href="join.html#young-leader">Young Leader</a></li>
-          </ul>
-        </div>
-      </section>
-    </div>
-  </div>
-
-  <section class="section t-light" aria-labelledby="moments-title">
-    <div class="wrap sec-head">
-      <h2 class="headline" id="moments-title">The community, in person.</h2>
-      <p><a class="more more--lg" href="events.html">See all events <bsh-icon name="chevronRight"></bsh-icon></a></p>
-    </div>
-    <div class="gallery" data-gallery role="region" aria-roledescription="carousel" aria-label="Moments from the community">
-      <div class="gallery-track">
-        <figure class="slide" role="group" aria-roledescription="slide" aria-label="1 of 6">
-          <img src="https://bsh-static.neuship.co/NapaFoundersRetreat2-2.jpg" width="2523" height="1323" loading="lazy" decoding="async" alt="Dozens of founders together at the entrance of a Napa winery at dusk.">
-          <figcaption class="slide-cap"><div><h3>Napa Founders Retreat</h3><p>Napa Valley</p></div></figcaption>
-        </figure>
-        <figure class="slide" role="group" aria-roledescription="slide" aria-label="2 of 6">
-          <img src="https://bsh-static.neuship.co/AIAgentInActionPanel3.jpg" width="1702" height="1276" loading="lazy" decoding="async" alt="Panelists in front of the AI Agents in Action title slide at the house.">
-          <figcaption class="slide-cap"><div><h3>AI Agents in Action: Industry × Academia Exchange</h3><p>At the house · June 2025</p></div></figcaption>
-        </figure>
-        <figure class="slide" role="group" aria-roledescription="slide" aria-label="3 of 6">
-          <img src="https://bsh-static.neuship.co/ManusVibeCraft1.jpg" width="1918" height="1280" loading="lazy" decoding="async" alt="Attendees outside the house holding a Manus banner.">
-          <figcaption class="slide-cap"><div><h3>VibeCoding Craft Summitry, by Manus AI</h3><p>Berkeley · May 2025</p></div></figcaption>
-        </figure>
-        <figure class="slide" role="group" aria-roledescription="slide" aria-label="4 of 6">
-          <img src="https://bsh-static.neuship.co/YBVChallenge4.jpg" width="2048" height="1366" loading="lazy" decoding="async" alt="A full banquet room during the Youth Business Ventures Challenge.">
-          <figcaption class="slide-cap"><div><h3>Youth Business Ventures Challenge</h3><p>Entrepreneurship challenge</p></div></figcaption>
-        </figure>
-        <figure class="slide" role="group" aria-roledescription="slide" aria-label="5 of 6">
-          <img src="https://bsh-static.neuship.co/InceptionCohort195.jpg" width="1706" height="1280" loading="lazy" decoding="async" alt="Founders mingling in a grand hall with wooden beams and chandeliers.">
-          <figcaption class="slide-cap"><div><h3>Inception Cohort Demo Day</h3><p>With Inception Studio</p></div></figcaption>
-        </figure>
-        <figure class="slide" role="group" aria-roledescription="slide" aria-label="6 of 6">
-          <img src="https://bsh-static.neuship.co/AIArtistsMeetup1.jpg" width="1706" height="1279" loading="lazy" decoding="async" alt="Artists and engineers around a table of laptops in a bright room with arched windows.">
-          <figcaption class="slide-cap"><div><h3>AI Artists Meetup</h3><p>Community</p></div></figcaption>
-        </figure>
-      </div>
-      <div class="gallery-controls">
-        <div class="dots" role="tablist" aria-label="Choose a slide">
-          <button class="dot" type="button" role="tab" aria-selected="true" aria-label="Napa Founders Retreat"><i></i></button>
-          <button class="dot" type="button" role="tab" aria-selected="false" tabindex="-1" aria-label="AI Agents in Action"><i></i></button>
-          <button class="dot" type="button" role="tab" aria-selected="false" tabindex="-1" aria-label="VibeCoding Craft Summitry"><i></i></button>
-          <button class="dot" type="button" role="tab" aria-selected="false" tabindex="-1" aria-label="Youth Business Ventures Challenge"><i></i></button>
-          <button class="dot" type="button" role="tab" aria-selected="false" tabindex="-1" aria-label="Inception Cohort Demo Day"><i></i></button>
-          <button class="dot" type="button" role="tab" aria-selected="false" tabindex="-1" aria-label="AI Artists Meetup"><i></i></button>
-        </div>
-        <button class="play-btn" type="button" aria-label="Pause the slideshow"></button>
+  <section class="sec f-paper" aria-labelledby="pillars-title">
+    <div class="wrap">
+      <header class="sec-hd">
+        <p class="label">What we do</p>
+        <h2 class="h2 balance" id="pillars-title">One house. Three ways up.</h2>
+        <p class="lede">Three interconnected pillars, built so that every entrepreneurial dreamer gets a chance to be believed in.</p>
+      </header>
+      <div class="pillars">
+        <a class="pillar f-cobalt rv" href="ventures.html" data-terrain-wrap>
+          <canvas data-terrain data-seed="3" data-peaks="a:.86,.1,.9,.32" data-peaks-narrow="a:.9,.1,.9,.4" aria-hidden="true"></canvas>
+          <span class="label">Ventures</span>
+          <span class="pillar-title">Backing human-centered AI.</span>
+          <span class="pillar-copy">We invest and collaborate with founders and GPs committed to human-centered AI technology.</span>
+          <span class="pillar-go">Explore Ventures <bsh-icon name="arrow"></bsh-icon></span>
+          <span class="pillar-photo"><img src="https://bsh-static.neuship.co/InceptionCohort191.jpg" loading="lazy" decoding="async" alt="A full room of founders and investors at a cohort demo day."></span>
+        </a>
+        <a class="pillar f-poppy rv" style="--d:.08s" href="incubator.html" data-terrain-wrap>
+          <canvas data-terrain data-seed="5" data-peaks="a:.14,.16,.8,.3" data-peaks-narrow="a:.1,.1,.9,.4" aria-hidden="true"></canvas>
+          <span class="label">Incubator</span>
+          <span class="pillar-title">Consumer-first AI, built together.</span>
+          <span class="pillar-copy">We co-develop AI with founders to bridge the gap in technology access, across education, wellbeing, legal and the arts.</span>
+          <span class="pillar-go">Explore the Incubator <bsh-icon name="arrow"></bsh-icon></span>
+          <span class="pillar-photo"><img src="https://bsh-static.neuship.co/ClaudeCodeOpenClawLiveUseCases2-1.jpg" loading="lazy" decoding="async" alt="Guests fill the house’s columned living room, framed by arched windows."></span>
+        </a>
+        <a class="pillar f-gold rv" style="--d:.16s" href="foundation.html" data-terrain-wrap>
+          <canvas data-terrain data-seed="8" data-peaks="a:.8,.2,.85,.3" data-peaks-narrow="a:.85,.12,.9,.4" aria-hidden="true"></canvas>
+          <span class="label">Foundation</span>
+          <span class="pillar-title">Pathways for the next generation.</span>
+          <span class="pillar-copy">Roundtables, challenges, research support and retreats for high-potential innovators aged 15 to 35.</span>
+          <span class="pillar-go">Explore the Foundation <bsh-icon name="arrow"></bsh-icon></span>
+          <span class="pillar-photo"><img src="https://bsh-static.neuship.co/YBVChallenge2.jpg" loading="lazy" decoding="async" alt="Students in suits together at the Youth Business Ventures Challenge."></span>
+        </a>
       </div>
     </div>
+  </section>
+
+  <section class="sec f-stone" aria-labelledby="story-title">
+    <div class="wrap teaser">
+      <figure class="teaser-photo rv">
+        <img src="https://www.berkeleysummithouse.org/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fpolaroid-house.fa9820f8.png&amp;w=1080&amp;q=75" width="1080" height="1080" loading="lazy" decoding="async" alt="The white house in the Berkeley Hills, with a red tile roof, framed by tall trees under a blue sky.">
+        <figcaption class="mono">The house · Berkeley Hills</figcaption>
+      </figure>
+      <div class="teaser-copy rv" style="--d:.08s">
+        <p class="label">Our story</p>
+        <h2 class="h2 balance" id="story-title">It started with a mattress, a chair and a lamp.</h2>
+        <p class="lede">A mother bought a white house in the Berkeley Hills for her daughter. They offered a room to a young founder who had arrived with a one-way ticket and an AI startup idea. Within days, the walls were covered in ideas.</p>
+        <p class="body">So an idea sparked: why not turn the house into a platform, where more founders could dream, build and grow?</p>
+        <a class="link" href="story.html">Read the whole story <bsh-icon name="arrow"></bsh-icon></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec f-paper" id="way-in" aria-labelledby="way-title">
+    <div class="wrap">
+      <header class="sec-hd">
+        <p class="label">Find your way in</p>
+        <h2 class="h2 balance" id="way-title">Tell us who you are. We’ll point the way.</h2>
+      </header>
+      <div class="router" data-router>
+        <div class="router-q" role="group" aria-label="I am">
+          <p class="small">I am…</p>
+          <button class="router-opt" type="button" data-route="founder" aria-pressed="true"><i class="tri" aria-hidden="true"></i>A founder</button>
+          <button class="router-opt" type="button" data-route="investor" aria-pressed="false"><i class="tri" aria-hidden="true"></i>An investor</button>
+          <button class="router-opt" type="button" data-route="cxo" aria-pressed="false"><i class="tri" aria-hidden="true"></i>An operator or executive</button>
+          <button class="router-opt" type="button" data-route="scholar" aria-pressed="false"><i class="tri" aria-hidden="true"></i>A researcher</button>
+          <button class="router-opt" type="button" data-route="scout" aria-pressed="false"><i class="tri" aria-hidden="true"></i>A scout</button>
+          <button class="router-opt" type="button" data-route="young" aria-pressed="false"><i class="tri" aria-hidden="true"></i>Aged 15 to 35</button>
+          <button class="router-opt" type="button" data-route="curious" aria-pressed="false"><i class="tri" aria-hidden="true"></i>Just curious</button>
+        </div>
+
+        <div class="router-a" aria-live="polite">
+          <div class="route" data-route-panel="founder">
+            <h3 class="h3">Bring the idea. We’ll bring the house.</h3>
+            <ol class="trail">
+              <li><a href="incubator.html" data-tone="poppy"><span class="stop"></span><b>Incubator</b><span class="what">Co-develop consumer-first AI in education, wellbeing, legal or the arts.</span><bsh-icon name="arrow"></bsh-icon></a></li>
+              <li><a href="ventures.html" data-tone="cobalt"><span class="stop"></span><b>Ventures</b><span class="what">We invest in exceptional founders at critical growth stages.</span><bsh-icon name="arrow"></bsh-icon></a></li>
+              <li><a href="events.html" data-tone="ink"><span class="stop"></span><b>Events</b><span class="what">Founder dinners, retreats and evenings at the house.</span><bsh-icon name="arrow"></bsh-icon></a></li>
+            </ol>
+            <div class="actions"><a class="btn" href="join.html#founder">Join as a founder <bsh-icon name="arrow"></bsh-icon></a></div>
+          </div>
+          <div class="route" data-route-panel="investor" hidden>
+            <h3 class="h3">Back human-centered AI alongside us.</h3>
+            <ol class="trail">
+              <li><a href="ventures.html#partners" data-tone="cobalt"><span class="stop"></span><b>Ventures</b><span class="what">We collaborate with GPs who share our commitment to human-centered AI.</span><bsh-icon name="arrow"></bsh-icon></a></li>
+              <li><a href="events.html" data-tone="ink"><span class="stop"></span><b>Events</b><span class="what">Meet founders at demo days, dinners and retreats.</span><bsh-icon name="arrow"></bsh-icon></a></li>
+            </ol>
+            <div class="actions">
+              <a class="btn" href="join.html#investor">Invest with us <bsh-icon name="arrow"></bsh-icon></a>
+              <a class="link" href="join.html#scout">Or become a scout</a>
+            </div>
+          </div>
+          <div class="route" data-route-panel="cxo" hidden>
+            <h3 class="h3">Share what you’ve learned the hard way.</h3>
+            <ol class="trail">
+              <li><a href="incubator.html#how" data-tone="poppy"><span class="stop"></span><b>Incubator</b><span class="what">Help founders bridge the capability gaps that matter most.</span><bsh-icon name="arrow"></bsh-icon></a></li>
+              <li><a href="foundation.html#programs" data-tone="gold"><span class="stop"></span><b>Foundation</b><span class="what">Lead a knowledge roundtable for the next generation.</span><bsh-icon name="arrow"></bsh-icon></a></li>
+            </ol>
+            <div class="actions"><a class="btn" href="join.html#cxo">Join as a CXO <bsh-icon name="arrow"></bsh-icon></a></div>
+          </div>
+          <div class="route" data-route-panel="scholar" hidden>
+            <h3 class="h3">Turn inquiry into innovation.</h3>
+            <ol class="trail">
+              <li><a href="foundation.html#programs" data-tone="gold"><span class="stop"></span><b>Foundation</b><span class="what">Research support: targeted funding that bridges academic inquiry and innovation.</span><bsh-icon name="arrow"></bsh-icon></a></li>
+              <li><a href="events.html" data-tone="ink"><span class="stop"></span><b>Events</b><span class="what">Industry and academia exchanges, at the house.</span><bsh-icon name="arrow"></bsh-icon></a></li>
+            </ol>
+            <div class="actions"><a class="btn" href="join.html#scholar">Join as a scholar <bsh-icon name="arrow"></bsh-icon></a></div>
+          </div>
+          <div class="route" data-route-panel="scout" hidden>
+            <h3 class="h3">Find the founders others miss.</h3>
+            <ol class="trail">
+              <li><a href="ventures.html" data-tone="cobalt"><span class="stop"></span><b>Ventures</b><span class="what">Bring us exceptional founders building human-centered AI.</span><bsh-icon name="arrow"></bsh-icon></a></li>
+              <li><a href="events.html" data-tone="ink"><span class="stop"></span><b>Events</b><span class="what">Meet the community at the house and beyond.</span><bsh-icon name="arrow"></bsh-icon></a></li>
+            </ol>
+            <div class="actions"><a class="btn" href="join.html#scout">Become a scout <bsh-icon name="arrow"></bsh-icon></a></div>
+          </div>
+          <div class="route" data-route-panel="young" hidden>
+            <h3 class="h3">Start early. Start here.</h3>
+            <ol class="trail">
+              <li><a href="foundation.html" data-tone="gold"><span class="stop"></span><b>Foundation</b><span class="what">Pitch competitions, roundtables with industry leaders, and retreats.</span><bsh-icon name="arrow"></bsh-icon></a></li>
+              <li><a href="events.html" data-tone="ink"><span class="stop"></span><b>Events</b><span class="what">Come to a gathering and meet founders who started where you are.</span><bsh-icon name="arrow"></bsh-icon></a></li>
+            </ol>
+            <div class="actions"><a class="btn" href="join.html#young-leader">Join as a young leader <bsh-icon name="arrow"></bsh-icon></a></div>
+          </div>
+          <div class="route" data-route-panel="curious" hidden>
+            <h3 class="h3">Come to a gathering first.</h3>
+            <ol class="trail">
+              <li><a href="events.html" data-tone="ink"><span class="stop"></span><b>Events</b><span class="what">Roundtables, retreats and evenings at the house. New ones land on Luma first.</span><bsh-icon name="arrow"></bsh-icon></a></li>
+              <li><a href="story.html" data-tone="ink"><span class="stop"></span><b>Our Story</b><span class="what">How a white house in the hills became a community.</span><bsh-icon name="arrow"></bsh-icon></a></li>
+            </ol>
+            <div class="actions"><a class="btn" href="https://luma.com/berkeleysummithouse" target="_blank" rel="noopener">See upcoming events <bsh-icon name="arrowUpRight"></bsh-icon><span class="sr"> (opens in a new tab)</span></a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--flush-top f-paper" aria-labelledby="table-title">
+    <div class="wrap sec-hd sec-hd--row">
+      <div>
+        <p class="label">In person</p>
+        <h2 class="h2" id="table-title">Around the table.</h2>
+      </div>
+      <div class="strip-ctrl">
+        <button class="round-btn" type="button" data-strip-btn="-1" aria-label="Previous photos"><bsh-icon name="arrowLeft"></bsh-icon></button>
+        <button class="round-btn" type="button" data-strip-btn="1" aria-label="Next photos"><bsh-icon name="arrow"></bsh-icon></button>
+        <a class="link" href="events.html">All events <bsh-icon name="arrow"></bsh-icon></a>
+      </div>
+    </div>
+    <ul class="strip" data-strip aria-label="Photos from our gatherings">
+      <li><figure><img src="https://bsh-static.neuship.co/NapaFoundersRetreat2-2.jpg" loading="lazy" decoding="async" alt="Dozens of founders together at the entrance of a Napa winery at dusk."><figcaption><span class="mono">Napa Valley</span><b>Napa Founders Retreat</b></figcaption></figure></li>
+      <li><figure><img src="https://bsh-static.neuship.co/AIAgentInActionPanel.jpg" loading="lazy" decoding="async" alt="A packed room under the white arched ceilings of the house."><figcaption><span class="mono">At the house · Jun 2025</span><b>AI Agents in Action</b></figcaption></figure></li>
+      <li><figure><img src="https://bsh-static.neuship.co/ClaudeCodeOpenClawLiveUseCases1.jpg" loading="lazy" decoding="async" alt="A speaker walks the room through a live use case on screen."><figcaption><span class="mono">At the house · Mar 2026</span><b>Claude Code &amp; OpenClaw @ Berkeley</b></figcaption></figure></li>
+      <li><figure><img src="https://bsh-static.neuship.co/YBVChallenge4.jpg" loading="lazy" decoding="async" alt="A full banquet room during the Youth Business Ventures Challenge."><figcaption><span class="mono">Foundation</span><b>Youth Business Ventures Challenge</b></figcaption></figure></li>
+      <li><figure><img src="https://bsh-static.neuship.co/ManusVibeCraft1.jpg" loading="lazy" decoding="async" alt="Attendees outside the house holding a Manus banner."><figcaption><span class="mono">Berkeley · May 2025</span><b>VibeCoding Craft Summitry</b></figcaption></figure></li>
+      <li><figure><img src="https://bsh-static.neuship.co/InceptionCohort195.jpg" loading="lazy" decoding="async" alt="Founders mingling in a grand hall with wooden beams and chandeliers."><figcaption><span class="mono">With Inception Studio</span><b>Inception Cohort Demo Day</b></figcaption></figure></li>
+      <li><figure><img src="https://bsh-static.neuship.co/AIDoesItAllBusinessPitchChallenge1.jpg" loading="lazy" decoding="async" alt="A presenter pitches to the room during the business pitch challenge."><figcaption><span class="mono">At the house · Sep 2025</span><b>AI Does It All</b></figcaption></figure></li>
+      <li><figure><img src="https://bsh-static.neuship.co/AIArtistsMeetup1.jpg" loading="lazy" decoding="async" alt="Artists and engineers around a table of laptops in a bright room with arched windows."><figcaption><span class="mono">Community</span><b>AI Artists Meetup</b></figcaption></figure></li>
+    </ul>
   </section>
 </main>
 

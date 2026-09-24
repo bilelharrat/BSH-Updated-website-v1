@@ -3,148 +3,157 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Ventures - Berkeley Summit House</title>
+<title>Ventures · Berkeley Summit House</title>
 <meta name="description" content="Berkeley Summit House Ventures invests and collaborates with founders and GPs committed to human-centered AI technology.">
+<meta name="theme-color" content="#2743D6">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="assets/site.css">
-<script src="assets/partials.js"></script>
-<script src="assets/site.js" defer></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400;500;600&family=Funnel+Sans:wght@400;500;600&family=Geist+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/chrome.js"></script>
+<script src="assets/terrain.js" defer></script>
+<script src="assets/app.js" defer></script>
 </head>
-<body id="top">
-<bsh-globalnav current="ventures" dark></bsh-globalnav>
-<bsh-localnav title="Ventures" links="Overview:#overview|Portfolio:#portfolio|Partners:#partners" cta="Pitch us" cta-href="join.html#founder" dark></bsh-localnav>
+<body>
+<bsh-header current="ventures"></bsh-header>
 
 <main id="main">
-  <section class="hero hero--pad t-dark" aria-labelledby="hero-title">
-    <div class="hero-copy wrap">
-      <p class="eyebrow-hero"><span class="grad">Ventures</span></p>
-      <h1 class="hero-title balance" id="hero-title">Backing human-centered AI.</h1>
-      <p class="intro">We invest and collaborate with founders and GPs committed to human-centered AI technology.</p>
-      <div class="ctas">
-        <a class="btn btn-primary" href="join.html#founder">Pitch us</a>
-        <a class="btn btn-secondary" href="join.html#investor">Invest with us</a>
-      </div>
-    </div>
-    <figure>
-      <div class="hero-media" data-hero-scale>
-        <img src="https://bsh-static.neuship.co/InceptionCohort195.jpg" width="1706" height="1280" fetchpriority="high" alt="Founders and investors mingling in a grand hall with wooden beams and chandeliers." style="object-position:50% 55%">
-      </div>
-      <figcaption class="media-note">Inception Cohort Demo Day, with Inception Studio.</figcaption>
-    </figure>
-  </section>
-
-  <section class="section t-light" aria-label="Our focus">
+  <section class="page-hero f-cobalt" data-terrain-wrap aria-labelledby="hero-title">
+    <canvas data-terrain data-animate data-seed="21" data-peaks="a:.8,.36,1,.11;b:.62,.82,.6,.07;c:.97,.92,.5,.08" data-peaks-narrow="a:.78,.22,1,.32" aria-hidden="true"></canvas>
     <div class="wrap">
-      <p class="lit statement" data-lit>Exceptional founders. Critical growth stages. Technology built to serve people and planet.</p>
-    </div>
-  </section>
-
-  <section class="section t-alt" id="overview" aria-labelledby="overview-title">
-    <div class="wrap">
-      <header class="sec-head">
-        <h2 class="headline" id="overview-title">Two ways we invest.</h2>
-      </header>
-      <div class="bento">
-        <article class="card span-3 reveal">
-          <bsh-icon name="trend"></bsh-icon>
-          <h3 class="card-title">Founders</h3>
-          <p class="copy">We invest in exceptional founders at critical growth stages, building AI that serves people.</p>
-          <p><a class="more" href="#portfolio">See the portfolio <bsh-icon name="chevronRight"></bsh-icon></a></p>
-        </article>
-        <article class="card span-3 reveal" style="--d:.1s">
-          <bsh-icon name="people"></bsh-icon>
-          <h3 class="card-title">Fund managers</h3>
-          <p class="copy">We collaborate with GPs who share our commitment to human-centered AI technology.</p>
-          <p><a class="more" href="#partners">See our partners <bsh-icon name="chevronRight"></bsh-icon></a></p>
-        </article>
-        <article class="card card--stat span-2 reveal">
-          <p class="stat"><span class="grad">7</span></p>
-          <p class="copy"><strong>GP collaborations</strong> with funds that share our focus.</p>
-        </article>
-        <article class="card card--stat span-2 reveal" style="--d:.1s">
-          <p class="stat"><span class="grad">3</span></p>
-          <p class="copy"><strong>Interconnected pillars:</strong> Ventures, Incubator and Foundation.</p>
-        </article>
-        <article class="card card--stat span-2 reveal" style="--d:.2s">
-          <p class="stat"><span class="grad">2024</span></p>
-          <p class="copy"><strong>Founded</strong> in the Berkeley Hills.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section class="section t-light" id="portfolio" aria-labelledby="portfolio-title">
-    <div class="wrap">
-      <header class="sec-head">
-        <h2 class="headline" id="portfolio-title">Selected portfolio.</h2>
-        <p class="intro">Exceptional founders at critical growth stages.</p>
-      </header>
-      <ul class="names-grid">
-        <li class="name-card reveal"><span class="monogram" aria-hidden="true">D</span><div><p class="card-title-sm">Databricks</p><p class="caption">Portfolio company</p></div></li>
-        <li class="name-card reveal" style="--d:.08s"><span class="monogram" aria-hidden="true">F</span><div><p class="card-title-sm">Flourish</p><p class="caption">Portfolio company</p></div></li>
-        <li class="name-card reveal" style="--d:.16s"><span class="monogram" aria-hidden="true">G</span><div><p class="card-title-sm">GridCARE</p><p class="caption">Portfolio company</p></div></li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="section t-alt" id="partners" aria-labelledby="partners-title">
-    <div class="wrap">
-      <header class="sec-head">
-        <h2 class="headline" id="partners-title">GP collaboration.</h2>
-        <p class="intro">We work alongside funds committed to human-centered AI.</p>
-      </header>
-      <ul class="names-grid names-grid--4">
-        <li class="name-card reveal"><span class="monogram" aria-hidden="true">A</span><div><p class="card-title-sm">AINA Climate AI Ventures</p><p class="caption">GP collaboration</p></div></li>
-        <li class="name-card reveal" style="--d:.08s"><span class="monogram" aria-hidden="true">B</span><div><p class="card-title-sm">Berkeley Frontier Fund</p><p class="caption">GP collaboration</p></div></li>
-        <li class="name-card reveal" style="--d:.16s"><span class="monogram" aria-hidden="true">F</span><div><p class="card-title-sm">Fusion Fund</p><p class="caption">GP collaboration</p></div></li>
-        <li class="name-card reveal"><span class="monogram" aria-hidden="true">I</span><div><p class="card-title-sm">Inception Studio</p><p class="caption">GP collaboration</p></div></li>
-        <li class="name-card reveal" style="--d:.08s"><span class="monogram" aria-hidden="true">M</span><div><p class="card-title-sm">Monolith</p><p class="caption">GP collaboration</p></div></li>
-        <li class="name-card reveal" style="--d:.16s"><span class="monogram" aria-hidden="true">P</span><div><p class="card-title-sm">Particle Future</p><p class="caption">GP collaboration</p></div></li>
-        <li class="name-card reveal"><span class="monogram" aria-hidden="true">W</span><div><p class="card-title-sm">Wisdom Ventures</p><p class="caption">GP collaboration</p></div></li>
-        <li class="name-card name-card--cta reveal" style="--d:.08s"><a href="join.html#investor"><span class="monogram monogram--add" aria-hidden="true">+</span><span><span class="card-title-sm">Collaborate with us</span><span class="caption">For GPs backing human-centered AI</span></span></a></li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="section t-light" aria-labelledby="lens-title">
-    <div class="wrap">
-      <header class="sec-head">
-        <h2 class="headline" id="lens-title">What we look for.</h2>
-        <p class="intro">The values of the house, brought to every decision.</p>
-      </header>
-      <ul class="features">
-        <li class="feature reveal"><bsh-icon name="heart"></bsh-icon><h3 class="card-title-sm">Human-centered AI</h3><p class="copy">Technology built to serve people and planet.</p></li>
-        <li class="feature reveal" style="--d:.08s"><bsh-icon name="flame"></bsh-icon><h3 class="card-title-sm">Founders who dare</h3><p class="copy">Teams daring to challenge the present.</p></li>
-        <li class="feature reveal" style="--d:.16s"><bsh-icon name="globe"></bsh-icon><h3 class="card-title-sm">Potential from anywhere</h3><p class="copy">Unbound by geography, identity, or resources.</p></li>
-        <li class="feature reveal" style="--d:.24s"><bsh-icon name="ripples"></bsh-icon><h3 class="card-title-sm">Growth that ripples</h3><p class="copy">Success that spreads from the individual to the community.</p></li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="section t-dark" aria-label="Get in touch">
-    <div class="wrap">
-      <div class="pair">
-        <div class="card">
-          <h2 class="card-title">Building human-centered AI?</h2>
-          <p class="copy">Tell us what you’re building and where you are in your journey.</p>
-          <div class="ctas ctas--left"><a class="btn btn-primary" href="join.html#founder">Pitch us</a></div>
+      <div class="ph-copy">
+        <p class="label">Ventures</p>
+        <h1 class="d-xl balance" id="hero-title">Backing human-centered AI.</h1>
+        <p class="lede">We invest and collaborate with founders and GPs committed to human-centered AI technology.</p>
+        <div class="actions">
+          <a class="btn" href="join.html#founder">Pitch us <bsh-icon name="arrow"></bsh-icon></a>
+          <a class="btn btn-ghost" href="join.html#investor">Invest with us</a>
         </div>
-        <div class="card">
-          <h2 class="card-title">Investing in it?</h2>
-          <p class="copy">We work with GPs, investors and scouts who share our commitment to human-centered AI.</p>
-          <div class="ctas ctas--left">
-            <a class="btn btn-primary" href="join.html#investor">Invest with us</a>
-            <a class="more" href="join.html#scout">Become a scout <bsh-icon name="chevronRight"></bsh-icon></a>
-          </div>
+      </div>
+      <dl class="ph-facts">
+        <div><dt>Focus</dt><dd>Human-centered AI</dd></div>
+        <div><dt>We back</dt><dd>Founders and fund managers</dd></div>
+        <div><dt>GP collaborations</dt><dd>7 funds</dd></div>
+        <div><dt>Founded</dt><dd>2024, Berkeley Hills</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec f-paper" aria-label="Our focus">
+    <div class="wrap">
+      <p class="statement">Exceptional founders. Critical growth stages. <em>Technology built to serve people and planet.</em></p>
+    </div>
+  </section>
+
+  <section class="sec sec--flush-top f-paper" id="overview" aria-labelledby="ways-title">
+    <div class="wrap">
+      <header class="sec-hd">
+        <p class="label" data-tone="cobalt">How we invest</p>
+        <h2 class="h2" id="ways-title">Two ways we invest.</h2>
+      </header>
+      <div class="ways">
+        <article class="way rv">
+          <p class="way-num">01</p>
+          <h3 class="h3">Founders</h3>
+          <p>We invest in exceptional founders at critical growth stages, building AI that serves people.</p>
+          <a class="link" href="#portfolio">See the portfolio <bsh-icon name="arrow"></bsh-icon></a>
+        </article>
+        <article class="way rv" style="--d:.08s">
+          <p class="way-num">02</p>
+          <h3 class="h3">Fund managers</h3>
+          <p>We collaborate with GPs who share our commitment to human-centered AI technology.</p>
+          <a class="link" href="#partners">See our GP partners <bsh-icon name="arrow"></bsh-icon></a>
+        </article>
+      </div>
+      <div class="figures" style="margin-top:clamp(64px,8vw,112px)">
+        <p class="figure rv" data-tone="cobalt"><b>7</b><span>GP collaborations with funds that share our focus.</span></p>
+        <p class="figure rv" data-tone="cobalt" style="--d:.08s"><b>3</b><span>Interconnected pillars: Ventures, Incubator and Foundation.</span></p>
+        <p class="figure rv" data-tone="cobalt" style="--d:.16s"><b>2024</b><span>Founded in a house in the Berkeley Hills.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec f-stone" id="portfolio" aria-labelledby="portfolio-title">
+    <div class="wrap">
+      <header class="sec-hd">
+        <p class="label" data-tone="cobalt">Portfolio</p>
+        <h2 class="h2" id="portfolio-title">Selected portfolio.</h2>
+        <p class="lede">Exceptional founders at critical growth stages.</p>
+      </header>
+      <ul class="names">
+        <li class="rv"><span class="nm">Databricks</span><span class="mono">Portfolio company</span></li>
+        <li class="rv"><span class="nm">Flourish</span><span class="mono">Portfolio company</span></li>
+        <li class="rv"><span class="nm">GridCARE</span><span class="mono">Portfolio company</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec sec--flush-top f-stone band" aria-label="Photo">
+    <div class="wrap">
+      <figure class="rv">
+        <img src="https://bsh-static.neuship.co/InceptionCohort195.jpg" loading="lazy" decoding="async" alt="Founders and investors mingling in a grand hall with wooden beams and chandeliers." style="object-position:50% 55%">
+        <figcaption class="mono">Inception Cohort Demo Day, with Inception Studio</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="sec f-paper" id="partners" aria-labelledby="partners-title">
+    <div class="wrap">
+      <header class="sec-hd">
+        <p class="label" data-tone="cobalt">GP collaboration</p>
+        <h2 class="h2" id="partners-title">Funds we work alongside.</h2>
+        <p class="lede">We collaborate with funds committed to human-centered AI.</p>
+      </header>
+      <ul class="names names--two">
+        <li><span class="nm">AINA Climate AI Ventures</span><span class="mono">GP</span></li>
+        <li><span class="nm">Berkeley Frontier Fund</span><span class="mono">GP</span></li>
+        <li><span class="nm">Fusion Fund</span><span class="mono">GP</span></li>
+        <li><span class="nm">Inception Studio</span><span class="mono">GP</span></li>
+        <li><span class="nm">Monolith</span><span class="mono">GP</span></li>
+        <li><span class="nm">Particle Future</span><span class="mono">GP</span></li>
+        <li><span class="nm">Wisdom Ventures</span><span class="mono">GP</span></li>
+        <li class="add"><a href="join.html#investor"><span class="nm">Collaborate with us</span><bsh-icon name="plus"></bsh-icon></a><span class="mono">For GPs</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec f-stone" aria-labelledby="lens-title">
+    <div class="wrap">
+      <header class="sec-hd">
+        <p class="label" data-tone="cobalt">What we look for</p>
+        <h2 class="h2" id="lens-title">The values of the house, in every decision.</h2>
+      </header>
+      <ul class="criteria">
+        <li class="criterion rv"><h3 class="h4">Human-centered AI</h3><p>Technology built to serve people and planet.</p></li>
+        <li class="criterion rv" style="--d:.08s"><h3 class="h4">Founders who dare</h3><p>Teams daring to challenge the present.</p></li>
+        <li class="criterion rv" style="--d:.16s"><h3 class="h4">Potential from anywhere</h3><p>Unbound by geography, identity, or resources.</p></li>
+        <li class="criterion rv" style="--d:.24s"><h3 class="h4">Growth that ripples</h3><p>Success that spreads from the individual to the community.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec f-paper" aria-label="Get in touch">
+    <div class="wrap duo">
+      <div class="duo-card">
+        <p class="label" data-tone="cobalt">Founders</p>
+        <h2 class="h3">Building human-centered AI?</h2>
+        <p class="body">Tell us what you’re building and where you are in your journey.</p>
+        <div class="actions"><a class="btn" href="join.html#founder">Pitch us <bsh-icon name="arrow"></bsh-icon></a></div>
+      </div>
+      <div class="duo-card">
+        <p class="label" data-tone="cobalt">Investors</p>
+        <h2 class="h3">Investing in it?</h2>
+        <p class="body">We work with GPs, investors and scouts who share our commitment to human-centered AI.</p>
+        <div class="actions">
+          <a class="btn" href="join.html#investor">Invest with us <bsh-icon name="arrow"></bsh-icon></a>
+          <a class="link" href="join.html#scout">Become a scout</a>
         </div>
       </div>
     </div>
   </section>
 </main>
 
-<bsh-footer crumb="Ventures"></bsh-footer>
+<bsh-footer></bsh-footer>
 </body>
 </html>

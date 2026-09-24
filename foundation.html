@@ -3,108 +3,116 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Foundation - Berkeley Summit House</title>
+<title>Foundation · Berkeley Summit House</title>
 <meta name="description" content="The Berkeley Summit House Foundation creates pathways for high-potential innovators aged 15 to 35 through roundtables, challenges, research support and community building.">
+<meta name="theme-color" content="#EDB431">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="assets/site.css">
-<script src="assets/partials.js"></script>
-<script src="assets/site.js" defer></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400;500;600&family=Funnel+Sans:wght@400;500;600&family=Geist+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/chrome.js"></script>
+<script src="assets/terrain.js" defer></script>
+<script src="assets/app.js" defer></script>
 </head>
-<body id="top">
-<bsh-globalnav current="foundation" dark></bsh-globalnav>
-<bsh-localnav title="Foundation" links="Overview:#overview|Programs:#programs" cta="Get involved" cta-href="join.html#young-leader" dark></bsh-localnav>
+<body>
+<bsh-header current="foundation"></bsh-header>
 
 <main id="main">
-  <section class="hero hero--pad t-dark" aria-labelledby="hero-title">
-    <div class="hero-copy wrap">
-      <p class="eyebrow-hero"><span class="grad">Foundation</span></p>
-      <h1 class="hero-title balance" id="hero-title">Pathways for the next generation.</h1>
-      <p class="intro">We create pathways for high-potential innovators through knowledge roundtables, entrepreneurship challenges, research support and community building.</p>
-      <div class="ctas">
-        <a class="btn btn-primary" href="join.html#young-leader">Join as a young leader</a>
-        <a class="btn btn-secondary" href="join.html#scholar">Join as a scholar</a>
+  <section class="page-hero f-gold" data-terrain-wrap aria-labelledby="hero-title">
+    <canvas data-terrain data-animate data-seed="57" data-peaks="a:.82,.26,1,.1;b:.66,.7,.7,.08;c:.97,.8,.6,.08" data-peaks-narrow="a:.8,.12,1,.3" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <div class="ph-copy">
+        <p class="label">Foundation</p>
+        <h1 class="d-xl balance" id="hero-title">Pathways for the next generation.</h1>
+        <p class="lede">We create pathways for high-potential innovators through knowledge roundtables, entrepreneurship challenges, research support and community building.</p>
+        <div class="actions">
+          <a class="btn" href="join.html#young-leader">Join as a young leader <bsh-icon name="arrow"></bsh-icon></a>
+          <a class="btn btn-ghost" href="join.html#scholar">Join as a scholar</a>
+        </div>
+      </div>
+      <div class="ages">
+        <p class="ages-range" aria-label="Ages 15 to 35">15<i aria-hidden="true">to</i>35</p>
+        <div class="ruler" aria-hidden="true">
+          <ol><li>15</li><li>20</li><li>25</li><li>30</li><li>35</li></ol>
+        </div>
+        <p class="small">The ages our programs are built for.</p>
       </div>
     </div>
-    <div class="wrap center" style="margin-top:96px">
-      <p class="mega" aria-label="Ages 15 to 35"><span class="grad">15–35</span></p>
-      <p class="mega-note">The ages our programs are built for.</p>
+  </section>
+
+  <section class="sec f-paper" aria-label="Overview">
+    <div class="wrap">
+      <p class="statement">Conversations with industry titans. Pitch competitions for high school and college students. <em>Funding for research. Retreats that turn peers into a community.</em></p>
     </div>
   </section>
 
-  <section class="section t-light" id="overview" aria-label="Overview">
+  <section class="sec f-stone" id="programs" aria-labelledby="programs-title">
     <div class="wrap">
-      <p class="lit statement" data-lit>Conversations with industry titans. Pitch competitions for high school and college students. Funding for research. Retreats that turn peers into a community.</p>
-    </div>
-  </section>
-
-  <section class="section t-alt" id="programs" aria-labelledby="programs-title">
-    <div class="wrap">
-      <header class="sec-head">
-        <h2 class="headline" id="programs-title">Four ways in.</h2>
-        <p class="intro">Every program is a door into the community, whatever stage you’re at.</p>
+      <header class="sec-hd">
+        <p class="label" data-tone="gold">Programs</p>
+        <h2 class="h2" id="programs-title">Four ways in.</h2>
+        <p class="lede">Every program is a door into the community, whatever stage you’re at.</p>
       </header>
       <div class="programs">
-        <article class="program-card reveal">
-          <img src="https://bsh-static.neuship.co/AIAgentInActionPanel3.jpg" width="1702" height="1276" loading="lazy" decoding="async" alt="Panelists in conversation in front of a Berkeley Summit House slide.">
+        <article class="program rv">
+          <div class="program-media"><img src="https://bsh-static.neuship.co/AIAgentInActionPanel3.jpg" loading="lazy" decoding="async" alt="Panelists in conversation in front of a Berkeley Summit House slide."></div>
           <div class="program-body">
-            <bsh-icon name="bubbles"></bsh-icon>
-            <h3 class="card-title">Knowledge Roundtables</h3>
-            <p class="copy">Curated conversations that bridge the gap between founders and industry titans.</p>
-            <p class="program-past"><strong>From past gatherings</strong>Go-to-Market Roundtable · AI Agents in Action: Industry × Academia Exchange</p>
+            <p class="label" data-tone="gold">01</p>
+            <h3 class="h3">Knowledge Roundtables</h3>
+            <p>Curated conversations that bridge the gap between founders and industry titans.</p>
+            <p class="program-past"><span class="mono">From past gatherings</span>Go-to-Market Roundtable · AI Agents in Action: Industry × Academia Exchange</p>
           </div>
         </article>
-        <article class="program-card reveal" style="--d:.1s">
-          <img src="https://bsh-static.neuship.co/YBVChallenge3.jpg" width="2048" height="1366" loading="lazy" decoding="async" alt="A student team on stage receiving recognition at the Youth Business Ventures Challenge.">
+        <article class="program rv" style="--d:.08s">
+          <div class="program-media"><img src="https://bsh-static.neuship.co/YBVChallenge3.jpg" loading="lazy" decoding="async" alt="A student team on stage receiving recognition at the Youth Business Ventures Challenge."></div>
           <div class="program-body">
-            <bsh-icon name="trophy"></bsh-icon>
-            <h3 class="card-title">Entrepreneurship Challenges</h3>
-            <p class="copy">High-impact pitch competitions for high school and college students.</p>
-            <p class="program-past"><strong>From past gatherings</strong>Youth Business Ventures Challenge · AI Does It All: Business Pitch Challenge</p>
+            <p class="label" data-tone="gold">02</p>
+            <h3 class="h3">Entrepreneurship Challenges</h3>
+            <p>High-impact pitch competitions for high school and college students.</p>
+            <p class="program-past"><span class="mono">From past gatherings</span>Youth Business Ventures Challenge · AI Does It All: Business Pitch Challenge</p>
           </div>
         </article>
-        <article class="program-card reveal">
-          <div class="program-art" aria-hidden="true"><bsh-icon name="flask"></bsh-icon></div>
+        <article class="program rv">
+          <div class="program-media f-gold" data-terrain-wrap><canvas data-terrain data-seed="61" data-peaks="a:.5,.5,1,.18;b:.12,.15,.5,.12;c:.9,.85,.5,.12" data-peaks-narrow="a:.5,.5,1,.22" aria-hidden="true"></canvas></div>
           <div class="program-body">
-            <bsh-icon name="flask"></bsh-icon>
-            <h3 class="card-title">Research Support</h3>
-            <p class="copy">Targeted funding to bridge the gap between academic inquiry and innovation.</p>
-            <p><a class="more" href="join.html#scholar">Tell us about your research <bsh-icon name="chevronRight"></bsh-icon></a></p>
+            <p class="label" data-tone="gold">03</p>
+            <h3 class="h3">Research Support</h3>
+            <p>Targeted funding to bridge the gap between academic inquiry and innovation.</p>
+            <p class="program-past"><a class="link" href="join.html#scholar">Tell us about your research <bsh-icon name="arrow"></bsh-icon></a></p>
           </div>
         </article>
-        <article class="program-card reveal" style="--d:.1s">
-          <img src="https://bsh-static.neuship.co/NapaFoundersRetreat2-2.jpg" width="2523" height="1323" loading="lazy" decoding="async" alt="Dozens of founders together at the entrance of a Napa winery at dusk.">
+        <article class="program rv" style="--d:.08s">
+          <div class="program-media"><img src="https://bsh-static.neuship.co/NapaFoundersRetreat2-2.jpg" loading="lazy" decoding="async" alt="Dozens of founders together at the entrance of a Napa winery at dusk."></div>
           <div class="program-body">
-            <bsh-icon name="tent"></bsh-icon>
-            <h3 class="card-title">Community Building</h3>
-            <p class="copy">Offsite retreats fostering deep connections and collaborative learning.</p>
-            <p class="program-past"><strong>From past gatherings</strong>Napa Founders Retreat · Future Society Lab, Napa · Mid-Summer BBQ, Palo Alto</p>
+            <p class="label" data-tone="gold">04</p>
+            <h3 class="h3">Community Building</h3>
+            <p>Offsite retreats fostering deep connections and collaborative learning.</p>
+            <p class="program-past"><span class="mono">From past gatherings</span>Napa Founders Retreat · Future Society Lab, Napa · Mid-Summer BBQ, Palo Alto</p>
           </div>
         </article>
       </div>
     </div>
   </section>
 
-  <section class="section t-dark" aria-label="Get involved">
-    <div class="wrap">
-      <div class="pair">
-        <div class="card">
-          <h2 class="card-title">Aged 15 to 35?</h2>
-          <p class="copy">Join the community to hear about roundtables, challenges and retreats as they open.</p>
-          <div class="ctas ctas--left"><a class="btn btn-primary" href="join.html#young-leader">Join as a young leader</a></div>
-        </div>
-        <div class="card">
-          <h2 class="card-title">Know a young innovator?</h2>
-          <p class="copy">Bring them along to one of our next gatherings. Every door here is meant to be opened.</p>
-          <div class="ctas ctas--left"><a class="btn btn-primary" href="events.html">See events</a></div>
-        </div>
+  <section class="sec f-paper" aria-label="Get involved">
+    <div class="wrap duo">
+      <div class="duo-card">
+        <p class="label" data-tone="gold">Young leaders</p>
+        <h2 class="h3">Aged 15 to 35?</h2>
+        <p class="body">Join the community to hear about roundtables, challenges and retreats as they open.</p>
+        <div class="actions"><a class="btn" href="join.html#young-leader">Join as a young leader <bsh-icon name="arrow"></bsh-icon></a></div>
+      </div>
+      <div class="duo-card">
+        <p class="label" data-tone="gold">Mentors and parents</p>
+        <h2 class="h3">Know a young innovator?</h2>
+        <p class="body">Bring them along to one of our next gatherings. Every door here is meant to be opened.</p>
+        <div class="actions"><a class="btn" href="events.html">See events <bsh-icon name="arrow"></bsh-icon></a></div>
       </div>
     </div>
   </section>
 </main>
 
-<bsh-footer crumb="Foundation"></bsh-footer>
+<bsh-footer></bsh-footer>
 </body>
 </html>
