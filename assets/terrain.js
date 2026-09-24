@@ -14,7 +14,9 @@
    and the radius as a fraction of its longer side. Elements marked
    data-peak="name" inside the wrap are pinned to their peak. data-animate
    lets the land drift slowly and rise a little under the pointer; it stays
-   still under Reduce Motion and whenever it is off screen. */
+   still under Reduce Motion and whenever it is off screen.
+   data-shape="square" raises each peak as a square instead of a round hill,
+   so its contour rings are squares. */
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
   const finePointer = matchMedia('(pointer: fine)');
@@ -80,6 +82,7 @@
       this.step = Number(d.step) || 0.07;
       this.amp = d.amp ? Number(d.amp) : 0.34;
       this.scale = Number(d.scale) || 460;
+      this.square = d.shape === 'square';
       this.animate = canvas.hasAttribute('data-animate');
       this.t = (Number(d.seed) || 1) * 17;
       this.bump = 0;
@@ -148,6 +151,10 @@
       const f1 = 1 / this.scale, f2 = 2.3 / this.scale, amp = this.amp;
       const pk = this.peaks.map(p => [p.x * w, p.y * h, p.h, 2 * (p.r * S) ** 2]);
       const bump = this.bump * 0.2, bx = this.px, by = this.py, br = 2 * (S * 0.05) ** 2;
+      // Squared distance: round (Euclidean) or square (the larger of the two axes).
+      const dist2 = this.square
+        ? (dx, dy) => { const m = Math.max(Math.abs(dx), Math.abs(dy)); return m * m; }
+        : (dx, dy) => dx * dx + dy * dy;
       let k = 0;
       for (let j = 0; j < rows; j++) {
         const y = j * cell;
@@ -156,12 +163,10 @@
           let v = amp * (0.7 * noise(x * f1 + t * 0.024, y * f1 - t * 0.015)
                        + 0.3 * noise(x * f2 - t * 0.019 + 40, y * f2 + t * 0.012));
           for (let q = 0; q < pk.length; q++) {
-            const dx = x - pk[q][0], dy = y - pk[q][1];
-            v += pk[q][2] * Math.exp(-(dx * dx + dy * dy) / pk[q][3]);
+            v += pk[q][2] * Math.exp(-dist2(x - pk[q][0], y - pk[q][1]) / pk[q][3]);
           }
           if (bump > 0.001) {
-            const dx = x - bx, dy = y - by;
-            v += bump * Math.exp(-(dx * dx + dy * dy) / br);
+            v += bump * Math.exp(-dist2(x - bx, y - by) / br);
           }
           field[k] = v;
         }
