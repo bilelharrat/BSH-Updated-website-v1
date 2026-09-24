@@ -1,14 +1,8 @@
 /* Berkeley Summit House: shared page chrome.
-   Loaded synchronously in <head> so the header, logo and house drawing are
-   in place for the first paint. In a production build these map one-to-one
-   onto <Logo />, <SiteHeader />, <SiteFooter /> and <HouseSection />. */
+   Loaded synchronously in <head> so the navigation is in place for the first
+   paint. Each custom element maps one-to-one onto a component in the
+   production build: <GlobalNav />, <LocalNav />, <Footer />, <Icon />. */
 (() => {
-  // Remembered appearance choice, stamped before anything paints.
-  try {
-    const saved = localStorage.getItem('bsh-theme');
-    if (saved === 'light' || saved === 'dark') document.documentElement.dataset.theme = saved;
-  } catch (e) { /* storage unavailable: follow the system */ }
-
   const EMAIL = 'founders@berkeleysummithouse.org';
   const LINKS = {
     luma: 'https://luma.com/berkeleysummithouse',
@@ -16,175 +10,182 @@
     youtube: 'https://www.youtube.com/@berkeleysummithouse',
   };
 
-  // The mountain mark and wordmark, exactly as drawn in the brand SVG.
+  // The BSH mountain mark, exactly as drawn in the brand file.
   const MARK = '<path d="M54.2302 10.179L73.2761 44.8541C73.974 46.119 75.5732 46.5843 76.8381 45.8573L89.6323 38.5733C91.0426 37.7737 92.8309 38.4425 93.3688 39.9836L100.609 60.876C101.191 62.5625 99.9404 64.3217 98.1521 64.3217H38.9499C37.2488 64.3217 36.013 62.7224 36.4346 61.0795L49.4469 10.7751C50.0285 8.49246 53.1107 8.11445 54.2302 10.179Z"/><path d="M36.202 40.3179L29.0925 62.5333C28.7436 63.6091 27.755 64.3361 26.6209 64.3361H3.48961C0.974389 64.3361 -0.0724086 61.1375 1.94849 59.6546L32.1893 37.4392C34.2102 35.9562 36.9726 37.9335 36.202 40.3179Z"/>';
-  const WORDMARK = '<path d="M121.867 10.0768C122.365 9.60687 122.615 8.97105 122.615 8.14171C122.615 7.64411 122.504 7.2018 122.255 6.78714C122.088 6.51069 121.867 6.31718 121.589 6.15132C121.645 6.09603 121.7 6.06838 121.783 6.01309C121.977 5.84723 122.116 5.68136 122.227 5.51549C122.421 5.15612 122.504 4.7691 122.504 4.38207C122.504 3.63567 122.282 3.0275 121.811 2.55754C121.34 2.08759 120.675 1.86643 119.761 1.86643H116.269V10.8232H120.038C120.758 10.8232 121.396 10.5744 121.867 10.0768ZM120.814 8.05878C120.814 8.33522 120.73 8.55638 120.564 8.74989C120.398 8.9434 120.121 9.02633 119.733 9.05398H118.07V7.06358H119.733C120.121 7.06358 120.398 7.17416 120.564 7.34002C120.73 7.53354 120.814 7.75469 120.814 8.03114V8.05878ZM120.426 5.12847C120.259 5.32198 119.982 5.40492 119.622 5.40492H118.07V3.55274H119.622C120.01 3.55274 120.287 3.63567 120.453 3.80154C120.62 3.99505 120.703 4.21621 120.703 4.46501C120.703 4.71381 120.62 4.93496 120.453 5.12847H120.426Z"/><path d="M130.54 9.05398H126.494V7.14651H129.958V5.46021H126.494V3.60803H130.54V1.86643H124.693V10.7956H130.54V9.05398Z"/><path d="M134.309 7.22945H135.473L137.108 10.6574L137.191 10.8232H139.325L137.33 6.953C138.299 6.48305 138.826 5.65372 138.826 4.49265C138.826 3.63567 138.493 2.97221 137.911 2.50225C137.44 2.08759 136.803 1.89408 136.027 1.89408H132.508V10.8509H134.309V7.22945ZM134.309 3.55274H135.999C136.332 3.55274 136.581 3.60803 136.775 3.7739C136.969 3.91212 137.08 4.16092 137.08 4.49265C137.08 4.79674 136.997 5.01789 136.803 5.23905C136.609 5.46021 136.332 5.54314 135.944 5.57078H134.309V3.55274Z"/><path d="M142.816 8.08642L143.925 6.89772L146.031 10.6574L146.114 10.7956H148.248L145.144 5.48785L148.054 1.86643H145.837L142.816 5.70901V1.86643H140.987V10.7956H142.816V8.08642Z"/><path d="M155.702 9.05398H151.629V7.14651H155.093V5.46021H151.629V3.60803H155.702V1.86643H149.827V10.7956H155.702V9.05398Z"/><path d="M163.489 9.05398H159.443V1.86643H157.642V10.7956H163.489V9.05398Z"/><path d="M171.304 9.05398H167.258V7.14651H170.722V5.46021H167.258V3.60803H171.304V1.86643H165.429V10.7956H171.304V9.05398Z"/><path d="M175.183 10.7956H176.901V7.14651L179.589 1.86643H177.622L176.042 5.21141L174.463 1.86643H172.495L175.183 7.14651V10.7956Z"/><path d="M189.094 31.8053C188.845 31.75 188.596 31.7224 188.319 31.6947C187.709 31.5842 187.21 31.4183 186.822 31.2248C186.434 31.0313 186.129 30.7548 185.908 30.4508C185.686 30.119 185.603 29.732 185.603 29.2344V14.7487H179.118V15.1081C179.922 15.191 180.559 15.3293 181.086 15.5228C181.585 15.7163 181.973 15.9651 182.25 16.3245C182.499 16.6838 182.638 17.1261 182.638 17.679V29.2344C182.638 29.732 182.527 30.1467 182.333 30.4784C182.111 30.8101 181.806 31.0866 181.391 31.2801C180.975 31.4736 180.449 31.6118 179.811 31.7224H179.562L179.506 31.75C178.897 31.6395 178.426 31.4736 178.065 31.2801C177.705 31.0866 177.428 30.8101 177.289 30.506C177.123 30.1743 177.068 29.7596 177.068 29.262V20.1117C177.068 18.9507 176.818 17.9278 176.32 17.0432C175.821 16.1586 175.156 15.4951 174.352 14.9975C173.548 14.5276 172.662 14.2788 171.719 14.2788C170.611 14.2788 169.586 14.6105 168.616 15.2463C167.646 15.8821 166.87 16.8497 166.288 18.1213C165.9 16.8773 165.235 15.9374 164.32 15.274C163.406 14.6105 162.408 14.2788 161.272 14.2788C160.247 14.2788 159.277 14.5552 158.363 15.1081C157.448 15.661 156.672 16.4903 156.062 17.5685V14.7487H149.911V15.1081C150.714 15.191 151.324 15.3293 151.767 15.5228C152.211 15.7163 152.543 15.9651 152.737 16.3245C152.959 16.6838 153.042 17.1261 153.042 17.679V29.2344C153.042 29.732 152.959 30.1743 152.793 30.4784C152.626 30.8101 152.377 31.0589 152.017 31.2524C151.656 31.4459 151.185 31.5842 150.576 31.6947L150.299 31.75H150.215C149.606 31.6395 149.135 31.4736 148.774 31.2801C148.414 31.0866 148.137 30.8101 147.998 30.506C147.832 30.1743 147.777 29.7596 147.777 29.262V20.1117C147.777 18.9507 147.527 17.9278 147.029 17.0432C146.53 16.1586 145.865 15.4951 145.061 14.9975C144.257 14.5276 143.371 14.2788 142.428 14.2788C141.32 14.2788 140.295 14.6105 139.325 15.2463C138.355 15.8821 137.579 16.8497 136.997 18.1213C136.609 16.8773 135.944 15.9374 135.03 15.274C134.115 14.6105 133.117 14.2788 131.981 14.2788C130.956 14.2788 129.986 14.5552 129.072 15.1081C128.157 15.661 127.381 16.4903 126.772 17.5685V14.7487H120.62V15.1081C121.423 15.191 122.033 15.3293 122.476 15.5228C122.92 15.7163 123.252 15.9651 123.446 16.3245C123.668 16.6838 123.751 17.1261 123.751 17.679V29.2344C123.751 29.732 123.668 30.1743 123.502 30.4784C123.335 30.8101 123.086 31.0589 122.726 31.2524C122.365 31.4459 121.894 31.5842 121.285 31.6947H121.146C120.592 31.6395 120.121 31.5289 119.788 31.3907C119.345 31.1972 119.012 30.9484 118.818 30.589C118.597 30.2296 118.514 29.7873 118.514 29.2344V14.7487H112.362V15.1081C112.611 15.1081 112.86 15.1634 113.082 15.2187C113.664 15.3293 114.135 15.4951 114.468 15.6886C114.8 15.8821 115.077 16.1586 115.244 16.4627C115.41 16.7944 115.493 17.1814 115.493 17.679V23.8437C115.493 25.0877 115.382 26.3041 115.133 27.5481C114.883 28.7921 114.495 29.8149 113.941 30.6443C113.387 31.4736 112.666 31.8883 111.807 31.8883C111.364 31.8883 110.948 31.6947 110.56 31.3077C110.172 30.9207 109.84 30.3125 109.59 29.5108C109.341 28.7092 109.23 27.7416 109.23 26.5805V14.804H103.078V15.1634L103.743 15.2463C104.353 15.3293 104.824 15.4951 105.184 15.6886C105.545 15.8821 105.794 16.1586 105.96 16.4903C106.127 16.8221 106.21 17.2644 106.21 17.762V27.0505C106.237 28.3221 106.459 29.4003 106.902 30.2572C107.346 31.1142 107.928 31.75 108.704 32.1647C109.48 32.5794 110.366 32.7729 111.364 32.7729C112.583 32.7729 113.525 32.4135 114.246 31.7224C114.966 31.0036 115.382 30.2296 115.521 29.3726V32.2753H129.931V31.9159C129.709 31.8606 129.46 31.833 129.21 31.8053C128.628 31.6947 128.157 31.5289 127.825 31.3354C127.492 31.1419 127.215 30.8654 127.049 30.5613C126.882 30.2296 126.799 29.8426 126.799 29.345V23.4014C126.799 21.798 127.049 20.3605 127.52 19.1165C127.991 17.8725 128.6 16.905 129.321 16.2139C130.041 15.5228 130.762 15.191 131.482 15.191C131.981 15.191 132.452 15.3845 132.896 15.7439C133.339 16.1033 133.672 16.6838 133.921 17.4579C134.17 18.2319 134.281 19.1995 134.281 20.3329V29.345C134.281 29.8426 134.198 30.2296 134.032 30.5613C133.866 30.8931 133.616 31.1419 133.256 31.3354C132.896 31.5289 132.425 31.6947 131.843 31.8053C131.621 31.8053 131.372 31.8606 131.15 31.9159V32.2753H140.433V31.9159C140.212 31.9159 139.99 31.8606 139.768 31.833C139.159 31.75 138.687 31.5842 138.299 31.3907C137.912 31.1972 137.662 30.9207 137.496 30.589C137.33 30.2572 137.274 29.8149 137.274 29.3173V23.3738C137.274 21.7428 137.496 20.3053 137.967 19.0613C138.438 17.8173 139.02 16.8497 139.74 16.1862C140.461 15.5228 141.181 15.1634 141.93 15.1634C142.428 15.1634 142.9 15.3569 143.343 15.7163C143.786 16.0757 144.119 16.6562 144.368 17.4302C144.618 18.2043 144.756 19.1442 144.756 20.2776V29.2897C144.756 29.7873 144.673 30.1743 144.507 30.506C144.341 30.8378 144.091 31.0866 143.731 31.2801C143.371 31.4736 142.9 31.6395 142.318 31.75C142.096 31.75 141.847 31.8053 141.625 31.8606V32.22H159.194V31.8606C158.972 31.8053 158.723 31.7777 158.473 31.75C157.891 31.6395 157.42 31.4736 157.088 31.2801C156.755 31.0866 156.478 30.8101 156.312 30.506C156.146 30.1743 156.062 29.7873 156.062 29.2897V23.3461C156.062 21.7428 156.312 20.3053 156.783 19.0613C157.254 17.8173 157.864 16.8497 158.584 16.1586C159.305 15.4675 160.025 15.1357 160.746 15.1357C161.245 15.1357 161.716 15.3293 162.159 15.6886C162.602 16.048 162.935 16.6285 163.184 17.4026C163.434 18.1766 163.545 19.1442 163.545 20.2776V29.2897C163.545 29.7873 163.461 30.1743 163.295 30.506C163.129 30.8378 162.879 31.0866 162.519 31.2801C162.159 31.4736 161.688 31.6395 161.106 31.75C160.884 31.75 160.635 31.8053 160.413 31.8606V32.22H169.697V31.8606C169.475 31.8606 169.253 31.8053 169.031 31.7777C168.422 31.6947 167.951 31.5289 167.563 31.3354C167.175 31.1419 166.925 30.8654 166.759 30.5337C166.593 30.202 166.537 29.7596 166.537 29.262V23.3185C166.537 21.6875 166.759 20.25 167.23 19.006C167.701 17.762 168.283 16.7944 169.004 16.1309C169.724 15.4675 170.445 15.1081 171.193 15.1081C171.692 15.1081 172.163 15.3016 172.606 15.661C173.05 16.0204 173.382 16.6009 173.632 17.3749C173.881 18.149 174.019 19.0889 174.019 20.2223V29.2344C174.019 29.732 173.936 30.119 173.77 30.4508C173.604 30.7825 173.354 31.0313 172.994 31.2248C172.634 31.4183 172.163 31.5842 171.581 31.6947C171.359 31.6947 171.11 31.75 170.888 31.8053V32.1647H189.122V31.8053H189.094Z"/><path d="M182.749 10.8509C183.053 11.0167 183.414 11.0997 183.774 11.0997C184.328 11.0997 184.799 10.9062 185.215 10.5191C185.631 10.1321 185.797 9.63451 185.797 8.99869C185.797 8.36287 185.603 7.92056 185.215 7.53354C184.827 7.17416 184.356 6.98065 183.774 6.98065C183.414 6.98065 183.053 7.06358 182.749 7.22945C182.444 7.39531 182.194 7.61647 182 7.9482C181.806 8.25229 181.723 8.61167 181.723 8.99869C181.723 9.41336 181.806 9.77273 182 10.1045C182.194 10.4086 182.444 10.6574 182.749 10.8232V10.8509Z"/><path d="M197.325 28.958C196.965 29.8702 196.577 30.5337 196.133 30.976C195.69 31.4183 195.219 31.6395 194.748 31.6395C194.083 31.6395 193.556 31.1695 193.223 30.202C192.891 29.2344 192.697 27.714 192.697 25.613V15.5504H197.075V14.7487H192.697V7.78234H192.004C191.866 9.46865 191.644 10.7956 191.367 11.7631C191.09 12.703 190.619 13.4494 189.981 13.947C189.316 14.4446 188.374 14.7211 187.155 14.7764V15.5781H189.704V26.6911C189.704 28.018 189.898 29.1238 190.286 30.0084C190.674 30.8931 191.201 31.5565 191.866 31.9988C192.531 32.4411 193.307 32.6623 194.166 32.6623C195.025 32.6623 195.745 32.3859 196.41 31.833C197.075 31.2801 197.63 30.4231 198.073 29.262L197.352 28.958H197.325Z"/><path d="M146.641 41.8126C145.477 41.0386 144.119 40.6515 142.65 40.6515C141.181 40.6515 139.824 41.0386 138.632 41.8126C137.44 42.5866 136.526 43.6648 135.861 45.0746C135.196 46.4845 134.863 48.1432 134.863 50.023C134.863 51.9028 135.196 53.5338 135.861 54.8884C136.526 56.2706 137.44 57.2935 138.632 58.0122C139.796 58.731 141.154 59.0904 142.678 59.0904C144.202 59.0904 145.532 58.731 146.696 58.0122C147.86 57.2935 148.774 56.243 149.412 54.8884C150.077 53.5062 150.382 51.9028 150.382 50.023C150.382 48.1432 150.049 46.4569 149.412 45.047C148.747 43.6371 147.86 42.559 146.668 41.785L146.641 41.8126ZM146.613 54.2526C146.253 55.4966 145.726 56.4918 145.033 57.1829C144.341 57.9016 143.537 58.2334 142.595 58.2334C141.653 58.2334 140.877 57.874 140.212 57.1829C139.519 56.4641 138.992 55.4966 138.632 54.2526C138.272 53.0086 138.078 51.5987 138.078 50.0506C138.078 48.392 138.272 46.9268 138.632 45.6552C138.992 44.3559 139.546 43.3607 140.212 42.6419C140.904 41.9232 141.708 41.5638 142.595 41.5638C143.482 41.5638 144.341 41.9232 145.033 42.6419C145.726 43.3607 146.253 44.3559 146.613 45.6552C146.973 46.9545 147.167 48.4196 147.167 50.0506C147.167 51.5987 147.001 53.0086 146.613 54.2526Z"/><path d="M164.792 57.0447C164.57 56.6853 164.487 56.243 164.487 55.6901V41.2044H158.335V41.5638C158.584 41.5638 158.834 41.6191 159.055 41.6744C159.637 41.785 160.108 41.9508 160.441 42.1443C160.773 42.3378 161.051 42.6143 161.217 42.9184C161.383 43.2501 161.466 43.6371 161.466 44.1347V50.2994C161.466 51.5434 161.355 52.7598 161.106 54.0038C160.857 55.2478 160.469 56.2706 159.914 57.1C159.36 57.9293 158.64 58.344 157.781 58.344C157.337 58.344 156.922 58.1504 156.534 57.7634C156.146 57.3764 155.813 56.7682 155.564 55.9665C155.314 55.1649 155.203 54.1973 155.203 53.0362V41.2597H149.051V41.6191L149.717 41.702C150.326 41.785 150.797 41.9508 151.158 42.1443C151.518 42.3378 151.767 42.6143 151.933 42.946C152.1 43.2778 152.183 43.7201 152.183 44.2177V53.5062C152.211 54.7778 152.432 55.856 152.876 56.7129C153.319 57.5699 153.901 58.2057 154.677 58.6204C155.453 59.0351 156.34 59.2286 157.337 59.2286C158.557 59.2286 159.499 58.8692 160.219 58.1781C160.94 57.4593 161.355 56.6853 161.494 55.8283V58.731H167.646V58.3716C166.842 58.2887 166.233 58.1505 165.789 57.9569C165.346 57.7634 165.013 57.5146 164.819 57.1553L164.792 57.0447Z"/><path d="M177.705 49.7742C177.04 49.3872 176.209 49.0001 175.211 48.5855L174.546 48.3367C174.297 48.2537 174.047 48.1432 173.77 48.0326C173.521 47.922 173.271 47.8114 172.994 47.6732C172.135 47.2033 171.47 46.7333 170.971 46.2081C170.472 45.7105 170.251 45.0746 170.251 44.3559C170.251 43.7201 170.389 43.1948 170.666 42.7525C170.944 42.3102 171.304 41.9785 171.719 41.785C172.163 41.5638 172.606 41.4809 173.105 41.4809C173.853 41.4809 174.546 41.6744 175.183 42.0891C175.821 42.5037 176.43 43.1395 177.04 43.9965C177.622 44.8811 178.232 45.9869 178.841 47.3968H179.202L178.62 42.2826C178.121 41.785 177.456 41.3703 176.569 41.0938C175.682 40.8174 174.74 40.6792 173.687 40.6792C172.634 40.6792 171.719 40.9003 170.805 41.315C169.89 41.7573 169.142 42.3378 168.56 43.1395C167.978 43.9136 167.701 44.7982 167.701 45.7658C167.701 46.7333 167.951 47.535 168.449 48.1985C168.948 48.8343 169.53 49.3319 170.223 49.6913C170.916 50.0506 171.858 50.4653 173.077 50.9353L173.798 51.2393C174.518 51.5434 175.156 51.8752 175.682 52.2345C176.209 52.5939 176.652 53.0086 176.985 53.4785C177.317 53.9485 177.483 54.5014 177.483 55.1096C177.483 55.6072 177.373 56.1324 177.123 56.63C176.874 57.1276 176.514 57.5423 176.015 57.8464C175.516 58.1504 174.906 58.3163 174.186 58.3163C173.105 58.3163 172.191 58.0122 171.415 57.3764C170.639 56.7406 169.946 55.856 169.364 54.6673C168.782 53.4785 168.117 51.8752 167.396 49.8295H167.036L167.452 56.4088C167.978 57.2935 168.837 57.9569 170.029 58.4269C171.221 58.8969 172.523 59.118 173.964 59.118C175.073 59.118 176.098 58.8969 177.012 58.4269C177.927 57.9569 178.647 57.3211 179.174 56.4641C179.7 55.6072 179.95 54.6396 179.95 53.5338C179.95 52.6492 179.728 51.9028 179.312 51.2946C178.897 50.6865 178.342 50.1889 177.677 49.8018L177.705 49.7742Z"/><path d="M190.923 47.4797H194.055C194.055 46.4016 193.833 45.3511 193.362 44.3006C192.919 43.2501 192.198 42.3931 191.256 41.702C190.314 41.0109 189.094 40.6792 187.653 40.6792C186.351 40.6792 185.132 41.1215 184.051 41.9785C182.943 42.8354 182.083 43.9965 181.418 45.434C180.781 46.8715 180.449 48.4196 180.449 50.1059C180.449 51.7922 180.781 53.2297 181.474 54.612C182.139 55.9942 183.081 57.1 184.245 57.9293C185.409 58.7586 186.739 59.1733 188.208 59.1733C188.956 59.1733 189.676 59.0074 190.397 58.648C191.117 58.2887 191.783 57.7081 192.392 56.8512C193.03 55.9942 193.528 54.8608 193.889 53.4509L193.113 53.1745C192.642 54.999 191.976 56.2983 191.117 57.1276C190.231 57.9569 189.316 58.3716 188.374 58.3716C187.432 58.3716 186.628 58.0399 185.908 57.3488C185.187 56.6576 184.633 55.6901 184.245 54.4461C183.857 53.2021 183.663 51.7369 183.663 50.0783C183.663 49.166 183.746 48.309 183.885 47.5074H190.896L190.923 47.4797ZM184.356 45.5722C184.799 44.273 185.353 43.2501 186.019 42.5314C186.684 41.8126 187.321 41.4809 187.958 41.4809C188.457 41.4809 188.928 41.6744 189.344 42.0338C189.76 42.3931 190.12 43.029 190.397 43.9136C190.619 44.6323 190.757 45.5722 190.84 46.678H184.079C184.162 46.3186 184.217 45.9316 184.328 45.5722H184.356Z"/><path d="M101.138 20.1947C100.529 19.1718 99.6697 17.8725 98.589 16.3245C97.4805 14.8317 96.6215 13.5877 96.0118 12.5372C95.4022 11.4867 94.9034 10.4086 94.5431 9.27513C94.1829 8.14171 94.072 7.03594 94.266 5.95781C94.4046 5.04554 94.7371 4.29914 95.2359 3.66332C95.7347 3.0275 96.289 2.58519 96.954 2.2811C97.6191 1.97701 98.3119 1.81114 99.0324 1.7835C100.113 1.7835 101 2.05994 101.748 2.61283C102.469 3.16572 103.078 4.0227 103.549 5.15612C104.02 6.31718 104.381 7.80998 104.63 9.71744H105.073L105.351 2.91692C104.464 2.25345 103.632 1.75585 102.773 1.45177C101.942 1.14768 100.806 0.981812 99.3649 0.981812C98.0071 0.981812 96.76 1.23061 95.6793 1.75586C94.5708 2.25345 93.6841 2.94456 93.019 3.80154C92.3539 4.65852 91.9106 5.59843 91.7443 6.64892C91.5503 7.83763 91.6334 9.08162 92.0214 10.3256C92.4094 11.5973 92.9636 12.786 93.6564 13.8917C94.3492 14.9975 95.2636 16.3797 96.3998 18.0108C97.4528 19.5036 98.2565 20.7199 98.8384 21.6598C99.4203 22.5997 99.8914 23.5673 100.224 24.5901C100.557 25.5853 100.667 26.5529 100.501 27.4928C100.335 28.5156 100.002 29.345 99.4758 30.0361C98.977 30.7272 98.3396 31.2248 97.6191 31.5289C96.8986 31.8606 96.1227 31.9988 95.3191 31.9988C94.0998 31.9988 93.019 31.6947 92.1045 31.1142C91.1901 30.5337 90.4141 29.5661 89.8045 28.2392C89.1948 26.9123 88.7792 25.1707 88.5575 23.042H88.0864L87.8647 30.589C88.4466 31.3354 89.3888 31.9159 90.6635 32.2753C91.9383 32.6347 93.407 32.8282 95.0419 32.8282C96.2612 32.8282 97.4251 32.6347 98.5059 32.22C99.5866 31.8053 100.529 31.1695 101.332 30.2849C102.136 29.4003 102.663 28.2392 102.884 26.8293C103.051 25.7512 102.967 24.6454 102.607 23.4844C102.247 22.3233 101.748 21.2452 101.138 20.2223V20.1947Z"/><path d="M137.856 36.2008L137.911 35.7861H126.772L126.716 36.2008L127.52 36.2837C128.323 36.3667 128.961 36.5049 129.432 36.6707C129.903 36.8366 130.235 37.1131 130.402 37.4724C130.596 37.8042 130.623 38.2741 130.54 38.8547L129.681 44.0518H116.879L117.738 38.8547C117.848 38.2741 118.042 37.8042 118.347 37.4724C118.652 37.1407 119.04 36.8643 119.539 36.6984C120.01 36.5325 120.675 36.3943 121.479 36.2837C121.783 36.2561 122.116 36.2284 122.421 36.2008L122.476 35.7861H111.364L111.309 36.2008L112.195 36.2837C113.054 36.3667 113.719 36.4772 114.163 36.6431C114.606 36.809 114.911 37.0578 115.05 37.4171C115.216 37.7765 115.244 38.2465 115.133 38.8547L111.364 61.7719C111.253 62.3524 111.087 62.8224 110.782 63.1541C110.505 63.4858 110.089 63.7623 109.59 63.9281C109.092 64.094 108.399 64.2046 107.54 64.2875L106.681 64.3981L106.625 64.8128H117.738L117.793 64.3981C117.488 64.3428 117.183 64.3152 116.879 64.2875C116.103 64.1769 115.493 64.0387 115.077 63.8452C114.662 63.6517 114.329 63.4029 114.135 63.0712C113.941 62.7394 113.886 62.2971 113.969 61.7442L116.768 44.7706H129.57L126.772 61.7442C126.661 62.3248 126.467 62.7947 126.162 63.1264C125.857 63.4582 125.441 63.707 124.943 63.9005C124.416 64.094 123.751 64.2046 122.92 64.2875L122.088 64.3981L122.033 64.8128H133.173L133.228 64.3981C132.896 64.3428 132.563 64.3152 132.231 64.2875C131.427 64.1769 130.817 64.0387 130.374 63.8728C129.958 63.707 129.654 63.4582 129.487 63.1264C129.321 62.7947 129.293 62.3248 129.404 61.7442L133.173 38.827C133.284 38.2465 133.45 37.7765 133.727 37.4448C134.004 37.1131 134.364 36.8643 134.836 36.6707C135.307 36.5049 135.972 36.3667 136.803 36.2837C137.163 36.2284 137.524 36.1731 137.884 36.1455L137.856 36.2008Z"/>';
+  const mark = cls => `<svg class="${cls}" viewBox="0 0 101 65" fill="currentColor" aria-hidden="true" focusable="false">${MARK}</svg>`;
 
-  const logo = () => `<svg class="logo" viewBox="0 0 199 65" fill="currentColor" aria-hidden="true" focusable="false">${MARK}${WORDMARK}</svg>`;
-  window.BSH = { EMAIL, LINKS, MARK };
+  // A small line-icon set drawn on a 24px grid: one stroke weight, round ends.
+  const ICONS = {
+    chevronRight: '<path d="M9.5 5.5 16 12l-6.5 6.5"/>',
+    chevronLeft: '<path d="M14.5 5.5 8 12l6.5 6.5"/>',
+    chevronDown: '<path d="M5.5 9.5 12 16l6.5-6.5"/>',
+    arrowUpRight: '<path d="M7.5 16.5l9-9M9 7.5h7.5V15"/>',
+    close: '<path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/>',
+    check: '<path d="M5.5 12.5l4.2 4.2 8.8-8.9"/>',
+    info: '<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.2"/><path d="M12 7.9v.2"/>',
+    house: '<path d="M4 11.2 12 4.5l8 6.7"/><path d="M6.2 9.6v9.9h11.6V9.6"/><path d="M10.2 19.5v-5h3.6v5"/>',
+    trend: '<path d="M3.5 17 9 11.5l4 4 7.5-7.5"/><path d="M15 8h5.5v5.5"/>',
+    sparkles: '<path d="M11 3.5l1.6 4.9 4.9 1.6-4.9 1.6-1.6 4.9-1.6-4.9L4.5 10l4.9-1.6Z"/><path d="M18 14.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8Z"/>',
+    graduation: '<path d="M2.5 9.5 12 5l9.5 4.5L12 14Z"/><path d="M6.5 11.6v4.1c0 1.3 2.5 2.8 5.5 2.8s5.5-1.5 5.5-2.8v-4.1"/><path d="M21.5 9.5V15"/>',
+    calendar: '<rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 9.8h17"/><path d="M8 3v3.8M16 3v3.8"/>',
+    people: '<circle cx="9" cy="8.5" r="3.2"/><path d="M3.3 19.2c.6-3 2.9-4.9 5.7-4.9s5.1 1.9 5.7 4.9"/><circle cx="16.8" cy="9.2" r="2.6"/><path d="M15.9 14.4c2.4.1 4.2 1.8 4.8 4.4"/>',
+    globe: '<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5c-2.5 2.3-3.9 5.3-3.9 8.5s1.4 6.2 3.9 8.5c2.5-2.3 3.9-5.3 3.9-8.5S14.5 5.8 12 3.5Z"/><path d="M3.8 9.4h16.4M3.8 14.6h16.4"/>',
+    flame: '<path d="M12 3.2c.4 3.3 4.9 5.2 4.9 10.1a4.9 4.9 0 0 1-9.8 0c0-2.3 1.1-3.9 2.4-5 .2 1.6 1 2.7 2.2 3.2-.7-2.8-.4-5.6.3-8.3Z"/>',
+    heart: '<path d="M12 19.6S4.5 15 4.5 9.4A4.1 4.1 0 0 1 12 7.2a4.1 4.1 0 0 1 7.5 2.2c0 5.6-7.5 10.2-7.5 10.2Z"/>',
+    ripples: '<circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="5.2"/><circle cx="12" cy="12" r="8.6"/>',
+    book: '<path d="M12 6.6C10.2 5.2 7.7 4.5 4.5 4.5v13c3.2 0 5.7.7 7.5 2.1 1.8-1.4 4.3-2.1 7.5-2.1v-13c-3.2 0-5.7.7-7.5 2.1Z"/><path d="M12 6.6v13"/>',
+    scales: '<path d="M12 4v15.5M8.5 19.5h7M5 7.5h14"/><path d="M5 7.5l-2.4 5.7h4.8Z"/><path d="M19 7.5l-2.4 5.7h4.8Z"/>',
+    brush: '<path d="M19.8 4.2a1.4 1.4 0 0 0-2 0l-7.1 7.1 2 2 7.1-7.1a1.4 1.4 0 0 0 0-2Z"/><path d="M10.6 13.4c-1.5-1.5-4.1-1.3-5.2.5-.7 1.1-.6 2.3-1.3 3.3-.4.6-.9.9-1.4 1 2.9 1 6.3.6 7.9-1.4 1-1.1 1.1-2.4 0-3.4Z"/>',
+    bubbles: '<path d="M4.5 5h9a2 2 0 0 1 2 2v4.8a2 2 0 0 1-2 2H9l-3.4 2.8v-2.8H4.5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/><path d="M17.8 9h1.7a2 2 0 0 1 2 2v4.6a2 2 0 0 1-2 2h-1v2.6l-3.3-2.6H12"/>',
+    trophy: '<path d="M8 4h8v5.2a4 4 0 0 1-8 0Z"/><path d="M8 6H4.8v1.3A3.3 3.3 0 0 0 8 10.6M16 6h3.2v1.3a3.3 3.3 0 0 1-3.2 3.3"/><path d="M12 13.2V17M9 20h6M10 17h4v3h-4Z"/>',
+    flask: '<path d="M9.5 3.5h5M10.6 3.5v5.4l-5.2 8.9A1.9 1.9 0 0 0 7 20.5h10a1.9 1.9 0 0 0 1.6-2.7l-5.2-8.9V3.5"/><path d="M7.6 14.5h8.8"/>',
+    tent: '<path d="M2.5 19.5h19"/><path d="M12 4.5 4.3 19.5M12 4.5l7.7 15"/><path d="M9.6 19.5l2.4-5.1 2.4 5.1"/>',
+    link: '<path d="M10.4 13.6a3.8 3.8 0 0 0 5.4 0l2.8-2.8a3.8 3.8 0 0 0-5.4-5.4l-1 1"/><path d="M13.6 10.4a3.8 3.8 0 0 0-5.4 0l-2.8 2.8a3.8 3.8 0 0 0 5.4 5.4l1-1"/>',
+    box: '<path d="M3.5 7.6 12 3.6l8.5 4v8.8L12 20.4l-8.5-4Z"/><path d="M3.5 7.6 12 11.6l8.5-4M12 11.6v8.8"/>',
+    mappin: '<path d="M12 20.8s-6.2-5.3-6.2-10.6a6.2 6.2 0 0 1 12.4 0c0 5.3-6.2 10.6-6.2 10.6Z"/><circle cx="12" cy="10.2" r="2.2"/>',
+    mail: '<rect x="3.5" y="5.5" width="17" height="13" rx="2.5"/><path d="m4.2 7.2 7.8 5.8 7.8-5.8"/>',
+    photo: '<rect x="3.5" y="5" width="17" height="14" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="m4 17 4.8-4.4 3.4 3 3.3-2.8 4.5 3.8"/>',
+    play: '<path d="M8 5.8v12.4a.9.9 0 0 0 1.4.8l9.6-6.2a.9.9 0 0 0 0-1.6L9.4 5a.9.9 0 0 0-1.4.8Z" fill="currentColor" stroke="none"/>',
+    pause: '<rect x="6.5" y="5.5" width="3.8" height="13" rx="1" fill="currentColor" stroke="none"/><rect x="13.7" y="5.5" width="3.8" height="13" rx="1" fill="currentColor" stroke="none"/>',
+  };
+  const icon = (name, cls = 'icon') =>
+    `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${ICONS[name] || ''}</svg>`;
 
-  const NAV = [
-    ['story', 'Our story', 'index.html#story'],
+  window.BSH = { EMAIL, LINKS, icon };
+
+  const PAGES = [
+    ['story', 'Our Story', 'story.html'],
     ['ventures', 'Ventures', 'ventures.html'],
     ['incubator', 'Incubator', 'incubator.html'],
     ['foundation', 'Foundation', 'foundation.html'],
     ['events', 'Events', 'events.html'],
+    ['join', 'Join', 'join.html'],
   ];
-  const navItems = current => NAV.map(([key, label, href]) =>
-    `<li><a href="${href}"${key === current ? ' aria-current="page"' : ''}>${label}</a></li>`).join('');
 
-  const out = (label, href) =>
-    `<a href="${href}" target="_blank" rel="noopener">${label}<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>`;
-
-  const emailChip = () =>
-    `<span class="email-chip"><a href="mailto:${EMAIL}">${EMAIL.replace('@', '@<wbr>')}</a><button type="button" class="copy-btn" data-copy="${EMAIL}">Copy</button></span>`;
-  window.BSH.emailChip = emailChip;
-
-  class BshLogo extends HTMLElement {
-    connectedCallback() { if (!this.firstChild) this.innerHTML = logo(); }
+  /* <bsh-icon name="globe"> */
+  class BshIcon extends HTMLElement {
+    connectedCallback() { if (!this.firstChild) this.innerHTML = icon(this.getAttribute('name')); }
   }
 
-  class BshHeader extends HTMLElement {
+  /* <bsh-globalnav current="ventures" dark> */
+  class BshGlobalNav extends HTMLElement {
     connectedCallback() {
       if (this.dataset.ready) return;
       this.dataset.ready = '1';
       const current = this.getAttribute('current') || '';
+      const dark = this.hasAttribute('dark');
+      const items = PAGES.map(([key, label, href]) =>
+        `<li><a href="${href}"${key === current ? ' aria-current="page"' : ''}>${label}</a></li>`).join('');
       this.innerHTML = `
-        <a class="skip-link" href="#main">Skip to content</a>
-        <header class="site-header" data-header>
-          <div class="wrap nav">
-            <a class="brand" href="index.html"><span class="visually-hidden">Berkeley Summit House, home</span>${logo()}</a>
-            <nav class="nav-main" aria-label="Main"><ul class="nav-list">${navItems(current)}</ul></nav>
-            <a class="btn btn-primary btn-sm nav-cta" href="join.html"${current === 'join' ? ' aria-current="page"' : ''}>Join the community</a>
-            <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu-panel" data-menu-open>
-              <span class="menu-icon" aria-hidden="true"><i></i><i></i></span>Menu
+        <a class="skip" href="#main">Skip to content</a>
+        <nav class="gn${dark ? ' gn--dark' : ''}" aria-label="Global" data-gn>
+          <div class="gn-bar">
+            <a class="gn-logo" href="index.html"><span class="visually-hidden">Berkeley Summit House</span>${mark('gn-mark')}</a>
+            <ul class="gn-list">${items}</ul>
+            <button class="gn-menu-btn" type="button" aria-expanded="false" aria-controls="gn-menu" data-gn-toggle>
+              <span class="visually-hidden">Menu</span><span class="gn-burger" aria-hidden="true"><i></i><i></i></span>
             </button>
           </div>
-        </header>
-        <div class="menu-panel" id="menu-panel" role="dialog" aria-modal="true" aria-label="Menu" hidden data-menu>
-          <div class="wrap menu-top">
-            <a class="brand" href="index.html"><span class="visually-hidden">Berkeley Summit House, home</span>${logo()}</a>
-            <button class="menu-btn" type="button" data-menu-close>Close</button>
+          <div class="gn-menu" id="gn-menu" data-gn-menu hidden>
+            <ul>
+              <li><a href="index.html"${current === 'home' ? ' aria-current="page"' : ''}>Home</a></li>
+              ${items}
+            </ul>
           </div>
-          <nav class="wrap menu-body" aria-label="Main">
-            <ul class="menu-list"><li><a href="index.html"${current === 'home' ? ' aria-current="page"' : ''}>Home</a></li>${navItems(current)}</ul>
-            <a class="btn btn-primary btn-lg" href="join.html">Join the community <span class="arrow" aria-hidden="true">→</span></a>
-          </nav>
-          <p class="wrap menu-foot">${EMAIL}</p>
-        </div>`;
+        </nav>`;
     }
   }
 
+  /* <bsh-localnav title="Ventures" links="Overview:#overview|Portfolio:#portfolio" cta="Pitch us" cta-href="join.html#founder" dark> */
+  class BshLocalNav extends HTMLElement {
+    connectedCallback() {
+      if (this.dataset.ready) return;
+      this.dataset.ready = '1';
+      const title = this.getAttribute('title') || '';
+      const dark = this.hasAttribute('dark');
+      const links = (this.getAttribute('links') || '').split('|').filter(Boolean).map(pair => {
+        const i = pair.indexOf(':');
+        return [pair.slice(0, i), pair.slice(i + 1)];
+      });
+      const cta = this.getAttribute('cta');
+      const ctaHref = this.getAttribute('cta-href') || 'join.html';
+      const external = /^https?:/.test(ctaHref);
+      this.removeAttribute('title'); // keep the tooltip off the whole bar
+      this.innerHTML = `
+        <nav class="ln${dark ? ' ln--dark' : ''}" aria-label="${title}" data-ln>
+          <div class="ln-bar">
+            <a class="ln-title" href="#top">${title}</a>
+            <div class="ln-right">
+              ${links.length ? `<button class="ln-toggle" type="button" aria-expanded="false" aria-controls="ln-items" data-ln-toggle>
+                <span class="visually-hidden">Sections</span>${icon('chevronDown')}</button>` : ''}
+              <ul class="ln-items" id="ln-items" data-ln-items>
+                ${links.map(([label, href]) => `<li><a href="${href}">${label}</a></li>`).join('')}
+              </ul>
+              ${cta ? `<a class="ln-cta" href="${ctaHref}"${external ? ' target="_blank" rel="noopener"' : ''}>${cta}</a>` : ''}
+            </div>
+          </div>
+        </nav>`;
+    }
+  }
+
+  /* <bsh-footer crumb="Ventures"> */
   class BshFooter extends HTMLElement {
     connectedCallback() {
       if (this.dataset.ready) return;
       this.dataset.ready = '1';
+      const crumb = this.getAttribute('crumb');
+      const out = (label, href) =>
+        `<a href="${href}" target="_blank" rel="noopener">${label}<span class="visually-hidden"> (opens in a new tab)</span></a>`;
       this.innerHTML = `
-        <footer class="site-footer">
-          <div class="wrap footer-grid">
-            <div class="footer-brand">
-              <a class="brand" href="index.html"><span class="visually-hidden">Berkeley Summit House, home</span>${logo()}</a>
-              <p>A global innovation community, born in a white house in the Berkeley Hills in 2024.</p>
+        <footer class="ft">
+          <div class="ft-inner">
+            <div class="ft-notes">
+              <p>Event dates and places come from the Berkeley Summit House calendar on Luma. Photos are from Berkeley Summit House community events.</p>
+              <p>This site is a design prototype. The join form does not send submissions yet.</p>
             </div>
-            <nav class="footer-col" aria-label="Footer">
-              <p class="eyebrow">Explore</p>
-              <ul>
-                <li><a href="index.html#story">Our story</a></li>
-                <li><a href="ventures.html">Ventures</a></li>
-                <li><a href="incubator.html">Incubator</a></li>
-                <li><a href="foundation.html">Foundation</a></li>
-                <li><a href="events.html">Events</a></li>
-                <li><a href="join.html">Join the community</a></li>
-              </ul>
+            <nav class="ft-crumbs" aria-label="Breadcrumbs">
+              <a href="index.html" class="ft-crumb-home"><span class="visually-hidden">Berkeley Summit House</span>${mark('ft-mark')}</a>
+              ${crumb ? `${icon('chevronRight', 'ft-sep')}<span>${crumb}</span>` : ''}
             </nav>
-            <div class="footer-col">
-              <p class="eyebrow">Stay in touch</p>
-              <ul>
-                <li>${emailChip()}</li>
-                <li>${out('Event calendar on Luma', LINKS.luma)}</li>
-                <li>${out('LinkedIn', LINKS.linkedin)}</li>
-                <li>${out('YouTube', LINKS.youtube)}</li>
-              </ul>
+            <div class="ft-dir">
+              <div>
+                <h3>Explore</h3>
+                <ul>
+                  <li><a href="story.html">Our Story</a></li>
+                  <li><a href="ventures.html">Ventures</a></li>
+                  <li><a href="incubator.html">Incubator</a></li>
+                  <li><a href="foundation.html">Foundation</a></li>
+                  <li><a href="events.html">Events</a></li>
+                </ul>
+              </div>
+              <div>
+                <h3>Community</h3>
+                <ul>
+                  <li><a href="join.html">Join the Community</a></li>
+                  <li>${out('Event Calendar', LINKS.luma)}</li>
+                  <li>${out('LinkedIn', LINKS.linkedin)}</li>
+                  <li>${out('YouTube', LINKS.youtube)}</li>
+                </ul>
+              </div>
+              <div>
+                <h3>Contact</h3>
+                <ul>
+                  <li class="ft-email"><a href="mailto:${EMAIL}">${EMAIL.replace('@', '@<wbr>')}</a> <button type="button" class="ft-copy" data-copy="${EMAIL}">Copy</button></li>
+                  <li>Berkeley Hills, California</li>
+                </ul>
+              </div>
             </div>
-          </div>
-          <div class="wrap footer-base">
-            <p>© 2026 Berkeley Summit House. All rights reserved.</p>
-            <div class="theme-switch" role="group" aria-label="Appearance">
-              <button type="button" aria-pressed="false" data-theme-choice="system">System</button>
-              <button type="button" aria-pressed="false" data-theme-choice="light">Day</button>
-              <button type="button" aria-pressed="false" data-theme-choice="dark">Night</button>
+            <div class="ft-legal">
+              <p>Copyright © 2026 Berkeley Summit House. All rights reserved.</p>
+              <p>Berkeley, California</p>
             </div>
           </div>
         </footer>`;
     }
   }
 
-  /* The house in section: three floors, three pillars.
-     Ventures is the top floor with the view of the summit, the Incubator is
-     the founder's room (mattress, chair, lamp), and the Foundation is, well,
-     the foundation. Read bottom-up it runs from ideation to realized impact. */
-  let houseCount = 0;
-  const houseSVG = (id, active) => {
-    const ticks = [];
-    for (let x = 6; x < 78; x += 14) ticks.push(`M${x} 466L${x + 9} 455`);
-    for (let x = 404; x < 474; x += 14) ticks.push(`M${x} 466L${x + 9} 455`);
-    const on = floor => (floor === active ? ' is-on' : '');
-    return `
-<svg class="house" viewBox="0 0 480 520" aria-hidden="true" focusable="false">
-  <defs>
-    <pattern id="${id}-hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-      <line x1="0" y1="0" x2="0" y2="8" class="h-hatch"/>
-    </pattern>
-  </defs>
-  <path class="h-hills" d="M0 250C50 226 96 236 140 222C190 206 214 172 262 180C316 188 350 214 398 204C430 197 456 188 480 184V452H0Z"/>
-  <path class="h-ln h-solid" d="M318 90H344V138.1L318 120.6Z"/>
-  <path class="h-ln h-solid" d="M313 84H349V90H313Z"/>
-  <path class="h-ln h-solid" d="M62 188L240 68L418 188Z"/>
-  <g class="h-floor${on('ventures')}" data-floor="ventures">
-    <rect class="h-room" x="96" y="188" width="288" height="112"/>
-    <text class="h-label" x="112" y="213">VENTURES</text>
-    <rect class="h-ln h-window" x="236" y="206" width="100" height="64"/>
-    <path class="h-ln" d="M228 272H344"/>
-    <g class="h-summit" transform="translate(256 224) scale(.6)">${MARK}</g>
-    <path class="h-ln h-solid" d="M171.7 265.1L216.4 242.4L211.6 233.6L168.3 258.9Z"/>
-    <path class="h-ln" d="M190 254L174 300M190 254L206 300M190 254V300"/>
-  </g>
-  <g class="h-floor${on('incubator')}" data-floor="incubator">
-    <rect class="h-room" x="96" y="300" width="288" height="112"/>
-    <text class="h-label" x="112" y="325">INCUBATOR</text>
-    <ellipse class="h-glow" cx="198" cy="372" rx="48" ry="15"/>
-    <g class="h-doodles" data-sketch="house-doodles" data-still></g>
-    <path class="h-ln" d="M150 372H236M156 372V412M230 372V412"/>
-    <path class="h-ln" d="M208 372H222M215 372L224 352L212 340"/>
-    <path class="h-ln h-solid" d="M203 347L212 336L220 344Z"/>
-    <path class="h-ln" d="M122 384H142M122 384L119 352M142 384V412M122 384V412"/>
-    <rect class="h-ln h-solid" x="252" y="398" width="62" height="14" rx="5"/>
-    <rect class="h-ln h-solid" x="257" y="392" width="18" height="8" rx="3"/>
-    <path class="h-ln" d="M380 412V398H372V384H364V370H356V356H348V342H340V328H332V314H324V300"/>
-  </g>
-  <g class="h-floor${on('foundation')}" data-floor="foundation">
-    <rect class="h-room" x="84" y="412" width="312" height="52"/>
-    <rect class="h-hatchfill" x="84" y="412" width="312" height="52" style="fill:url(#${id}-hatch)"/>
-    <rect class="h-chip" x="100" y="425" width="104" height="24"/>
-    <text class="h-label" x="110" y="441.5">FOUNDATION</text>
-  </g>
-  <path class="h-ln" d="M0 452H84M396 452H480"/>
-  <path class="h-ln h-thin" d="${ticks.join('')}"/>
-  <g class="h-annot" data-sketch="house-annot"></g>
-</svg>`;
-  };
-
-  class BshHouse extends HTMLElement {
-    connectedCallback() {
-      if (this.dataset.ready) return;
-      this.dataset.ready = '1';
-      houseCount += 1;
-      this.innerHTML = houseSVG(`house${houseCount}`, this.getAttribute('active') || '');
-    }
-  }
-
-  customElements.define('bsh-logo', BshLogo);
-  customElements.define('bsh-header', BshHeader);
+  customElements.define('bsh-icon', BshIcon);
+  customElements.define('bsh-globalnav', BshGlobalNav);
+  customElements.define('bsh-localnav', BshLocalNav);
   customElements.define('bsh-footer', BshFooter);
-  customElements.define('bsh-house', BshHouse);
 })();

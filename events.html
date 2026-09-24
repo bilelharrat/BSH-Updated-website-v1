@@ -3,214 +3,199 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Events · Berkeley Summit House</title>
+<title>Events - Berkeley Summit House</title>
 <meta name="description" content="Gatherings at Berkeley Summit House and beyond, where builders and thinkers support one another, exchange perspectives, and turn ideas into visions.">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..500&family=Nanum+Pen+Script&family=Noto+Serif+Display:ital,wdth,wght@0,62.5..100,300..600;1,62.5..100,300..600&family=Noto+Serif:ital,wght@0,400;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="assets/site.css">
 <script src="assets/partials.js"></script>
 <script src="assets/site.js" defer></script>
 </head>
-<body>
-<bsh-header current="events"></bsh-header>
+<body id="top">
+<bsh-globalnav current="events"></bsh-globalnav>
+<bsh-localnav title="Events" links="Upcoming:#upcoming|Past:#past|Photos:#photos" cta="Calendar" cta-href="https://luma.com/berkeleysummithouse"></bsh-localnav>
 
 <main id="main">
-  <section class="page-hero" aria-labelledby="page-title">
-    <div class="wrap page-hero-grid">
-      <div class="page-hero-copy">
-        <p class="eyebrow">Community</p>
-        <h1 class="display t-1" id="page-title">Where builders and thinkers come <em>together.</em></h1>
-        <p class="lede">Our community gathers at the house and beyond to support one another, exchange perspectives, and turn ideas into visions.</p>
-      </div>
+  <section class="hero t-light" aria-labelledby="hero-title">
+    <div class="hero-copy wrap">
+      <p class="eyebrow-hero"><span class="grad">Events</span></p>
+      <h1 class="hero-title balance" id="hero-title">Where builders gather.</h1>
+      <p class="intro">Our community comes together at the house and beyond to support one another, exchange perspectives, and turn ideas into visions.</p>
     </div>
   </section>
 
-  <section class="section--flush-top" aria-labelledby="next-title">
+  <section class="section t-light" id="upcoming" aria-labelledby="next-title">
     <div class="wrap">
-      <div class="next-up">
+      <div class="next-card">
+        <bsh-icon name="calendar"></bsh-icon>
         <div>
-          <p class="eyebrow">What’s next</p>
-          <h2 class="display t-3" id="next-title" style="margin-top:12px">New gatherings are announced on Luma.</h2>
-          <p class="prose" style="margin-top:12px">Follow the Berkeley Summit House calendar to hear about retreats, roundtables and evenings at the house as soon as they’re posted.</p>
+          <h2 class="card-title" id="next-title">What’s next.</h2>
+          <p class="copy" style="margin-top:8px">New gatherings are announced on our Luma calendar first. Follow it to hear about retreats, roundtables and evenings at the house.</p>
         </div>
-        <a class="btn btn-primary btn-lg" href="https://luma.com/berkeleysummithouse" target="_blank" rel="noopener">See upcoming events<span class="ext" aria-hidden="true" style="color:inherit">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>
+        <a class="btn btn-primary" href="https://luma.com/berkeleysummithouse" target="_blank" rel="noopener">See upcoming events <bsh-icon name="arrowUpRight"></bsh-icon><span class="visually-hidden"> (opens in a new tab)</span></a>
       </div>
     </div>
   </section>
 
-  <section class="section" aria-labelledby="log-title">
+  <section class="section t-alt" id="past" aria-labelledby="past-title">
     <div class="wrap">
       <header class="sec-head">
-        <p class="eyebrow">The logbook</p>
-        <h2 class="display t-2" id="log-title">Past <em>gatherings.</em></h2>
+        <h2 class="headline" id="past-title">Past gatherings.</h2>
       </header>
-
-      <div class="year">
-        <p class="year-label display t-2 num" aria-hidden="true">2026</p>
-        <ol class="log" aria-label="2026">
-          <li class="log-row">
-            <p class="log-date"><span class="log-day num">27</span><span class="log-mon">Jul</span></p>
-            <div>
-              <h3 class="log-title">Post YC SUS Tech Founder &amp; Researcher Happy Hour</h3>
-              <p class="log-meta"><span class="at-house">At the house</span> · Berkeley Hills</p>
-            </div>
-          </li>
-          <li class="log-row">
-            <p class="log-date"><span class="log-day num">25</span><span class="log-mon">Jul</span></p>
-            <div>
-              <h3 class="log-title">Mind Games AI Hackathon + Exclusive Napa Retreat</h3>
-              <p class="log-meta">Stanford, CA</p>
-            </div>
-          </li>
-          <li class="log-row">
-            <p class="log-date"><span class="log-day num">7</span><span class="log-mon">Jul</span></p>
-            <div>
-              <h3 class="log-title">Berkeley Summit House Mid-Summer BBQ</h3>
-              <p class="log-meta">Old Palo Alto</p>
-            </div>
-          </li>
-          <li class="log-row">
-            <p class="log-date"><span class="log-day num">2</span><span class="log-mon">May</span></p>
-            <div>
-              <h3 class="log-title">Future Society Lab: A Sci-Fi Role-Playing Game on the Age of AI</h3>
-              <p class="log-meta">Napa County, California</p>
-            </div>
-          </li>
-          <li class="log-row">
-            <p class="log-date"><span class="log-day num">30</span><span class="log-mon">Apr</span></p>
-            <div>
-              <h3 class="log-title">Silicon Valley Inner Circle: 5 Days Inside the Rooms That Matter</h3>
-              <p class="log-meta">A private Napa experience · Napa, CA</p>
-            </div>
-          </li>
-          <li class="log-row">
-            <p class="log-date"><span class="log-day num">17</span><span class="log-mon">Mar</span></p>
-            <div>
-              <h3 class="log-title">GTC After Party: Founder Dinner</h3>
-              <p class="log-meta">Financial District, San Francisco</p>
-            </div>
-          </li>
-          <li class="log-row">
-            <p class="log-date"><span class="log-day num">6</span><span class="log-mon">Mar</span></p>
-            <div>
-              <h3 class="log-title">Claude Code &amp; OpenClaw @ Berkeley: Lunch &amp; Live Use Cases</h3>
-              <p class="log-meta"><span class="at-house">At the house</span> · Berkeley Hills</p>
-            </div>
-            <button class="thumb" type="button" data-album="openclaw" data-index="0" aria-label="View 3 photos from Claude Code and OpenClaw at Berkeley">
-              <img src="https://bsh-static.neuship.co/ClaudeCodeOpenClawLiveUseCases1.jpg" alt="" loading="lazy" decoding="async">
-              <span class="thumb-count" aria-hidden="true">3 photos</span>
-            </button>
-          </li>
-        </ol>
+      <div class="filter-row">
+        <div class="segmented" role="group" aria-label="Filter by year" data-filter>
+          <button type="button" aria-pressed="true" data-value="all">All</button>
+          <button type="button" aria-pressed="false" data-value="2026">2026</button>
+          <button type="button" aria-pressed="false" data-value="2025">2025</button>
+        </div>
+        <p class="caption" aria-live="polite" data-filter-status>11 gatherings</p>
       </div>
-
-      <div class="year">
-        <p class="year-label display t-2 num" aria-hidden="true">2025</p>
-        <ol class="log" aria-label="2025">
-          <li class="log-row">
-            <p class="log-date"><span class="log-day num">17</span><span class="log-mon">Oct</span></p>
-            <div>
-              <h3 class="log-title">Hyper AI Programmer Event</h3>
-              <p class="log-meta">Berkeley, California</p>
-            </div>
-          </li>
-          <li class="log-row">
-            <p class="log-date"><span class="log-day num">27</span><span class="log-mon">Sep</span></p>
-            <div>
-              <h3 class="log-title">AI Does It All: Berkeley Summit House × Manus AI</h3>
-              <p class="log-meta"><span class="at-house">At the house</span> · Business pitch challenge</p>
-            </div>
-            <button class="thumb" type="button" data-album="aidoesitall" data-index="0" aria-label="View 3 photos from AI Does It All">
-              <img src="https://bsh-static.neuship.co/AIDoesItAll3.jpg" alt="" loading="lazy" decoding="async">
-              <span class="thumb-count" aria-hidden="true">3 photos</span>
-            </button>
-          </li>
-          <li class="log-row">
-            <p class="log-date"><span class="log-day num">19</span><span class="log-mon">Jun</span></p>
-            <div>
-              <h3 class="log-title">AI Agents in Action: Industry × Academia Exchange</h3>
-              <p class="log-meta"><span class="at-house">At the house</span> · Panel</p>
-            </div>
-            <button class="thumb" type="button" data-album="agents" data-index="0" aria-label="View 3 photos from AI Agents in Action">
-              <img src="https://bsh-static.neuship.co/AIAgentInActionPanel3.jpg" alt="" loading="lazy" decoding="async">
-              <span class="thumb-count" aria-hidden="true">3 photos</span>
-            </button>
-          </li>
-          <li class="log-row">
-            <p class="log-date"><span class="log-day num">23</span><span class="log-mon">May</span></p>
-            <div>
-              <h3 class="log-title">VibeCoding Craft Summitry, by Manus AI</h3>
-              <p class="log-meta">Berkeley, California</p>
-            </div>
-            <button class="thumb" type="button" data-album="vibecoding" data-index="0" aria-label="View 2 photos from VibeCoding Craft Summitry">
-              <img src="https://bsh-static.neuship.co/ManusVibeCraft1.jpg" alt="" loading="lazy" decoding="async">
-              <span class="thumb-count" aria-hidden="true">2 photos</span>
-            </button>
-          </li>
-        </ol>
-      </div>
+      <ol class="event-list">
+        <li class="event" data-year="2026">
+          <p class="event-date"><span class="mon">Jul</span><span class="day">27</span><span class="yr">2026</span></p>
+          <div>
+            <h3>Post YC SUS Tech Founder &amp; Researcher Happy Hour</h3>
+            <p class="event-meta"><span class="badge">At the house</span><span><bsh-icon name="mappin"></bsh-icon>Berkeley Hills</span></p>
+          </div>
+        </li>
+        <li class="event" data-year="2026">
+          <p class="event-date"><span class="mon">Jul</span><span class="day">25</span><span class="yr">2026</span></p>
+          <div>
+            <h3>Mind Games AI Hackathon + Exclusive Napa Retreat</h3>
+            <p class="event-meta"><span><bsh-icon name="mappin"></bsh-icon>Stanford, CA</span></p>
+          </div>
+        </li>
+        <li class="event" data-year="2026">
+          <p class="event-date"><span class="mon">Jul</span><span class="day">7</span><span class="yr">2026</span></p>
+          <div>
+            <h3>Berkeley Summit House Mid-Summer BBQ</h3>
+            <p class="event-meta"><span><bsh-icon name="mappin"></bsh-icon>Old Palo Alto</span></p>
+          </div>
+        </li>
+        <li class="event" data-year="2026">
+          <p class="event-date"><span class="mon">May</span><span class="day">2</span><span class="yr">2026</span></p>
+          <div>
+            <h3>Future Society Lab: A Sci-Fi Role-Playing Game on the Age of AI</h3>
+            <p class="event-meta"><span><bsh-icon name="mappin"></bsh-icon>Napa County, California</span></p>
+          </div>
+        </li>
+        <li class="event" data-year="2026">
+          <p class="event-date"><span class="mon">Apr</span><span class="day">30</span><span class="yr">2026</span></p>
+          <div>
+            <h3>Silicon Valley Inner Circle: 5 Days Inside the Rooms That Matter</h3>
+            <p class="event-meta"><span><bsh-icon name="mappin"></bsh-icon>Napa, CA · A private experience</span></p>
+          </div>
+        </li>
+        <li class="event" data-year="2026">
+          <p class="event-date"><span class="mon">Mar</span><span class="day">17</span><span class="yr">2026</span></p>
+          <div>
+            <h3>GTC After Party: Founder Dinner</h3>
+            <p class="event-meta"><span><bsh-icon name="mappin"></bsh-icon>Financial District, San Francisco</span></p>
+          </div>
+        </li>
+        <li class="event" data-year="2026">
+          <p class="event-date"><span class="mon">Mar</span><span class="day">6</span><span class="yr">2026</span></p>
+          <div>
+            <h3>Claude Code &amp; OpenClaw @ Berkeley: Lunch &amp; Live Use Cases</h3>
+            <p class="event-meta"><span class="badge">At the house</span><span><bsh-icon name="mappin"></bsh-icon>Berkeley Hills</span></p>
+          </div>
+          <button class="thumb-btn" type="button" data-album="openclaw" aria-label="View 3 photos from Claude Code and OpenClaw at Berkeley">
+            <img src="https://bsh-static.neuship.co/ClaudeCodeOpenClawLiveUseCases1.jpg" alt="" loading="lazy" decoding="async">
+            <span class="count" aria-hidden="true"><bsh-icon name="photo"></bsh-icon>3</span>
+          </button>
+        </li>
+        <li class="event" data-year="2025">
+          <p class="event-date"><span class="mon">Oct</span><span class="day">17</span><span class="yr">2025</span></p>
+          <div>
+            <h3>Hyper AI Programmer Event</h3>
+            <p class="event-meta"><span><bsh-icon name="mappin"></bsh-icon>Berkeley, California</span></p>
+          </div>
+        </li>
+        <li class="event" data-year="2025">
+          <p class="event-date"><span class="mon">Sep</span><span class="day">27</span><span class="yr">2025</span></p>
+          <div>
+            <h3>AI Does It All: Berkeley Summit House × Manus AI</h3>
+            <p class="event-meta"><span class="badge">At the house</span><span>Business pitch challenge</span></p>
+          </div>
+          <button class="thumb-btn" type="button" data-album="aidoesitall" aria-label="View 3 photos from AI Does It All">
+            <img src="https://bsh-static.neuship.co/AIDoesItAll3.jpg" alt="" loading="lazy" decoding="async">
+            <span class="count" aria-hidden="true"><bsh-icon name="photo"></bsh-icon>3</span>
+          </button>
+        </li>
+        <li class="event" data-year="2025">
+          <p class="event-date"><span class="mon">Jun</span><span class="day">19</span><span class="yr">2025</span></p>
+          <div>
+            <h3>AI Agents in Action: Industry × Academia Exchange</h3>
+            <p class="event-meta"><span class="badge">At the house</span><span>Panel</span></p>
+          </div>
+          <button class="thumb-btn" type="button" data-album="agents" aria-label="View 3 photos from AI Agents in Action">
+            <img src="https://bsh-static.neuship.co/AIAgentInActionPanel3.jpg" alt="" loading="lazy" decoding="async">
+            <span class="count" aria-hidden="true"><bsh-icon name="photo"></bsh-icon>3</span>
+          </button>
+        </li>
+        <li class="event" data-year="2025">
+          <p class="event-date"><span class="mon">May</span><span class="day">23</span><span class="yr">2025</span></p>
+          <div>
+            <h3>VibeCoding Craft Summitry, by Manus AI</h3>
+            <p class="event-meta"><span><bsh-icon name="mappin"></bsh-icon>Berkeley, California</span></p>
+          </div>
+          <button class="thumb-btn" type="button" data-album="vibecoding" aria-label="View 2 photos from VibeCoding Craft Summitry">
+            <img src="https://bsh-static.neuship.co/ManusVibeCraft1.jpg" alt="" loading="lazy" decoding="async">
+            <span class="count" aria-hidden="true"><bsh-icon name="photo"></bsh-icon>2</span>
+          </button>
+        </li>
+      </ol>
     </div>
   </section>
 
-  <section class="section rule-top" aria-labelledby="albums-title">
+  <section class="section t-light" id="photos" aria-labelledby="photos-title" data-shelf>
     <div class="wrap">
       <header class="sec-head">
-        <p class="eyebrow">From the album</p>
-        <h2 class="display t-2" id="albums-title">More moments from the <em>community.</em></h2>
+        <h2 class="headline" id="photos-title">From the album.</h2>
+        <p class="intro">More moments from retreats, demo days and challenges.</p>
       </header>
-      <ul class="albums">
-        <li class="album">
-          <button type="button" data-album="napa" data-index="0" aria-label="View 2 photos from the Napa Founders Retreat">
-            <img src="https://bsh-static.neuship.co/NapaFoundersRetreat1-1.jpg" alt="" loading="lazy" decoding="async">
-            <span class="album-count" aria-hidden="true">2 photos</span>
-          </button>
-          <h3>Napa Founders Retreat</h3>
-        </li>
-        <li class="album">
-          <button type="button" data-album="inception" data-index="0" aria-label="View 5 photos from the Inception Cohort Demo Day">
-            <img src="https://bsh-static.neuship.co/InceptionCohort195.jpg" alt="" loading="lazy" decoding="async">
-            <span class="album-count" aria-hidden="true">5 photos</span>
-          </button>
-          <h3>Inception Cohort Demo Day</h3>
-        </li>
-        <li class="album">
-          <button type="button" data-album="ybv" data-index="0" aria-label="View 5 photos from the Youth Business Ventures Challenge">
-            <img src="https://bsh-static.neuship.co/YBVChallenge1.jpg" alt="" loading="lazy" decoding="async">
-            <span class="album-count" aria-hidden="true">5 photos</span>
-          </button>
-          <h3>Youth Business Ventures Challenge</h3>
-        </li>
-        <li class="album">
-          <button type="button" data-album="gtm" data-index="0" aria-label="View the photo from the Go-to-Market Roundtable">
-            <img src="https://bsh-static.neuship.co/GoToMarketRoundtable.jpg" alt="" loading="lazy" decoding="async">
-            <span class="album-count" aria-hidden="true">1 photo</span>
-          </button>
-          <h3>Go-to-Market Roundtable</h3>
-        </li>
-        <li class="album">
-          <button type="button" data-album="artists" data-index="0" aria-label="View the photo from the AI Artists Meetup">
-            <img src="https://bsh-static.neuship.co/AIArtistsMeetup1.jpg" alt="" loading="lazy" decoding="async">
-            <span class="album-count" aria-hidden="true">1 photo</span>
-          </button>
-          <h3>AI Artists Meetup</h3>
-        </li>
-      </ul>
+    </div>
+    <ul class="shelf" aria-label="Photo albums">
+      <li><button class="album-card" type="button" data-album="napa" aria-label="View 2 photos from the Napa Founders Retreat">
+        <img src="https://bsh-static.neuship.co/NapaFoundersRetreat1-1.jpg" alt="" loading="lazy" decoding="async">
+        <span class="album-body"><span class="card-title-sm">Napa Founders Retreat</span><span class="caption">2 photos</span></span>
+      </button></li>
+      <li><button class="album-card" type="button" data-album="inception" aria-label="View 5 photos from the Inception Cohort Demo Day">
+        <img src="https://bsh-static.neuship.co/InceptionCohort195.jpg" alt="" loading="lazy" decoding="async">
+        <span class="album-body"><span class="card-title-sm">Inception Cohort Demo Day</span><span class="caption">5 photos</span></span>
+      </button></li>
+      <li><button class="album-card" type="button" data-album="ybv" aria-label="View 5 photos from the Youth Business Ventures Challenge">
+        <img src="https://bsh-static.neuship.co/YBVChallenge1.jpg" alt="" loading="lazy" decoding="async">
+        <span class="album-body"><span class="card-title-sm">Youth Business Ventures Challenge</span><span class="caption">5 photos</span></span>
+      </button></li>
+      <li><button class="album-card" type="button" data-album="gtm" aria-label="View the photo from the Go-to-Market Roundtable">
+        <img src="https://bsh-static.neuship.co/GoToMarketRoundtable.jpg" alt="" loading="lazy" decoding="async">
+        <span class="album-body"><span class="card-title-sm">Go-to-Market Roundtable</span><span class="caption">1 photo</span></span>
+      </button></li>
+      <li><button class="album-card" type="button" data-album="artists" aria-label="View the photo from the AI Artists Meetup">
+        <img src="https://bsh-static.neuship.co/AIArtistsMeetup1.jpg" alt="" loading="lazy" decoding="async">
+        <span class="album-body"><span class="card-title-sm">AI Artists Meetup</span><span class="caption">1 photo</span></span>
+      </button></li>
+    </ul>
+    <div class="wrap paddles">
+      <button class="paddle" type="button" data-dir="-1" aria-label="Previous albums"><bsh-icon name="chevronLeft"></bsh-icon></button>
+      <button class="paddle" type="button" data-dir="1" aria-label="Next albums"><bsh-icon name="chevronRight"></bsh-icon></button>
     </div>
   </section>
 </main>
 
 <dialog class="lightbox" data-lightbox aria-label="Photo viewer">
-  <div class="lightbox-inner">
+  <div class="lightbox-stage">
+    <div class="lightbox-top"><button class="circle-btn" type="button" data-lb-close aria-label="Close"><bsh-icon name="close"></bsh-icon></button></div>
     <img class="lightbox-img" src="" alt="">
     <div class="lightbox-bar">
-      <p class="lightbox-cap"></p>
+      <p class="lightbox-cap"><strong data-lb-title></strong><span data-lb-meta></span></p>
+      <span class="visually-hidden" aria-live="polite" data-lb-count></span>
       <div class="lightbox-ctrl">
-        <span class="visually-hidden" aria-live="polite" data-lb-count></span>
-        <button type="button" data-lb-step="-1" aria-label="Previous photo">←</button>
-        <button type="button" data-lb-step="1" aria-label="Next photo">→</button>
-        <button type="button" data-lb-close>Close</button>
+        <button class="circle-btn" type="button" data-lb-step="-1" aria-label="Previous photo"><bsh-icon name="chevronLeft"></bsh-icon></button>
+        <button class="circle-btn" type="button" data-lb-step="1" aria-label="Next photo"><bsh-icon name="chevronRight"></bsh-icon></button>
       </div>
     </div>
   </div>
@@ -234,7 +219,7 @@
     ["https://bsh-static.neuship.co/ManusVibeCraft1.jpg", "Attendees outside the house holding a Manus banner."],
     ["https://bsh-static.neuship.co/ManusVibeCraft2.jpg", "A speaker presenting at VibeCoding Craft Summitry."] ] },
   "napa": { "title": "Napa Founders Retreat", "meta": "Napa Valley", "photos": [
-    ["https://bsh-static.neuship.co/NapaFoundersRetreat1-1.jpg", "Retreat participants cheering outdoors behind a seafoam Berkeley Summit House banner."],
+    ["https://bsh-static.neuship.co/NapaFoundersRetreat1-1.jpg", "Retreat participants cheering outdoors behind a Berkeley Summit House banner."],
     ["https://bsh-static.neuship.co/NapaFoundersRetreat2-2.jpg", "Dozens of founders together at the entrance of a Napa winery at dusk."] ] },
   "inception": { "title": "Inception Cohort Demo Day", "meta": "With Inception Studio", "photos": [
     ["https://bsh-static.neuship.co/InceptionCohort195.jpg", "Founders mingling in a grand hall with wooden beams and chandeliers."],
@@ -255,6 +240,6 @@
 }
 </script>
 
-<bsh-footer></bsh-footer>
+<bsh-footer crumb="Events"></bsh-footer>
 </body>
 </html>

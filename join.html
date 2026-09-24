@@ -3,150 +3,148 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Join the Community · Berkeley Summit House</title>
+<title>Join the Community - Berkeley Summit House</title>
 <meta name="description" content="Join the Berkeley Summit House community as a founder, CXO, investor, scholar, scout or young leader.">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..500&family=Nanum+Pen+Script&family=Noto+Serif+Display:ital,wdth,wght@0,62.5..100,300..600;1,62.5..100,300..600&family=Noto+Serif:ital,wght@0,400;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="assets/site.css">
 <script src="assets/partials.js"></script>
 <script src="assets/site.js" defer></script>
 </head>
-<body>
-<bsh-header current="join"></bsh-header>
+<body id="top">
+<bsh-globalnav current="join"></bsh-globalnav>
 
 <main id="main">
-  <section class="page-hero" aria-labelledby="page-title">
-    <div class="wrap page-hero-grid">
-      <div class="page-hero-copy">
-        <p class="eyebrow">Join the community</p>
-        <h1 class="display t-1" id="page-title">Pull up a <em>chair.</em></h1>
-        <p class="lede">Tell us a little about yourself. We’ll review your interest and schedule a call shortly.</p>
-      </div>
-    </div>
-  </section>
+  <section class="section t-light join-page" aria-labelledby="page-title">
+    <div class="wrap-wide">
+      <header class="sec-head">
+        <h1 class="headline" id="page-title">Join the community.</h1>
+        <p class="intro">Pull up a chair. Tell us a little about yourself, and we’ll review your interest and schedule a call shortly.</p>
+      </header>
 
-  <section class="section section--flush-top">
-    <div class="wrap join-grid">
-      <form class="join-form" id="join-form" novalidate aria-labelledby="page-title">
-        <p class="form-alert" id="form-alert" role="alert" hidden></p>
+      <div class="join">
+        <form class="join-main" id="join-form" novalidate aria-labelledby="page-title">
+          <p class="form-alert" id="form-alert" role="alert" hidden><bsh-icon name="info"></bsh-icon><span></span></p>
 
-        <fieldset class="field-set">
-          <legend class="eyebrow">I’m joining as</legend>
-          <div class="role-tiles">
-            <label class="role-tile">
-              <input type="radio" name="network" id="network-founder" value="founder">
-              <span class="role-card"><span class="role-name">Founder</span><span class="role-desc">Building a company, from first idea to growth stage.</span></span>
-            </label>
-            <label class="role-tile">
-              <input type="radio" name="network" id="network-cxo" value="cxo">
-              <span class="role-card"><span class="role-name">CXO</span><span class="role-desc">An operator or executive with experience to share.</span></span>
-            </label>
-            <label class="role-tile">
-              <input type="radio" name="network" id="network-investor" value="investor">
-              <span class="role-card"><span class="role-name">Investor</span><span class="role-desc">A GP, LP or angel backing human-centered AI.</span></span>
-            </label>
-            <label class="role-tile">
-              <input type="radio" name="network" id="network-scholar" value="scholar">
-              <span class="role-card"><span class="role-name">Scholar</span><span class="role-desc">A researcher turning inquiry into innovation.</span></span>
-            </label>
-            <label class="role-tile">
-              <input type="radio" name="network" id="network-scout" value="scout">
-              <span class="role-card"><span class="role-name">Scout</span><span class="role-desc">You find exceptional founders before others do.</span></span>
-            </label>
-            <label class="role-tile">
-              <input type="radio" name="network" id="network-young-leader" value="young-leader">
-              <span class="role-card"><span class="role-name">Young leader</span><span class="role-desc">Aged 15 to 35 and ready to build, learn and lead.</span></span>
-            </label>
-          </div>
-        </fieldset>
+          <fieldset class="join-step">
+            <legend class="card-title">Which best describes you?</legend>
+            <div class="choices">
+              <label class="choice">
+                <input type="radio" name="network" id="network-founder" value="founder">
+                <span class="choice-card"><bsh-icon name="sparkles"></bsh-icon><span class="choice-title">Founder</span><span class="choice-desc">Building a company, from first idea to growth stage.</span></span>
+              </label>
+              <label class="choice">
+                <input type="radio" name="network" id="network-cxo" value="cxo">
+                <span class="choice-card"><bsh-icon name="people"></bsh-icon><span class="choice-title">CXO</span><span class="choice-desc">An operator or executive with experience to share.</span></span>
+              </label>
+              <label class="choice">
+                <input type="radio" name="network" id="network-investor" value="investor">
+                <span class="choice-card"><bsh-icon name="trend"></bsh-icon><span class="choice-title">Investor</span><span class="choice-desc">A GP, LP or angel backing human-centered AI.</span></span>
+              </label>
+              <label class="choice">
+                <input type="radio" name="network" id="network-scholar" value="scholar">
+                <span class="choice-card"><bsh-icon name="graduation"></bsh-icon><span class="choice-title">Scholar</span><span class="choice-desc">A researcher turning inquiry into innovation.</span></span>
+              </label>
+              <label class="choice">
+                <input type="radio" name="network" id="network-scout" value="scout">
+                <span class="choice-card"><bsh-icon name="globe"></bsh-icon><span class="choice-title">Scout</span><span class="choice-desc">You find exceptional founders before others do.</span></span>
+              </label>
+              <label class="choice">
+                <input type="radio" name="network" id="network-young-leader" value="young-leader">
+                <span class="choice-card"><bsh-icon name="flame"></bsh-icon><span class="choice-title">Young Leader</span><span class="choice-desc">Aged 15 to 35 and ready to build, learn and lead.</span></span>
+              </label>
+            </div>
+          </fieldset>
 
-        <fieldset class="field-set">
-          <legend class="eyebrow">About you</legend>
-          <div class="fields">
-            <div class="field">
-              <label for="first-name">First name</label>
-              <input class="input" id="first-name" name="first-name" autocomplete="given-name" required aria-describedby="first-name-error">
-              <p class="field-error" id="first-name-error" hidden></p>
-            </div>
-            <div class="field">
-              <label for="last-name">Last name</label>
-              <input class="input" id="last-name" name="last-name" autocomplete="family-name" required aria-describedby="last-name-error">
-              <p class="field-error" id="last-name-error" hidden></p>
-            </div>
-            <div class="field field--full">
-              <label for="organization">Organization</label>
-              <input class="input" id="organization" name="organization" autocomplete="organization" required aria-describedby="organization-error">
-              <p class="field-error" id="organization-error" hidden></p>
-            </div>
-            <div class="field">
-              <label for="email">Email</label>
-              <input class="input" id="email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required aria-describedby="email-error">
-              <p class="field-error" id="email-error" hidden></p>
-            </div>
-            <div class="field">
-              <label for="phone">Phone</label>
-              <div class="phone">
-                <span class="dial">
-                  <span data-dial-code>+1</span>
-                  <select id="phone-country" name="phone-country" aria-label="Country calling code" autocomplete="tel-country-code"></select>
-                </span>
-                <input class="input" id="phone" name="phone" type="tel" autocomplete="tel-national" inputmode="tel" placeholder="Phone number" required aria-describedby="phone-error">
+          <fieldset class="join-step">
+            <legend class="card-title">Tell us about yourself.</legend>
+            <div class="fields">
+              <div class="fld">
+                <input class="fld-input" id="first-name" name="first-name" autocomplete="given-name" placeholder=" " required aria-describedby="first-name-error">
+                <label class="fld-label" for="first-name">First name</label>
+                <p class="fld-error" id="first-name-error" hidden></p>
               </div>
-              <p class="field-error" id="phone-error" hidden></p>
+              <div class="fld">
+                <input class="fld-input" id="last-name" name="last-name" autocomplete="family-name" placeholder=" " required aria-describedby="last-name-error">
+                <label class="fld-label" for="last-name">Last name</label>
+                <p class="fld-error" id="last-name-error" hidden></p>
+              </div>
+              <div class="fld full">
+                <input class="fld-input" id="organization" name="organization" autocomplete="organization" placeholder=" " required aria-describedby="organization-error">
+                <label class="fld-label" for="organization">Organization</label>
+                <p class="fld-error" id="organization-error" hidden></p>
+              </div>
+              <div class="fld full">
+                <input class="fld-input" id="email" name="email" type="email" autocomplete="email" inputmode="email" placeholder=" " required aria-describedby="email-error">
+                <label class="fld-label" for="email">Email address</label>
+                <p class="fld-error" id="email-error" hidden></p>
+              </div>
+              <div class="full phone">
+                <div class="fld fld-select">
+                  <select class="fld-input" id="phone-country" name="phone-country" autocomplete="tel-country-code"></select>
+                  <label class="fld-label" for="phone-country">Country code</label>
+                  <bsh-icon name="chevronDown"></bsh-icon>
+                </div>
+                <div class="fld">
+                  <input class="fld-input" id="phone" name="phone" type="tel" autocomplete="tel-national" inputmode="tel" placeholder=" " required aria-describedby="phone-error">
+                  <label class="fld-label" for="phone">Phone number</label>
+                  <p class="fld-error" id="phone-error" hidden></p>
+                </div>
+              </div>
+              <div class="fld full">
+                <input class="fld-input" id="linkedin" name="linkedin" type="url" inputmode="url" placeholder=" " required aria-describedby="linkedin-error">
+                <label class="fld-label" for="linkedin">LinkedIn profile URL</label>
+                <p class="fld-error" id="linkedin-error" hidden></p>
+              </div>
+              <div class="fld full">
+                <textarea class="fld-input" id="note" name="note" rows="4" placeholder=" "></textarea>
+                <label class="fld-label" for="note">What are you building, or looking for? (optional)</label>
+              </div>
             </div>
-            <div class="field field--full">
-              <label for="linkedin">LinkedIn</label>
-              <input class="input" id="linkedin" name="linkedin" type="url" inputmode="url" placeholder="linkedin.com/in/yourname" required aria-describedby="linkedin-error">
-              <p class="field-error" id="linkedin-error" hidden></p>
-            </div>
-            <div class="field field--full">
-              <label for="note">What are you building, or looking for? <span class="opt">(optional)</span></label>
-              <textarea class="input" id="note" name="note" rows="4"></textarea>
-            </div>
+          </fieldset>
+
+          <div class="form-foot">
+            <button class="btn btn-primary btn-lg" type="submit">Join the community</button>
+            <p class="fine">Design prototype: this form doesn’t send anything yet.</p>
           </div>
-        </fieldset>
+        </form>
 
-        <div class="form-foot">
-          <button class="btn btn-primary btn-lg" type="submit">Join the community <span class="arrow" aria-hidden="true">→</span></button>
-          <p class="form-note">Design prototype: this form doesn’t send anything yet.</p>
+        <div class="success" id="join-success" tabindex="-1" hidden>
+          <span class="success-mark"><bsh-icon name="check"></bsh-icon></span>
+          <h2 class="headline-sm">Thank you, <span data-first-name></span>.</h2>
+          <p class="intro">We’ll review your interest and schedule a call shortly.</p>
+          <p class="fine">Design prototype: nothing was sent.</p>
+          <div class="ctas">
+            <a class="btn btn-primary" href="events.html">See events</a>
+            <a class="btn btn-secondary" href="index.html">Back to home</a>
+          </div>
         </div>
-      </form>
 
-      <div class="join-success" id="join-success" tabindex="-1" hidden>
-        <p class="eyebrow">Welcome</p>
-        <h2 class="display t-2">Thank you, <em data-first-name></em>.</h2>
-        <p class="lede">We’ll review your interest and schedule a call shortly.</p>
-        <p class="form-note">Design prototype: nothing was sent.</p>
-        <div class="actions">
-          <a class="btn btn-primary" href="events.html">See what’s on <span class="arrow" aria-hidden="true">→</span></a>
-          <a class="text-link" href="index.html">Back to the house</a>
-        </div>
+        <aside class="join-aside" aria-label="About joining">
+          <div class="card card--gray">
+            <h2 class="card-title-sm">What happens next</h2>
+            <ol class="steps">
+              <li>You tell us who you are and what you’re working on.</li>
+              <li>We review your interest.</li>
+              <li>We schedule a call to find the right fit for you.</li>
+            </ol>
+          </div>
+          <div class="card card--gray">
+            <h2 class="card-title-sm">Prefer email?</h2>
+            <p class="caption"><a class="more" href="mailto:founders@berkeleysummithouse.org">founders@<wbr>berkeleysummithouse.org</a></p>
+          </div>
+          <div class="card card--gray">
+            <h2 class="card-title-sm">Just curious?</h2>
+            <p class="caption">Come to a gathering first. <a class="more" href="https://luma.com/berkeleysummithouse" target="_blank" rel="noopener">See the calendar <bsh-icon name="arrowUpRight"></bsh-icon><span class="visually-hidden"> (opens in a new tab)</span></a></p>
+          </div>
+        </aside>
       </div>
-
-      <aside class="join-aside" aria-label="About joining">
-        <div class="aside-block" style="border-top:0;padding-top:0">
-          <h2 class="eyebrow">What happens next</h2>
-          <ol class="steps">
-            <li>You tell us who you are and what you’re working on.</li>
-            <li>We review your interest.</li>
-            <li>We schedule a call to find the right room for you.</li>
-          </ol>
-        </div>
-        <div class="aside-block">
-          <p class="eyebrow">Prefer email?</p>
-          <span class="email-chip"><a href="mailto:founders@berkeleysummithouse.org">founders@<wbr>berkeleysummithouse.org</a><button type="button" class="copy-btn" data-copy="founders@berkeleysummithouse.org">Copy</button></span>
-        </div>
-        <div class="aside-block">
-          <p class="eyebrow">Just curious?</p>
-          <p class="prose-sm">Come to a gathering first. <a class="text-link" href="https://luma.com/berkeleysummithouse" target="_blank" rel="noopener">See the calendar on Luma<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a></p>
-        </div>
-      </aside>
     </div>
   </section>
 </main>
 
-<bsh-footer></bsh-footer>
+<bsh-footer crumb="Join"></bsh-footer>
 </body>
 </html>
