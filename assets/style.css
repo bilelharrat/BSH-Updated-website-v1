@@ -563,7 +563,9 @@ canvas[data-terrain] {
 .home-copy > * { max-width: 620px; }
 .home-copy .actions { margin-top: 6px; }
 
-.summit { padding-top: 88px; }
+/* The mountain stands on the left and the copy reads on the right; the copy
+   stays first in the markup so it is read first. */
+.summit { order: -1; padding-top: 88px; }
 .summit-art { position: relative; aspect-ratio: 101 / 67; }
 .summit-mark {
   display: block;
@@ -661,7 +663,7 @@ canvas[data-terrain] {
 @media (max-width: 860px) {
   .home-hero { min-height: 0; }
   .home-grid { grid-template-columns: 1fr; gap: 24px; padding-block: 48px 56px; }
-  .summit { padding-top: 76px; }
+  .summit { order: 0; padding-top: 76px; }
   .peak-card { padding: 7px 10px 8px; }
   .peak-name { font-size: 15px; }
   .peak-note { display: none; }
