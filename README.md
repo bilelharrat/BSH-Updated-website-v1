@@ -20,12 +20,14 @@ Photos and fonts load from the web.
 
 ## The idea
 
-- **A live map.** The home page opens on a contour map of the hills that
-  drifts slowly and rises a little under the pointer. Its peaks are the site
-  itself: pins for the House (our story), Ventures, Incubator, Foundation and
-  Events each lead to that page. The same terrain, reseeded, runs behind every
-  page hero, the pillar cards, the Incubator's focus areas and the footer.
-  Every fifth line is heavier, the way index contours are on a real map.
+- **The mark is the map.** The home page hero is the BSH mountain mark,
+  drawn large, and each of its three peaks is a pillar: Ventures on the
+  summit, the Incubator on the right shoulder, the Foundation on the small
+  peak. A pin on each peak links to that page, and pointing at a peak fills it
+  with the pillar's color. Our Story and Events sit on the ground line below.
+- **Terrain.** Generated contour lines run behind the page heroes, the pillar
+  cards, the Incubator's focus areas and the footer. Every fifth line is
+  heavier, the way index contours are on a real map.
 - **Color is wayfinding.** Each pillar owns one color everywhere it
   appears: in the nav, on the map pins, in labels, on its page, and on the
   join form's role cards. The three colors come from the house photo: the
@@ -52,7 +54,7 @@ Photos and fonts load from the web.
 
 | Page | What's on it |
 | --- | --- |
-| `index.html` | The live map with pins to every section; the three pillars; the story in short; "Find your way in"; a strip of photos from gatherings |
+| `index.html` | The mountain mark, one peak per pillar; the three pillars; the story in short; "Find your way in"; a strip of photos from gatherings |
 | `story.html` | The origin story in four chapters, with a rail that follows your reading; "born in 2024"; a timeline that climbs; mission; values |
 | `ventures.html` | Thesis, two ways we invest, key figures, portfolio, GP partners, what we look for |
 | `incubator.html` | The four focus areas as an accordion, each with its own terrain; how we work |
