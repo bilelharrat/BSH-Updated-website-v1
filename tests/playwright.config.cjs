@@ -22,7 +22,8 @@ module.exports = defineConfig({
     toHaveScreenshot: { animations: 'disabled', caret: 'hide', scale: 'css', threshold: 0.2, maxDiffPixels: 40 },
   },
   projects: [
-    { name: 'functional', testMatch: /functional\.spec\.cjs/ },
+    // Every other *.spec.cjs (photos, join endpoint, regression specs) is functional.
+    { name: 'functional', testMatch: /\.spec\.cjs$/, testIgnore: /(content|visual)\.spec\.cjs$/ },
     { name: 'content', testMatch: /content\.spec\.cjs/ },
     { name: 'visual', testMatch: /visual\.spec\.cjs/ },
   ],
