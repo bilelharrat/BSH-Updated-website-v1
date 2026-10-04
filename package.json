@@ -1,0 +1,16 @@
+{
+  "name": "berkeley-summit-house-website",
+  "private": true,
+  "description": "Berkeley Summit House website: static pages, plus the browser tests that guard them.",
+  "scripts": {
+    "serve": "python3 -m http.server 8041",
+    "test": "playwright test -c tests/playwright.config.cjs --project=functional --project=content",
+    "test:visual": "playwright test -c tests/playwright.config.cjs --project=visual",
+    "test:all": "playwright test -c tests/playwright.config.cjs",
+    "baseline": "playwright test -c tests/playwright.config.cjs --project=visual --project=content --update-snapshots",
+    "metrics": "node tests/metrics.cjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.60.0"
+  }
+}

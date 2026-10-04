@@ -1,0 +1,3 @@
+/* Applied to element screenshots only: the sticky header and the photo that
+   follows the pointer float over whatever is scrolled under them. */
+.hdr, .skip, .peek { visibility: hidden !important; }
