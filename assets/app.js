@@ -199,19 +199,33 @@
   const albumsData = $('#albums');
   if (lb && albumsData) {
     const albums = JSON.parse(albumsData.textContent);
-    const img = $('.lb-stage img', lb);
+    const stage = $('.lb-stage', lb);
     const title = $('[data-lb-title]', lb);
     const meta = $('[data-lb-meta]', lb);
     const pos = $('[data-lb-pos]', lb);
     let album = null, i = 0, opener = null;
+    // Each photo is its own <img>, kept once fetched, and both neighbours are
+    // fetched ahead. Reusing one <img> left the last photo beside a new
+    // caption until the next file arrived.
+    const photos = new Map();
+    const photo = src => {
+      if (!photos.has(src)) {
+        const p = new Image();
+        p.onerror = () => photos.delete(src); // try again next time
+        p.src = src;
+        photos.set(src, p);
+      }
+      return photos.get(src);
+    };
     const show = () => {
+      const n = album.photos.length;
       const [src, alt] = album.photos[i];
-      img.src = src;
-      img.alt = alt;
+      stage.replaceChildren(Object.assign(photo(src), { alt }));
+      [1, n - 1].forEach(d => photo(album.photos[(i + d) % n][0]));
       title.textContent = album.title;
       meta.textContent = alt;
-      pos.textContent = `${String(i + 1).padStart(2, '0')} / ${String(album.photos.length).padStart(2, '0')}`;
-      $$('[data-lb-step]', lb).forEach(b => { b.hidden = album.photos.length < 2; });
+      pos.textContent = `${String(i + 1).padStart(2, '0')} / ${String(n).padStart(2, '0')}`;
+      $$('[data-lb-step]', lb).forEach(b => { b.hidden = n < 2; });
     };
     $$('[data-album]').forEach(btn => btn.addEventListener('click', () => {
       album = albums[btn.dataset.album];

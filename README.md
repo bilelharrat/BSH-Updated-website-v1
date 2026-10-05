@@ -16,7 +16,8 @@ From this folder, serve it and open http://localhost:8041:
 python3 -m http.server 8041
 ```
 
-Photos and fonts load from the web.
+Everything, photos included, is in this folder; only the fonts load from
+Google Fonts.
 
 ## The idea
 
@@ -68,6 +69,24 @@ Photos and fonts load from the web.
 | `assets/terrain.js` | The contour-map renderer (seeded simplex noise and marching squares, on canvas) |
 | `assets/chrome.js` | Header, mobile menu, footer and icons, as custom elements |
 | `assets/app.js` | Header behaviour, the way-in picker, photo strip, story rail and timeline, events filter and previews, photo viewer, join form |
+| `assets/photos/` | Self-hosted WebP photos at several widths, picked by each image's `srcset` and `sizes` |
+
+## Photos
+
+Photos are self-hosted in `assets/photos/` as WebP, named
+`<album>-<n>-<width>.webp`. Widths are 480, 800, 1200, 1600 and 2000px;
+photos are never upscaled, and the house photo tops out at 1024. Metadata
+and colour profiles are stripped (the originals were all sRGB).
+
+- Each `<img>` has a `srcset`, a `sizes` and `width`/`height`. `sizes` is the
+  width the whole photo is drawn at once `object-fit: cover` fills its
+  frame, so a wide photo in a tall frame asks for more pixels.
+- The album viewer shows the 1600w files and fetches the next and previous
+  photo ahead. The logbook thumbnails share the 480w file with the pointer
+  peek, so the peek appears straight from the cache.
+- To add a photo, export it at those widths (WebP, quality about 80) and
+  give it the same markup as the photos beside it. `tests/photos.spec.cjs`
+  fails on a photo that is hotlinked, missing or has no `width`/`height`.
 
 ## Before launch: things to confirm
 
@@ -79,14 +98,11 @@ Photos and fonts load from the web.
 2. **Logos.** Portfolio companies and GP partners are listed by name. Add
    real logos if wanted. The current Ventures page also has two logos with no
    names (`portfolio-logo-3`, `portfolio-logo-5`) that need adding.
-3. **Photos are hotlinked** from `bsh-static.neuship.co`, and the house
-   photo from the current site's image optimizer. Move them into the project
-   and resize them before launch; some originals are about 6000px wide.
-4. **The join form isn't connected.** Wire it to the current submission
+3. **The join form isn't connected.** Wire it to the current submission
    endpoint. The optional "What are you building?" field is new.
-5. **Events were copied from Luma by hand** on 2026-09-24. In production,
+4. **Events were copied from Luma by hand** on 2026-09-24. In production,
    pull them from Luma or update the list after each event.
-6. **The map is stylised.** Its terrain is generated, not surveyed, and the
+5. **The map is stylised.** Its terrain is generated, not surveyed, and the
    legend says "Not to scale". The coordinates in the footer are central
    Berkeley's, not the house's.
 
