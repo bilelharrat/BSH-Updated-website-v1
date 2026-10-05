@@ -399,7 +399,9 @@
       form.hidden = true;
       done.hidden = false;
       done.focus();
-      done.scrollIntoView({ block: 'center', behavior: behavior() });
+      // Centred only if it fits under the header; else 'start' keeps its top in view.
+      const room = innerHeight - parseFloat(getComputedStyle(root).scrollPaddingTop);
+      done.scrollIntoView({ block: done.offsetHeight <= room ? 'center' : 'start', behavior: behavior() });
     });
   }
 })();

@@ -152,3 +152,36 @@ test('incubator areas stay one-at-a-time where <details name> is unsupported (Sa
     await expect.poll(open).toEqual([name]);
   }
 });
+
+// A thank-you panel taller than the room below the sticky header was centred
+// with its top, check mark and heading under the header (400% zoom, landscape phone).
+for (const [width, height] of [[320, 200], [568, 320], [1280, 800]]) {
+  test(`join: the thank-you starts below the header at ${width}x${height}`, async ({ page }) => {
+    await page.setViewportSize({ width, height });
+    await page.goto('join.html');
+    await settle(page);
+    await fillJoin(page);
+    for (const [id, v] of [['first-name', 'Alexandra'], ['last-name', 'Quist'], ['organization', 'UC Berkeley'], ['linkedin', 'https://linkedin.com/in/aq']]) await page.locator(`#${id}`).fill(v);
+    await page.locator('#join-form [type="submit"]').click();
+    await expect(page.locator('#join-success')).toBeFocused();
+    const tops = () => page.evaluate(() => {
+      const top = s => Math.round(document.querySelector(s).getBoundingClientRect().top);
+      return { hdr: Math.round(document.querySelector('.hdr').getBoundingClientRect().bottom), mark: top('.success-mark'), h2: top('#join-success h2') };
+    });
+    await page.waitForTimeout(900); // the smooth scroll has ended
+    const t = await tops();
+    expect(t.mark, 'check mark below the header').toBeGreaterThanOrEqual(t.hdr);
+    expect(t.h2, 'heading below the header').toBeGreaterThanOrEqual(t.hdr);
+    expect(t.h2, 'heading on screen').toBeLessThan(height);
+  });
+}
+
+test('printing join.html keeps the contour map inside its panel', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('join.html');
+  await settle(page);
+  await page.emulateMedia({ media: 'print' });
+  const [side, map] = await Promise.all(['.join-side', '.join-side canvas'].map(s =>
+    page.locator(s).evaluate(el => { const r = el.getBoundingClientRect(); return [r.left, r.top + scrollY, r.width, r.height].map(Math.round); })));
+  expect(map).toEqual(side);
+});

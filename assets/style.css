@@ -933,6 +933,7 @@ canvas[data-terrain] {
 .rail a[aria-current="true"], .rail a:hover { color: var(--fg); }
 .chapter-list { display: grid; gap: clamp(88px, 12vw, 176px); }
 .chapter { display: grid; gap: 22px; max-width: 900px; }
+.chapter-list, .chapter { grid-template-columns: minmax(0, 1fr); } /* a wide numeral can't widen the column */
 .chapter .statement { max-width: 22em; }
 .born { display: grid; gap: 8px; }
 .born-year {
@@ -946,7 +947,7 @@ canvas[data-terrain] {
 .hl { background: linear-gradient(var(--gold), var(--gold)) 0 90% / 100% .12em no-repeat; }
 .born-year .tri { width: .14em; height: .12em; margin-top: .02em; background: var(--poppy); }
 @media (max-width: 860px) {
-  .chapters { grid-template-columns: 1fr; }
+  .chapters { grid-template-columns: minmax(0, 1fr); }
   .rail { display: none; }
 }
 
@@ -1425,7 +1426,11 @@ canvas[data-terrain] {
 /* Print never scrolls, so held-back blocks show at once there too. */
 @media print, (prefers-reduced-motion: reduce) { .rv.armed { opacity: 1; transform: none; } }
 @media print {
-  .skip { display: none; } /* fixed boxes repeat on every sheet */
+  .skip, .menu, .lightbox { display: none !important; } /* fixed boxes and open overlays repeat on every sheet */
+  /* Sticky boxes would print where the live scroll stuck them, the header tucked away.
+     Relative, not static: the join panel's contour map still fills the panel. */
+  .hdr, .rail, .router-a, .join-side { position: relative; top: 0; }
+  .hdr, .hdr.is-hidden { transform: none; transition: none; }
   /* A grid fragments as one box: with the art stacked under the copy, Chromium pushed the whole hero to sheet 2. */
   .home-grid, .story-hero { display: block; }
   .story-hero figure { margin-top: 24px; } /* .summit already has its own top padding */

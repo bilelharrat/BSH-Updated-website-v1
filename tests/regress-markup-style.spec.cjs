@@ -509,3 +509,79 @@ test.describe('round 3', () => {
     expect(playing, 'the opened area fades up').toContain('running');
   });
 });
+
+test.describe('round 4', () => {
+  const docTop = (page, sel) => page.locator(sel).first().evaluate(el => Math.round(el.getBoundingClientRect().top + scrollY));
+
+  for (const { file } of PAGES) {
+    test(`${file}: printing after scrolling keeps the header at the top of the document`, async ({ page }) => {
+      await page.setViewportSize({ width: 1280, height: 900 });
+      await page.goto(file);
+      await settle(page);
+      await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight * 0.45));
+      await page.waitForTimeout(300); // let the header tuck away
+      await page.emulateMedia({ media: 'print' });
+      expect(await docTop(page, '.hdr'), 'header top in print').toBe(0);
+      expect(await page.locator('.hdr').evaluate(el => getComputedStyle(el).transform)).toBe('none');
+      for (const sel of ['.rail', '.router-a', '.join-side']) {
+        for (const el of await page.locator(sel).all()) {
+          expect(await el.evaluate(e => getComputedStyle(e).position), `${sel} in print`).not.toBe('sticky');
+        }
+      }
+    });
+  }
+
+  test('printing with the mobile menu open prints the page, not the menu', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('story.html');
+    await settle(page);
+    await page.locator('.hdr-menu').click();
+    await expect(page.locator('.menu')).toBeVisible();
+    await page.emulateMedia({ media: 'print' });
+    await expect(page.locator('.menu')).toBeHidden();
+  });
+
+  test('printing with the photo viewer open prints the page, not the viewer', async ({ page }) => {
+    await page.goto('events.html');
+    await settle(page);
+    await page.locator('button.album').first().click();
+    await expect(page.locator('.lightbox')).toBeVisible();
+    await page.emulateMedia({ media: 'print' });
+    await expect(page.locator('.lightbox')).toBeHidden();
+  });
+
+  test('story: chapter text reflows at 320px with user text spacing (WCAG 1.4.12)', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 640 });
+    await page.goto('story.html');
+    await settle(page, { eager: true });
+    await page.addStyleTag({ content: '* { line-height: 1.5 !important; letter-spacing: .12em !important; word-spacing: .16em !important; } p { margin-bottom: 2em !important; }' });
+    const cut = await page.evaluate(() => {
+      const out = [];
+      const tw = document.createTreeWalker(document.querySelector('.chapter-list'), NodeFilter.SHOW_TEXT);
+      while (tw.nextNode()) {
+        const t = tw.currentNode;
+        if (t.parentElement.closest('.born-year')) continue; // the decorative numeral may run off; it is labelled
+        const rg = document.createRange();
+        rg.selectNodeContents(t);
+        for (const b of rg.getClientRects()) if (b.width && b.right > innerWidth + .5) out.push(`${t.data.trim().slice(0, 30)} right=${b.right | 0}`);
+      }
+      return out;
+    });
+    expect(cut, 'chapter lines cut off at the right edge').toEqual([]);
+  });
+
+  test('events: logbook thumbnails use small files, and the peek keeps the larger photo', async ({ page, request }) => {
+    await page.goto('events.html');
+    const thumbs = await page.locator('.log-row').evaluateAll(rows => rows.filter(r => r.querySelector('.log-photos img'))
+      .map(r => { const i = r.querySelector('.log-photos img'); return { src: i.getAttribute('src'), w: +i.getAttribute('width'), h: +i.getAttribute('height'), peek: r.dataset.peek }; }));
+    expect(thumbs).toHaveLength(4);
+    for (const t of thumbs) {
+      expect(t.w, t.src).toBeLessThanOrEqual(200);
+      expect(t.h, t.src).toBeLessThanOrEqual(200);
+      expect(t.peek, t.src).toMatch(/-480\.webp$/);
+      const res = await request.get(t.src);
+      expect(res.status(), t.src).toBe(200);
+      expect((await res.body()).length, `${t.src} bytes`).toBeLessThan(10000);
+    }
+  });
+});

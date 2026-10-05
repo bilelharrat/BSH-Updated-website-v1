@@ -86,13 +86,17 @@ Photos are self-hosted in `assets/photos/` as WebP, named
 photos are never upscaled, and the house photo tops out at 1024. Metadata
 and colour profiles are stripped (the originals were all sRGB).
 
-- Each `<img>` has a `srcset`, a `sizes` and `width`/`height`. `sizes` is the
+- Each `<img>` has a `srcset`, a `sizes` and `width`/`height`, except the
+  events logbook badges (below). `sizes` is the
   width the whole photo is drawn at once `object-fit: cover` fills its
   frame, so a wide photo in a tall frame asks for more pixels.
 - The album viewer picks from the 480/800/1200/1600w files the smallest that
   covers the screen (an album entry's third item lists the smaller widths
-  that exist) and fetches the next and previous photo ahead. The logbook thumbnails share the 480w file with the pointer
-  peek, so the peek appears straight from the cache.
+  that exist) and fetches the next and previous photo ahead.
+- The events logbook badges use square, centre-cropped
+  `<album>-1-160.webp` thumbnails with no `srcset`, since they are always
+  drawn at 44px; the pointer peek still shows the 480w file, fetched on first
+  hover.
 - To add a photo, export it at those widths (WebP, quality about 80) and
   give it the same markup as the photos beside it. `tests/photos.spec.cjs`
   fails on a photo that is hotlinked, missing or has no `width`/`height`.
