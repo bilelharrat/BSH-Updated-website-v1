@@ -17,7 +17,7 @@ for (const { file } of PAGES) {
         urls: [
           ...imgs.map(i => i.getAttribute('src')),
           ...imgs.flatMap(i => (i.getAttribute('srcset') || '').split(',').map(c => c.trim().split(/\s+/)[0]).filter(Boolean)),
-          ...albums.flatMap(a => a.photos.map(([src]) => src)),
+          ...albums.flatMap(a => a.photos.flatMap(([src, , ws = []]) => [src, ...ws.map(w => src.replace('-1600.', `-${w}.`))])),
           ...[...doc.querySelectorAll('[data-peek]')].map(row => row.dataset.peek),
         ],
         unsized: imgs.filter(i => !(i.getAttribute('width') > 0 && i.getAttribute('height') > 0)).map(i => i.outerHTML),

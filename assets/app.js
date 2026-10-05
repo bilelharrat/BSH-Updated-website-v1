@@ -107,7 +107,12 @@
     const btns = $$('[data-strip-btn]', strip.closest('section') || document);
     const update = () => {
       const x = strip.scrollLeft, max = strip.scrollWidth - strip.clientWidth - 2;
-      btns.forEach(b => { b.disabled = b.dataset.stripBtn === '-1' ? x <= 2 : x >= max; });
+      btns.forEach(b => {
+        const off = b.dataset.stripBtn === '-1' ? x <= 2 : x >= max;
+        // A disabled button drops focus to <body>: hand it to the other one first.
+        if (off && b === document.activeElement) btns.find(o => o !== b)?.focus({ preventScroll: true });
+        b.disabled = off;
+      });
     };
     btns.forEach(b => b.addEventListener('click', () => {
       const item = strip.firstElementChild;
@@ -194,7 +199,13 @@
     document.body.insertAdjacentHTML('beforeend', '<div class="peek" aria-hidden="true"><img alt=""></div>');
     const peek = document.body.lastElementChild, img = peek.firstChild;
     let raf = 0, x = 0, y = 0;
-    const place = () => { raf = 0; peek.style.transform = `translate(${x + 24}px, ${y - 90}px)`; };
+    // 240 × 180, beside the pointer: flipped left near the right edge, kept below the header.
+    const place = () => {
+      raf = 0;
+      const px = x + 264 > root.clientWidth ? x - 264 : x + 24;
+      const py = Math.max(76, Math.min(y - 90, root.clientHeight - 188));
+      peek.style.transform = `translate(${px}px, ${py}px)`;
+    };
     peekRows.forEach(row => {
       row.addEventListener('pointerenter', () => { img.src = row.dataset.peek; peek.classList.add('is-on'); });
       row.addEventListener('pointerleave', () => peek.classList.remove('is-on'));
@@ -215,12 +226,17 @@
     let album = null, i = 0, opener = null;
     // Each photo is its own <img>, kept once fetched, and both neighbours are
     // fetched ahead. Reusing one <img> left the last photo beside a new
-    // caption until the next file arrived.
+    // caption until the next file arrived. An entry's optional third item
+    // lists the smaller files beside the 1600px one, so phones fetch less.
     const photos = new Map();
-    const photo = src => {
+    const photo = ([src, , ws]) => {
       if (!photos.has(src)) {
         const p = new Image();
         p.onerror = () => photos.delete(src); // try again next time
+        if (ws) {
+          p.sizes = 'min(100vw, 1600px)';
+          p.srcset = [...ws, 1600].map(w => `${src.replace('-1600.', `-${w}.`)} ${w}w`).join();
+        }
         p.src = src;
         photos.set(src, p);
       }
@@ -228,9 +244,9 @@
     };
     const show = () => {
       const n = album.photos.length;
-      const [src, alt] = album.photos[i];
-      stage.replaceChildren(Object.assign(photo(src), { alt }));
-      [1, n - 1].forEach(d => photo(album.photos[(i + d) % n][0]));
+      const alt = album.photos[i][1];
+      stage.replaceChildren(Object.assign(photo(album.photos[i]), { alt }));
+      [1, n - 1].forEach(d => photo(album.photos[(i + d) % n]));
       title.textContent = album.title;
       meta.textContent = alt;
       pos.textContent = `${String(i + 1).padStart(2, '0')} / ${String(n).padStart(2, '0')}`;
@@ -253,6 +269,7 @@
     });
     lb.addEventListener('click', e => { if (e.target === lb || e.target === stage || e.target.closest('[data-lb-close]')) lb.close(); });
     lb.addEventListener('close', () => {
+      if (lb.open) return; // reopened before this queued event arrived
       root.classList.toggle('menu-open', menu?.hidden === false); // the menu shares the lock
       opener?.focus();
     });
@@ -265,15 +282,7 @@
     // "44 United Kingdom" is shown as "+44  United Kingdom" and sent as "44|United Kingdom".
     $('#phone-country', form).append(...DIAL.split('|').map(c => new Option(`+${c.replace(' ', '  ')}`, c.replace(' ', '|'))));
 
-    // join.html#founder, #investor… preselect the role.
     const roles = $$('input[name="role"]', form);
-    const preset = () => {
-      const input = roles.find(r => `#${r.value}` === location.hash);
-      if (input) input.checked = true;
-    };
-    preset();
-    addEventListener('hashchange', preset);
-
     const need = msg => v => (v.trim() ? '' : msg);
     const RULES = {
       'first-name': need('Enter your first name.'),
@@ -309,6 +318,18 @@
       f.input.addEventListener('input', () => { if (tried) check(f); });
     });
     form.addEventListener('change', e => { if (tried && e.target.name === 'role') checkRole(); });
+
+    // join.html#founder, #investor… preselect the role. Followed from this
+    // page (no id matches, so nothing scrolls), focus brings it into view.
+    const preset = e => {
+      const input = roles.find(r => `#${r.value}` === location.hash);
+      if (!input) return;
+      input.checked = true;
+      if (tried) checkRole();
+      if (e) input.focus();
+    };
+    preset();
+    addEventListener('hashchange', preset);
 
     // data-endpoint on the form makes it live; until then it stays a prototype.
     const notes = $$('[data-prototype-note]');

@@ -75,7 +75,9 @@ Google Fonts.
 
 Without JavaScript every page still shows a plain row of links in place of
 the header (a `<noscript>` inside `<bsh-header>`), and the join form says
-it needs JavaScript and gives the email address.
+it needs JavaScript and gives the email address. The home page then lists
+every way in at once and hides the photo strip's arrows; the events page
+hides the year filter and leaves the album cards as plain photos.
 
 ## Photos
 
@@ -87,8 +89,9 @@ and colour profiles are stripped (the originals were all sRGB).
 - Each `<img>` has a `srcset`, a `sizes` and `width`/`height`. `sizes` is the
   width the whole photo is drawn at once `object-fit: cover` fills its
   frame, so a wide photo in a tall frame asks for more pixels.
-- The album viewer shows the 1600w files and fetches the next and previous
-  photo ahead. The logbook thumbnails share the 480w file with the pointer
+- The album viewer picks from the 480/800/1200/1600w files the smallest that
+  covers the screen (an album entry's third item lists the smaller widths
+  that exist) and fetches the next and previous photo ahead. The logbook thumbnails share the 480w file with the pointer
   peek, so the peek appears straight from the cache.
 - To add a photo, export it at those widths (WebP, quality about 80) and
   give it the same markup as the photos beside it. `tests/photos.spec.cjs`

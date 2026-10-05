@@ -96,3 +96,40 @@ test('the open mobile menu takes the rest of the page, skip link included, out o
   await page.keyboard.press('Escape');
   expect(await inert()).toEqual([]);
 });
+
+for (const [width, height] of [[1024, 700], [1280, 800], [1920, 1080]]) {
+  test(`story rail: jumping back up to a skipped chapter lands it below the header at ${width}`, async ({ page }) => {
+    await page.setViewportSize({ width, height });
+    await page.goto('story.html');
+    await settle(page);
+    await page.locator('[data-rail] a[href="#ch-walls"]').click();
+    await page.waitForTimeout(1300);
+    await page.locator('[data-rail] a[href="#ch-founder"]').click();
+    await page.waitForTimeout(1300); // the reveal's rise has ended
+    // The chapter was still held back by the reveal when the jump lined it up.
+    expect(await page.evaluate(() =>
+      Math.round(document.querySelector('#ch-founder .label').getBoundingClientRect().top))).toBe(84);
+    expect(await page.evaluate(() => document.querySelector('.hdr').getBoundingClientRect().bottom)).toBeLessThan(84);
+  });
+}
+
+test('the photo viewer fetches files sized for the screen', async ({ browser, site }) => {
+  const sizes = {};
+  for (const [name, viewport, deviceScaleFactor] of [['phone', { width: 390, height: 844 }, 2], ['desktop', { width: 1440, height: 900 }, 1]]) {
+    const ctx = await browser.newContext({ viewport, deviceScaleFactor, baseURL: site });
+    const page = await ctx.newPage();
+    await hermetic(page, site);
+    const asked = [];
+    page.on('request', r => { const m = r.url().match(/openclaw-(\d)-(\d+)\.webp$/); if (m) asked.push(`${m[1]}-${m[2]}`); });
+    await page.goto('events.html');
+    await settle(page);
+    asked.length = 0; // the album cards' own photos
+    await page.locator('button.album[data-album="openclaw"]').click();
+    await expect(page.locator('.lb-stage img')).toBeVisible();
+    await page.waitForTimeout(300);
+    sizes[name] = [...new Set(asked)].sort();
+    await ctx.close();
+  }
+  expect(sizes.phone).toEqual(['1-800', '2-800', '3-1600']);
+  expect(sizes.desktop).toEqual(['1-1600', '2-1600', '3-1600']);
+});

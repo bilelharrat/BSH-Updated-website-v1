@@ -5,7 +5,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { test, expect } = require('./fixtures.cjs');
-const { PAGES, ROOT, settle } = require('./support.cjs');
+const { PAGES, ROOT, settle, hermetic } = require('./support.cjs');
 
 const overflowX = page => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
 const rect = (page, sel) => page.locator(sel).first().evaluate(el => el.getBoundingClientRect().toJSON());
@@ -241,5 +241,114 @@ test.describe('launch files', () => {
       // The page's own 404 is expected; any other failed request is listed as "HTTP 4xx <url>".
       expect(errors.filter(e => !e.includes('/no/such/page') && !/^console: .*status of 404/.test(e))).toEqual([]);
     });
+  });
+});
+
+/* ---------- Round 2 stress findings ----------------------------------------- */
+test.describe('round 2', () => {
+  test('the photo viewer keeps a usable photo on short windows (400% zoom) and the caption scrolls into view', async ({ page }) => {
+    for (const [width, height] of [[320, 200], [320, 256], [427, 240]]) {
+      await page.setViewportSize({ width, height });
+      await page.goto('events.html');
+      await settle(page);
+      await page.locator('button.album').first().click();
+      const img = page.locator('.lb-stage img');
+      await expect(img).toBeVisible();
+      await finished(page);
+      const box = await rect(page, '.lb-stage img');
+      expect(box.height, `photo @${width}x${height}`).toBeGreaterThanOrEqual(Math.min(140, height * .6));
+      await page.locator('.lb-cap').scrollIntoViewIfNeeded();
+      const cap = await rect(page, '.lb-cap');
+      expect(cap.bottom, `caption @${width}x${height}`).toBeLessThanOrEqual(height + 1);
+      await page.keyboard.press('Escape');
+    }
+  });
+
+  test('the home "Around the table" heading row stays in the page column on wide screens', async ({ page }) => {
+    for (const width of [1440, 1920, 2560]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto('index.html');
+      await settle(page);
+      const [row, ref] = await page.evaluate(() => {
+        const h = [...document.querySelectorAll('h2')].find(el => /Around the table/.test(el.textContent));
+        return [h.closest('.sec-hd--row'), document.querySelector('.ftr .wrap, footer .wrap') || document.querySelector('main .wrap:not(.sec-hd--row)')]
+          .map(el => el.getBoundingClientRect().toJSON());
+      });
+      expect(Math.abs(row.left - ref.left), `left @${width}`).toBeLessThanOrEqual(1);
+      expect(Math.abs(row.right - ref.right), `right @${width}`).toBeLessThanOrEqual(1);
+    }
+  });
+
+  test('mouse users can still scroll the photo strip at 640px and narrower, where the arrows step aside', async ({ page }) => {
+    for (const width of [360, 640]) {
+      await page.setViewportSize({ width, height: 700 });
+      await page.goto('index.html');
+      await settle(page);
+      const strip = page.locator('.strip');
+      const visible = await page.locator('[data-strip-btn]').first().isVisible();
+      const scrollbar = await strip.evaluate(el => getComputedStyle(el).scrollbarWidth);
+      expect(visible || scrollbar !== 'none', `arrows or a scrollbar @${width}`).toBe(true);
+    }
+  });
+
+  test('the home photo strip is in the keyboard tab order on every engine', async ({ page }) => {
+    await page.goto('index.html');
+    await expect(page.locator('.strip')).toHaveAttribute('tabindex', '0');
+  });
+
+  test('without JavaScript every way-in answer is readable and no dead control is shown', async ({ browser, site }) => {
+    const context = await browser.newContext({ baseURL: site, javaScriptEnabled: false });
+    const page = await context.newPage();
+    await hermetic(page, site);
+    await page.goto('index.html');
+    await expect(page.locator('.router-opt').first()).toBeHidden();
+    await expect(page.locator('[data-strip-btn]').first()).toBeHidden();
+    for (const route of ['founder', 'investor', 'cxo', 'scholar', 'scout', 'young', 'curious']) {
+      await expect(page.locator(`[data-route-panel="${route}"]`), route).toBeVisible();
+    }
+    await page.goto('events.html');
+    await expect(page.locator('[data-filter]')).toBeHidden();
+    for (const el of await page.locator('[data-album]').all()) {
+      expect(await el.evaluate(e => getComputedStyle(e).pointerEvents)).toBe('none');
+    }
+    await context.close();
+  });
+
+  test('opening the menu reserves the scrollbar gutter so the header does not jump', async ({ page }) => {
+    await page.setViewportSize({ width: 900, height: 800 });
+    await page.goto('ventures.html');
+    expect(await page.evaluate(() => getComputedStyle(document.documentElement).scrollbarGutter)).toBe('stable');
+  });
+
+  test('forced colours: only the chosen role, year and way-in option look selected', async ({ browser, site }) => {
+    const context = await browser.newContext({ baseURL: site, forcedColors: 'active' });
+    const page = await context.newPage();
+    await hermetic(page, site);
+    const look = (loc, sel) => loc.locator(sel).evaluateAll(els => els.map(el => {
+      const cs = getComputedStyle(el);
+      return [cs.backgroundColor, cs.color, cs.borderTopWidth, cs.borderTopColor].join(' ');
+    }));
+    await page.goto('join.html');
+    await page.locator('label.role', { hasText: 'Founder' }).first().click();
+    const ticks = await page.locator('.role-check .i').evaluateAll(els => els.map(el => getComputedStyle(el).visibility));
+    expect(ticks.filter(v => v === 'visible')).toHaveLength(1);
+    const cards = await look(page, '.role-card');
+    expect(new Set(cards).size, 'checked card differs').toBe(2);
+    await page.goto('events.html');
+    await page.locator('[data-filter] button', { hasText: '2026' }).click();
+    const seg = await look(page, '[data-filter] button');
+    expect(seg.filter(s => s === seg[1]), 'pressed year differs').toHaveLength(1);
+    for (const width of [1280, 390]) {
+      await page.setViewportSize({ width, height: 800 });
+      await page.goto('index.html');
+      const opts = await look(page, '.router-opt');
+      expect(opts.filter(s => s === opts[0]), `pressed option differs @${width}`).toHaveLength(1);
+    }
+    await context.close();
+  });
+
+  test('the foundation ages read "15 to 35" to screen readers', async ({ page }) => {
+    await page.goto('foundation.html');
+    await expect(page.locator('.ages-range')).toMatchAriaSnapshot('- paragraph: 15 to 35');
   });
 });

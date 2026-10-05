@@ -122,3 +122,72 @@ test('animated terrain pauses while the mobile menu covers it', async ({ page })
   await expect(page.locator('#site-menu')).toBeHidden();
   expect(await draws()).toBeGreaterThan(3);
 });
+
+/* Round 2 stress findings */
+
+test('the logbook photo peek stays inside the window and clear of the header', async ({ page }) => {
+  for (const width of [1280, 1440]) {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto('events.html');
+    await settle(page);
+    const row = page.locator('[data-peek]').first();
+    // Near the top of the window, at the right end of the row.
+    await page.evaluate(() => {
+      const r = document.querySelector('[data-peek]');
+      scrollBy(0, r.getBoundingClientRect().top - 72);
+    });
+    const box = await row.boundingBox();
+    await page.mouse.move(box.x + 10, box.y + box.height / 2);
+    await page.mouse.move(box.x + box.width - 20, box.y + 6, { steps: 5 });
+    const peek = page.locator('.peek.is-on');
+    await expect(peek).toHaveCount(1);
+    await expect.poll(() => peek.evaluate(p => {
+      const b = p.getBoundingClientRect(), root = document.documentElement;
+      return b.left >= 0 && b.right <= root.clientWidth && b.top >= 68 && b.bottom <= root.clientHeight;
+    }), { message: `${width} wide` }).toBe(true);
+  }
+});
+
+test('a footer "Get involved" link on the join page brings the picked role into view and clears its error', async ({ page }) => {
+  await page.goto('join.html');
+  await settle(page);
+  await page.locator('#join-form [type="submit"]').click();
+  await expect(page.locator('#role-error')).toBeVisible();
+  for (const [role, text] of [['investor', 'Invest with us'], ['founder', 'Join as a founder']]) {
+    await page.locator('.ftr a', { hasText: text }).click();
+    const input = page.locator(`input[name="role"][value="${role}"]`);
+    await expect(input).toBeChecked();
+    await expect(input).toBeFocused();
+    await expect(input).toBeInViewport();
+    await expect(page.locator('#role-error')).toBeHidden();
+  }
+});
+
+test('reopening the photo viewer before its close event arrives keeps the page locked', async ({ page }) => {
+  await page.goto('events.html');
+  await settle(page);
+  await page.locator('[data-album]').first().click();
+  await expect(page.locator('[data-lightbox]')).toHaveAttribute('open', '');
+  await page.evaluate(() => {
+    document.querySelector('[data-lightbox]').close();
+    document.querySelector('[data-album]').click();
+  });
+  await page.waitForTimeout(100);
+  await expect(page.locator('[data-lightbox]')).toHaveAttribute('open', '');
+  await expect(page.locator('html')).toHaveClass(/\bmenu-open\b/);
+});
+
+test('paging the home photo strip to either end keeps keyboard focus on a strip button', async ({ page }) => {
+  await page.goto('index.html');
+  await settle(page);
+  const next = page.locator('[data-strip-btn="1"]'), prev = page.locator('[data-strip-btn="-1"]');
+  for (const [from, to] of [[next, prev], [prev, next]]) {
+    await from.focus();
+    await expect.poll(async () => {
+      if (await from.isEnabled()) await page.keyboard.press('Enter');
+      await page.waitForTimeout(250);
+      return from.isDisabled();
+    }, { timeout: 15_000 }).toBe(true);
+    await expect(to).toBeFocused();
+  }
+});

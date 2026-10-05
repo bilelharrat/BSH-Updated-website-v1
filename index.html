@@ -22,6 +22,7 @@
 <script src="assets/chrome.js?v=4"></script>
 <script src="assets/terrain.js?v=4" defer></script>
 <script src="assets/app.js?v=4" defer></script>
+<noscript><style>.router-q, [data-strip-btn] { display: none; } .route[hidden] { display: grid !important; } .router-a { position: static; display: grid; gap: 48px; }</style></noscript>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Berkeley Summit House","url":"https://berkeleysummithouse.org/","logo":"https://berkeleysummithouse.org/assets/apple-touch-icon.png","email":"founders@berkeleysummithouse.org","sameAs":["https://www.linkedin.com/company/berkeley-summit-house/","https://www.youtube.com/@berkeleysummithouse","https://luma.com/berkeleysummithouse"]}</script>
 </head>
 <body>
@@ -230,7 +231,7 @@
     </div>
     <!-- Photo sizes give the width a photo is drawn at once object-fit: cover
          fills its frame, so a wide photo in a tall 4:5 frame asks for more. -->
-    <ul class="strip" data-strip aria-label="Photos from our gatherings">
+    <ul class="strip" data-strip tabindex="0" aria-label="Photos from our gatherings">
       <li><figure><img src="assets/photos/napa-2-800.webp" srcset="assets/photos/napa-2-480.webp 480w, assets/photos/napa-2-800.webp 800w, assets/photos/napa-2-1200.webp 1200w, assets/photos/napa-2-1600.webp 1600w, assets/photos/napa-2-2000.webp 2000w" sizes="(min-width: 1467px) 1049px, (min-width: 867px) 72vw, (min-width: 641px) 620px, 186vw" width="800" height="419" loading="lazy" decoding="async" alt="Dozens of founders together at the entrance of a Napa winery at dusk."><figcaption><span class="mono">Napa Valley</span><b>Napa Founders Retreat</b></figcaption></figure></li>
       <li><figure><img src="assets/photos/agents-2-800.webp" srcset="assets/photos/agents-2-480.webp 480w, assets/photos/agents-2-800.webp 800w, assets/photos/agents-2-1200.webp 1200w, assets/photos/agents-2-1600.webp 1600w" sizes="(min-width: 1467px) 733px, (min-width: 867px) 50vw, (min-width: 641px) 433px, 130vw" width="800" height="599" loading="lazy" decoding="async" alt="A packed room under the white arched ceilings of the house."><figcaption><span class="mono">At the house · Jun 2025</span><b>AI Agents in Action</b></figcaption></figure></li>
       <li><figure><img src="assets/photos/openclaw-1-800.webp" srcset="assets/photos/openclaw-1-480.webp 480w, assets/photos/openclaw-1-800.webp 800w, assets/photos/openclaw-1-1200.webp 1200w, assets/photos/openclaw-1-1600.webp 1600w" sizes="(min-width: 1467px) 733px, (min-width: 867px) 50vw, (min-width: 641px) 433px, 130vw" width="800" height="600" loading="lazy" decoding="async" alt="A speaker walks the room through a live use case on screen."><figcaption><span class="mono">At the house · Mar 2026</span><b>Claude Code &amp; OpenClaw @ Berkeley</b></figcaption></figure></li>
