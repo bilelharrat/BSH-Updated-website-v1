@@ -21,17 +21,15 @@ Google Fonts.
 
 ## The idea
 
-- **The mark is the map.** The home page hero is the BSH mountain mark,
-  drawn large, and each of its three peaks is a pillar: Ventures on the
-  summit, the Incubator on the right shoulder, the Foundation on the small
-  peak. A pin on each peak links to that page, and pointing at a peak fills it
-  with the pillar's color. Our Story and Events sit on the ground line below.
+- **Three doors.** The home page hero sets the pitch beside three doors,
+  one per pillar (Ventures, the Incubator, the Foundation), each edged in its
+  pillar's color. Our Story and Events sit on the line below them.
 - **Terrain.** Generated contour lines run behind the page heroes, the pillar
   cards, the Incubator's focus areas and the footer. Every fifth line is
   heavier, the way index contours are on a real map.
 - **Color is wayfinding.** Each pillar owns one color everywhere it
-  appears: in the nav, on the map pins, in labels, on its page, and on the
-  join form's role cards. The three colors come from the house photo: the
+  appears: in the nav, on the home page doors, in labels, on its page, and
+  on the join form's role cards. The three colors come from the house photo: the
   Berkeley sky (cobalt, Ventures), the tile roof (poppy, Incubator) and the
   summer hills (gold, Foundation). Everything else is white, stone and ink.
 - **Find your way in.** A picker on the home page asks who you are
@@ -55,7 +53,7 @@ Google Fonts.
 
 | Page | What's on it |
 | --- | --- |
-| `index.html` | The mountain mark, one peak per pillar; the three pillars; the story in short; "Find your way in"; a strip of photos from gatherings |
+| `index.html` | The pitch and three doors, one per pillar; the three pillars; the story in short; "Find your way in"; a strip of photos from gatherings |
 | `story.html` | The origin story in four chapters, with a rail that follows your reading; "born in 2024"; a timeline that climbs; mission; values |
 | `ventures.html` | Thesis, two ways we invest, key figures, portfolio, GP partners, what we look for |
 | `incubator.html` | The four focus areas as an accordion, each with its own terrain; how we work |
@@ -167,15 +165,14 @@ npm run metrics -- <label> [--compare <other-label>]   # file sizes, load and sc
    building?" field is new.
 4. **Events were copied from Luma by hand** on 2026-09-24. In production,
    pull them from Luma or update the list after each event.
-5. **The map is stylised.** Its terrain is generated, not surveyed, and the
-   legend says "Not to scale". The coordinates in the footer are central
-   Berkeley's, not the house's.
+5. **The terrain is stylised.** It is generated, not surveyed. The
+   coordinates in the footer are central Berkeley's, not the house's.
 
 ## Porting to the production (Next.js) site
 
 - `chrome.js` becomes `<SiteHeader />`, `<SiteFooter />` and `<Icon />`.
 - `terrain.js` becomes one `<Terrain seed peaks animate />` client component
-  that owns a canvas; the pins are ordinary links laid over it.
+  that owns a canvas.
 - The tokens and fields at the top of `style.css` move into CSS variables or
   a Tailwind theme. Each block in `app.js` is self-contained and becomes one
   small client component.

@@ -7,13 +7,12 @@
 <meta name="description" content="Join the Berkeley Summit House community as a founder, CXO, investor, scholar, scout or young leader.">
 <meta name="theme-color" content="#FFFFFF">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400;500;600&family=Funnel+Sans:wght@400;500;600&family=Geist+Mono:wght@500&display=swap">
-<link rel="stylesheet" href="assets/style.css">
-<script src="assets/chrome.js"></script>
-<script src="assets/terrain.js" defer></script>
-<script src="assets/app.js" defer></script>
+<link rel="stylesheet" href="assets/style.css?v=3">
+<script src="assets/chrome.js?v=3"></script>
+<script src="assets/terrain.js?v=3" defer></script>
+<script src="assets/app.js?v=3" defer></script>
 </head>
 <body>
 <bsh-header current="join"></bsh-header>
@@ -47,27 +46,27 @@
           <div class="roles">
             <label class="role" data-tone="poppy">
               <input type="radio" name="role" value="founder" data-phrase="a founder" aria-describedby="role-error">
-              <span class="role-card"><span class="role-name"><i class="tri" aria-hidden="true"></i>Founder</span><span class="role-check" aria-hidden="true"><bsh-icon name="check"></bsh-icon></span><span class="role-desc">Building a company, from first idea to growth stage.</span></span>
+              <span class="role-card"><span class="role-name"><i class="tri"></i>Founder</span><span class="role-check"><bsh-icon name="check"></bsh-icon></span><span class="role-desc">Building a company, from first idea to growth stage.</span></span>
             </label>
             <label class="role" data-tone="ink">
               <input type="radio" name="role" value="cxo" data-phrase="a CXO" aria-describedby="role-error">
-              <span class="role-card"><span class="role-name"><i class="tri" aria-hidden="true"></i>CXO</span><span class="role-check" aria-hidden="true"><bsh-icon name="check"></bsh-icon></span><span class="role-desc">An operator or executive with experience to share.</span></span>
+              <span class="role-card"><span class="role-name"><i class="tri"></i>CXO</span><span class="role-check"><bsh-icon name="check"></bsh-icon></span><span class="role-desc">An operator or executive with experience to share.</span></span>
             </label>
             <label class="role" data-tone="cobalt">
               <input type="radio" name="role" value="investor" data-phrase="an investor" aria-describedby="role-error">
-              <span class="role-card"><span class="role-name"><i class="tri" aria-hidden="true"></i>Investor</span><span class="role-check" aria-hidden="true"><bsh-icon name="check"></bsh-icon></span><span class="role-desc">A GP, LP or angel backing human-centered AI.</span></span>
+              <span class="role-card"><span class="role-name"><i class="tri"></i>Investor</span><span class="role-check"><bsh-icon name="check"></bsh-icon></span><span class="role-desc">A GP, LP or angel backing human-centered AI.</span></span>
             </label>
             <label class="role" data-tone="cobalt">
               <input type="radio" name="role" value="scout" data-phrase="a scout" aria-describedby="role-error">
-              <span class="role-card"><span class="role-name"><i class="tri" aria-hidden="true"></i>Scout</span><span class="role-check" aria-hidden="true"><bsh-icon name="check"></bsh-icon></span><span class="role-desc">You find exceptional founders before others do.</span></span>
+              <span class="role-card"><span class="role-name"><i class="tri"></i>Scout</span><span class="role-check"><bsh-icon name="check"></bsh-icon></span><span class="role-desc">You find exceptional founders before others do.</span></span>
             </label>
             <label class="role" data-tone="gold">
               <input type="radio" name="role" value="scholar" data-phrase="a scholar" aria-describedby="role-error">
-              <span class="role-card"><span class="role-name"><i class="tri" aria-hidden="true"></i>Scholar</span><span class="role-check" aria-hidden="true"><bsh-icon name="check"></bsh-icon></span><span class="role-desc">A researcher turning inquiry into innovation.</span></span>
+              <span class="role-card"><span class="role-name"><i class="tri"></i>Scholar</span><span class="role-check"><bsh-icon name="check"></bsh-icon></span><span class="role-desc">A researcher turning inquiry into innovation.</span></span>
             </label>
             <label class="role" data-tone="gold">
               <input type="radio" name="role" value="young-leader" data-phrase="a young leader" aria-describedby="role-error">
-              <span class="role-card"><span class="role-name"><i class="tri" aria-hidden="true"></i>Young Leader</span><span class="role-check" aria-hidden="true"><bsh-icon name="check"></bsh-icon></span><span class="role-desc">Aged 15 to 35 and ready to build, learn and lead.</span></span>
+              <span class="role-card"><span class="role-name"><i class="tri"></i>Young Leader</span><span class="role-check"><bsh-icon name="check"></bsh-icon></span><span class="role-desc">Aged 15 to 35 and ready to build, learn and lead.</span></span>
             </label>
           </div>
           <p class="err roles-error" id="role-error" hidden></p>
@@ -93,20 +92,20 @@
             </div>
             <div class="fld fld--full">
               <label for="email">Email address</label>
-              <input id="email" name="email" type="email" autocomplete="email" inputmode="email" required aria-describedby="email-error">
+              <input id="email" name="email" type="email" autocomplete="email" required aria-describedby="email-error">
               <p class="err" id="email-error" hidden></p>
             </div>
             <div class="fld fld--full">
               <label for="phone">Phone number</label>
               <div class="phone">
                 <select id="phone-country" name="phone-country" autocomplete="tel-country-code" aria-label="Country code"></select>
-                <input id="phone" name="phone" type="tel" autocomplete="tel-national" inputmode="tel" required aria-describedby="phone-error">
+                <input id="phone" name="phone" type="tel" autocomplete="tel-national" required aria-describedby="phone-error">
               </div>
               <p class="err" id="phone-error" hidden></p>
             </div>
             <div class="fld fld--full">
               <label for="linkedin">LinkedIn profile URL</label>
-              <input id="linkedin" name="linkedin" type="url" inputmode="url" placeholder="linkedin.com/in/…" required aria-describedby="linkedin-error">
+              <input id="linkedin" name="linkedin" type="url" placeholder="linkedin.com/in/…" required aria-describedby="linkedin-error">
               <p class="err" id="linkedin-error" hidden></p>
             </div>
             <div class="fld fld--full">

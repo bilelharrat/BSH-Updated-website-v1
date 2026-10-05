@@ -1,25 +1,22 @@
 /* Berkeley Summit House: the terrain.
    The site's signature graphic. Each <canvas data-terrain> draws the contour
-   lines of a small landscape, the way a topographic map would: named peaks
+   lines of a small landscape, the way a topographic map would: a few peaks
    plus soft noise, with every fifth line drawn heavier as an index contour.
 
-     <div data-terrain-wrap>
-       <canvas data-terrain data-seed="4" data-animate
-               data-peaks="house:.7,.4,1,.16;ventures:.56,.74,.7,.12"
-               data-peaks-narrow="house:.5,.4,1,.2"></canvas>
-       <a data-peak="house">…</a>
-     </div>
+     <canvas data-terrain data-seed="4" data-animate
+             data-peaks="a:.7,.4,1,.16;b:.56,.74,.7,.12"
+             data-peaks-narrow="a:.5,.4,1,.2"></canvas>
 
-   A peak is "name:x,y,height,radius", with x and y as fractions of the canvas
-   and the radius as a fraction of its longer side. Elements marked
-   data-peak="name" inside the wrap are pinned to their peak. data-animate
-   lets the land drift slowly and rise a little under the pointer; it stays
-   still under Reduce Motion and whenever it is off screen.
-   data-shape="square" raises each peak as a square instead of a round hill,
-   so its contour rings are squares. */
+   A peak is "label:x,y,height,radius": x and y are fractions of the canvas,
+   the radius a fraction of its longer side, and the label is for readers of
+   the markup. data-peaks-narrow takes over when the canvas is not clearly
+   wider than tall; data-step sets the height between lines. data-animate
+   lets the land drift slowly and rise a little under the pointer anywhere in
+   its [data-terrain-wrap]; it stays still under Reduce Motion, off screen and
+   in a hidden tab. */
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
-  const finePointer = matchMedia('(pointer: fine)');
+  const AMP = 0.34, FREQ1 = 1 / 460, FREQ2 = 2.3 / 460; // the noise: height, and its two octaves
 
   const mulberry = a => () => {
     a = (a + 0x6D2B79F5) | 0;
@@ -56,11 +53,9 @@
     };
   }
 
-  const parsePeaks = str => (str || '').split(';').map(s => s.trim()).filter(Boolean).map(s => {
-    const [name, nums] = s.includes(':') ? s.split(':') : ['', s];
-    const [x, y, h, r] = nums.split(',').map(Number);
-    return { name, x, y, h, r };
-  });
+  // "a:.7,.4,1,.16;b:…" → [[.7, .4, 1, .16], …]
+  const parsePeaks = str => (str || '').split(';').filter(s => s.trim())
+    .map(s => s.slice(s.indexOf(':') + 1).split(',').map(Number));
 
   // Marching squares: which cell edges a contour crosses, by corner mask.
   // Corners: a top-left (8), b top-right (4), c bottom-right (2), d bottom-left (1).
@@ -69,104 +64,94 @@
     null, [3, 2], [2, 1], [3, 1], [0, 1], [0, 1, 3, 2], [0, 2], [0, 3],
     [0, 3], [0, 2], [0, 3, 1, 2], [0, 1], [3, 1], [1, 2], [3, 2], null,
   ];
+  const EX = new Float64Array(4), EY = new Float64Array(4); // a contour's crossing on each edge
+
+  // One set of observers and listeners serves every canvas.
+  const animated = [];
+  const kickAll = () => animated.forEach(t => t.kick());
+  const sizer = new ResizeObserver(es => es.forEach(e => e.target.terrain.resize(e.contentRect)));
+  const watcher = new IntersectionObserver(es => es.forEach(e => {
+    e.target.terrain.visible = e.isIntersecting;
+    e.target.terrain.kick();
+  }));
+  document.addEventListener('visibilitychange', kickAll);
+  reduce.addEventListener('change', kickAll);
 
   class Terrain {
     constructor(canvas) {
+      const d = canvas.dataset, seed = Number(d.seed) || 1;
       this.c = canvas;
       this.ctx = canvas.getContext('2d');
-      this.wrap = canvas.closest('[data-terrain-wrap]') || canvas.parentElement;
-      const d = canvas.dataset;
-      this.noise = simplex(Number(d.seed) || 1);
+      this.noise = simplex(seed);
       this.wide = parsePeaks(d.peaks);
       this.narrow = d.peaksNarrow ? parsePeaks(d.peaksNarrow) : this.wide;
       this.step = Number(d.step) || 0.07;
-      this.amp = d.amp ? Number(d.amp) : 0.34;
-      this.scale = Number(d.scale) || 460;
-      this.square = d.shape === 'square';
-      this.animate = canvas.hasAttribute('data-animate');
-      this.t = (Number(d.seed) || 1) * 17;
-      this.bump = 0;
-      this.bumpTarget = 0;
-      this.px = -1e4;
-      this.py = -1e4;
-      this.visible = false;
-      this.raf = 0;
+      this.t = seed * 17;
+      this.bump = this.bumpTarget = 0;
+      sizer.observe(canvas);
+      if (!canvas.hasAttribute('data-animate')) return;
+
       this.tick = this.tick.bind(this);
-
-      new ResizeObserver(() => this.resize()).observe(canvas);
-      new IntersectionObserver(([e]) => { this.visible = e.isIntersecting; this.kick(); }).observe(canvas);
-      document.addEventListener('visibilitychange', () => this.kick());
-      reduce.addEventListener?.('change', () => this.kick());
-
-      if (this.animate && finePointer.matches) {
-        this.wrap.addEventListener('pointermove', e => {
+      animated.push(this);
+      watcher.observe(canvas);
+      if (matchMedia('(pointer: fine)').matches) {
+        const wrap = canvas.closest('[data-terrain-wrap]') || canvas.parentElement;
+        wrap.addEventListener('pointermove', e => {
           const r = canvas.getBoundingClientRect();
           this.px = e.clientX - r.left;
           this.py = e.clientY - r.top;
           this.bumpTarget = 1;
           this.kick();
         });
-        this.wrap.addEventListener('pointerleave', () => { this.bumpTarget = 0; });
+        wrap.addEventListener('pointerleave', () => { this.bumpTarget = 0; });
       }
     }
 
-    resize() {
-      const r = this.c.getBoundingClientRect();
-      if (!r.width || !r.height) return;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      this.w = r.width;
-      this.h = r.height;
-      this.c.width = Math.round(this.w * dpr);
-      this.c.height = Math.round(this.h * dpr);
-      this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      this.peaks = this.w / this.h < 1.15 ? this.narrow : this.wide;
-      this.cell = this.w < 700 ? 7 : 9;
-      this.cols = Math.ceil(this.w / this.cell) + 1;
-      this.rows = Math.ceil(this.h / this.cell) + 1;
-      this.field = new Float32Array(this.cols * this.rows);
-      const cs = getComputedStyle(this.c);
-      this.color = cs.color;
+    resize({ width: w, height: h }) {
+      const { c, ctx } = this, dpr = Math.min(devicePixelRatio || 1, 2);
+      if (!w || !h || (w === this.w && h === this.h && dpr === this.dpr)) return;
+      this.dpr = dpr;
+      c.width = Math.round(w * dpr);
+      c.height = Math.round(h * dpr);
+      // Resizing the canvas resets its context, so the fixed styles go here.
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const cs = getComputedStyle(c);
+      ctx.strokeStyle = cs.color;
+      ctx.lineCap = 'round';
       this.minorAlpha = parseFloat(cs.getPropertyValue('--t-minor')) || 0.26;
       this.majorAlpha = parseFloat(cs.getPropertyValue('--t-major')) || 0.62;
-      this.place();
+      const cell = this.cell = w < 700 ? 7 : 9;
+      const cols = this.cols = Math.ceil(w / cell) + 1, rows = this.rows = Math.ceil(h / cell) + 1;
+      this.w = w;
+      this.h = h;
+      this.field = new Float32Array(cols * rows);
+      // The peaks stay put while the noise drifts: sum them once per size, not per frame.
+      const S = Math.max(w, h);
+      const peaks = (w / h < 1.15 ? this.narrow : this.wide).map(([x, y, ht, r]) => [x * w, y * h, ht, 2 * (r * S) ** 2]);
+      const land = this.land = new Float64Array(cols * rows);
+      for (let j = 0, k = 0; j < rows; j++) {
+        for (let i = 0; i < cols; i++, k++) {
+          for (const [px, py, ph, pr] of peaks) {
+            const dx = i * cell - px, dy = j * cell - py;
+            land[k] += ph * Math.exp(-(dx * dx + dy * dy) / pr);
+          }
+        }
+      }
       this.draw();
     }
 
-    place() {
-      this.wrap.querySelectorAll('[data-peak]').forEach(m => {
-        const p = this.peaks.find(q => q.name === m.dataset.peak);
-        m.hidden = !p;
-        if (!p) return;
-        m.style.left = `${p.x * 100}%`;
-        m.style.top = `${p.y * 100}%`;
-        // Open the legend card toward whichever side has room for it.
-        m.classList.remove('peak--flip');
-        m.classList.toggle('peak--flip', p.x * this.w + m.offsetWidth > this.w - 12);
-      });
-    }
-
     compute() {
-      const { cols, rows, cell, w, h, noise, field, t } = this;
-      const S = Math.max(w, h);
-      const f1 = 1 / this.scale, f2 = 2.3 / this.scale, amp = this.amp;
-      const pk = this.peaks.map(p => [p.x * w, p.y * h, p.h, 2 * (p.r * S) ** 2]);
-      const bump = this.bump * 0.2, bx = this.px, by = this.py, br = 2 * (S * 0.05) ** 2;
-      // Squared distance: round (Euclidean) or square (the larger of the two axes).
-      const dist2 = this.square
-        ? (dx, dy) => { const m = Math.max(Math.abs(dx), Math.abs(dy)); return m * m; }
-        : (dx, dy) => dx * dx + dy * dy;
-      let k = 0;
-      for (let j = 0; j < rows; j++) {
-        const y = j * cell;
+      const { cols, rows, cell, noise, field, land, t } = this;
+      const bump = this.bump * 0.2, bx = this.px, by = this.py, br = 2 * (Math.max(this.w, this.h) * 0.05) ** 2;
+      const dx1 = t * 0.024, dy1 = t * 0.015, dx2 = t * 0.019, dy2 = t * 0.012;
+      for (let j = 0, k = 0; j < rows; j++) {
+        const y = j * cell, y1 = y * FREQ1 - dy1, y2 = y * FREQ2 + dy2;
         for (let i = 0; i < cols; i++, k++) {
           const x = i * cell;
-          let v = amp * (0.7 * noise(x * f1 + t * 0.024, y * f1 - t * 0.015)
-                       + 0.3 * noise(x * f2 - t * 0.019 + 40, y * f2 + t * 0.012));
-          for (let q = 0; q < pk.length; q++) {
-            v += pk[q][2] * Math.exp(-dist2(x - pk[q][0], y - pk[q][1]) / pk[q][3]);
-          }
+          let v = AMP * (0.7 * noise(x * FREQ1 + dx1, y1) + 0.3 * noise(x * FREQ2 - dx2 + 40, y2)) + land[k];
           if (bump > 0.001) {
-            v += bump * Math.exp(-dist2(x - bx, y - by) / br);
+            const dx = x - bx, dy = y - by;
+            v += bump * Math.exp(-(dx * dx + dy * dy) / br);
           }
           field[k] = v;
         }
@@ -179,54 +164,46 @@
       const { ctx, cols, rows, cell, field, step } = this;
       const minor = new Path2D(), major = new Path2D();
       for (let j = 0; j < rows - 1; j++) {
-        for (let i = 0; i < cols - 1; i++) {
-          const k = j * cols + i;
+        for (let i = 0, k = j * cols; i < cols - 1; i++, k++) {
           const a = field[k], b = field[k + 1], c = field[k + cols + 1], d = field[k + cols];
-          const n0 = Math.ceil(Math.min(a, b, c, d) / step);
-          const n1 = Math.floor(Math.max(a, b, c, d) / step);
-          if (n0 > n1) continue;
-          const x = i * cell, y = j * cell;
-          for (let n = n0; n <= n1; n++) {
+          const x = i * cell, y = j * cell, n1 = Math.floor(Math.max(a, b, c, d) / step);
+          for (let n = Math.ceil(Math.min(a, b, c, d) / step); n <= n1; n++) {
             const L = n * step;
             const edges = CASES[(a > L ? 8 : 0) | (b > L ? 4 : 0) | (c > L ? 2 : 0) | (d > L ? 1 : 0)];
             if (!edges) continue;
+            EX[0] = x + cell * (L - a) / (b - a); EY[0] = y;
+            EX[1] = x + cell; EY[1] = y + cell * (L - b) / (c - b);
+            EX[2] = x + cell * (L - d) / (c - d); EY[2] = y + cell;
+            EX[3] = x; EY[3] = y + cell * (L - a) / (d - a);
             const path = n % 5 === 0 ? major : minor;
             for (let e = 0; e < edges.length; e += 2) {
-              for (let s = 0; s < 2; s++) {
-                let px, py;
-                switch (edges[e + s]) {
-                  case 0: px = x + cell * (L - a) / (b - a); py = y; break;
-                  case 1: px = x + cell; py = y + cell * (L - b) / (c - b); break;
-                  case 2: px = x + cell * (L - d) / (c - d); py = y + cell; break;
-                  default: px = x; py = y + cell * (L - a) / (d - a);
-                }
-                if (s === 0) path.moveTo(px, py); else path.lineTo(px, py);
-              }
+              path.moveTo(EX[edges[e]], EY[edges[e]]);
+              path.lineTo(EX[edges[e + 1]], EY[edges[e + 1]]);
             }
           }
         }
       }
       ctx.clearRect(0, 0, this.w, this.h);
-      ctx.strokeStyle = this.color;
-      ctx.lineCap = 'round';
       ctx.globalAlpha = this.minorAlpha;
       ctx.lineWidth = 0.9;
       ctx.stroke(minor);
       ctx.globalAlpha = this.majorAlpha;
       ctx.lineWidth = 1.5;
       ctx.stroke(major);
-      ctx.globalAlpha = 1;
     }
 
+    get live() { return this.visible && !document.hidden && !reduce.matches; }
+
     kick() {
-      if (!this.animate || reduce.matches || !this.visible || document.hidden || this.raf) return;
+      if (this.raf || !this.live) return;
       this.last = performance.now();
       this.raf = requestAnimationFrame(this.tick);
     }
 
+    // The drift is slow, so ~30 frames a second is plenty.
     tick(now) {
       this.raf = 0;
-      if (!this.visible || document.hidden || reduce.matches) return;
+      if (!this.live) return;
       const dt = now - this.last;
       if (dt >= 33) {
         this.last = now;
@@ -238,11 +215,11 @@
     }
   }
 
-  const init = () => document.querySelectorAll('canvas[data-terrain]').forEach(c => {
-    if (!c.terrain) c.terrain = new Terrain(c);
-  });
+  const init = () => document.querySelectorAll('canvas[data-terrain]').forEach(c => { c.terrain ||= new Terrain(c); });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
-  // Web fonts can shift layout after first paint; redraw once they settle.
-  document.fonts?.ready.then(() => document.querySelectorAll('canvas[data-terrain]').forEach(c => c.terrain?.resize()));
+  // A ResizeObserver can't see into a closed <details>, but measuring can, so
+  // one more pass once web fonts settle draws the canvases hidden there too.
+  document.fonts.ready.then(() => document.querySelectorAll('canvas[data-terrain]')
+    .forEach(c => c.terrain?.resize(c.getBoundingClientRect())));
 })();
