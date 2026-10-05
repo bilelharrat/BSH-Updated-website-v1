@@ -12,10 +12,10 @@
    the markup. data-peaks-narrow takes over when the canvas is not clearly
    wider than tall; data-step sets the height between lines. data-animate
    lets the land drift slowly and rise a little under the pointer anywhere in
-   its [data-terrain-wrap]; it stays still under Reduce Motion, off screen and
-   in a hidden tab. */
+   its parent element; it stays still under Reduce Motion, off screen, in a
+   hidden tab and under the open menu. */
 (() => {
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  const root = document.documentElement, reduce = matchMedia('(prefers-reduced-motion: reduce)');
   const AMP = 0.34, FREQ1 = 1 / 460, FREQ2 = 2.3 / 460; // the noise: height, and its two octaves
 
   const mulberry = a => () => {
@@ -74,8 +74,15 @@
     e.target.terrain.visible = e.isIntersecting;
     e.target.terrain.kick();
   }));
+  const resizeAll = () => document.querySelectorAll('canvas[data-terrain]').forEach(c => c.terrain?.resize(c.getBoundingClientRect()));
   document.addEventListener('visibilitychange', kickAll);
   reduce.addEventListener('change', kickAll);
+  // The opaque mobile menu (html.menu-open) covers the land: pause under it.
+  new MutationObserver(kickAll).observe(root, { attributeFilter: ['class'] });
+  // Moved to a screen of another resolution, the CSS size stays the same.
+  const onDpr = () => matchMedia(`(resolution: ${devicePixelRatio}dppx)`)
+    .addEventListener('change', () => { resizeAll(); onDpr(); }, { once: true });
+  onDpr();
 
   class Terrain {
     constructor(canvas) {
@@ -95,7 +102,7 @@
       animated.push(this);
       watcher.observe(canvas);
       if (matchMedia('(pointer: fine)').matches) {
-        const wrap = canvas.closest('[data-terrain-wrap]') || canvas.parentElement;
+        const wrap = canvas.parentElement;
         wrap.addEventListener('pointermove', e => {
           const r = canvas.getBoundingClientRect();
           this.px = e.clientX - r.left;
@@ -175,7 +182,7 @@
             EX[1] = x + cell; EY[1] = y + cell * (L - b) / (c - b);
             EX[2] = x + cell * (L - d) / (c - d); EY[2] = y + cell;
             EX[3] = x; EY[3] = y + cell * (L - a) / (d - a);
-            const path = n % 5 === 0 ? major : minor;
+            const path = n % 5 ? minor : major;
             for (let e = 0; e < edges.length; e += 2) {
               path.moveTo(EX[edges[e]], EY[edges[e]]);
               path.lineTo(EX[edges[e + 1]], EY[edges[e + 1]]);
@@ -192,7 +199,7 @@
       ctx.stroke(major);
     }
 
-    get live() { return this.visible && !document.hidden && !reduce.matches; }
+    get live() { return this.visible && !document.hidden && !reduce.matches && !root.classList.contains('menu-open'); }
 
     kick() {
       if (this.raf || !this.live) return;
@@ -220,6 +227,5 @@
   else init();
   // A ResizeObserver can't see into a closed <details>, but measuring can, so
   // one more pass once web fonts settle draws the canvases hidden there too.
-  document.fonts.ready.then(() => document.querySelectorAll('canvas[data-terrain]')
-    .forEach(c => c.terrain?.resize(c.getBoundingClientRect())));
+  document.fonts.ready.then(resizeAll);
 })();

@@ -6,7 +6,16 @@
 <title>Join · Berkeley Summit House</title>
 <meta name="description" content="Join the Berkeley Summit House community as a founder, CXO, investor, scholar, scout or young leader.">
 <meta name="theme-color" content="#FFFFFF">
+<link rel="canonical" href="https://berkeleysummithouse.org/join.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Berkeley Summit House">
+<meta property="og:title" content="Join · Berkeley Summit House">
+<meta property="og:description" content="Join the Berkeley Summit House community as a founder, CXO, investor, scholar, scout or young leader.">
+<meta property="og:url" content="https://berkeleysummithouse.org/join.html">
+<meta property="og:image" content="https://berkeleysummithouse.org/assets/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400;500;600&family=Funnel+Sans:wght@400;500;600&family=Geist+Mono:wght@500&display=swap">
 <link rel="stylesheet" href="assets/style.css?v=4">
@@ -15,11 +24,11 @@
 <script src="assets/app.js?v=4" defer></script>
 </head>
 <body>
-<bsh-header current="join"></bsh-header>
+<bsh-header current="join"><noscript><nav class="nojs-nav" aria-label="Main"><a href="index.html">Berkeley Summit House</a> <a href="story.html">Our Story</a> <a href="ventures.html">Ventures</a> <a href="incubator.html">Incubator</a> <a href="foundation.html">Foundation</a> <a href="events.html">Events</a> <a href="join.html">Join</a></nav></noscript></bsh-header>
 
 <main id="main">
   <div class="wrap join">
-    <aside class="join-side f-night" data-terrain-wrap aria-labelledby="page-title">
+    <aside class="join-side f-night" aria-labelledby="page-title">
       <canvas data-terrain data-animate data-seed="89" data-peaks="a:.72,.8,1,.22;b:.15,.98,.6,.16" data-peaks-narrow="a:.8,.75,1,.34" aria-hidden="true"></canvas>
       <p class="label">Join the community</p>
       <h1 class="d-l balance" id="page-title">Pull up a chair.</h1>
@@ -36,9 +45,10 @@
     </aside>
 
     <div class="join-form-wrap">
-      <!-- Set data-endpoint="https://…" on the form to make it send; until then
-           it is a prototype. What it sends and expects: README, "The join form". -->
-      <form class="join-main" id="join-form" novalidate aria-labelledby="page-title">
+      <!-- Set data-endpoint="https://…" (and action, for visitors without
+           JavaScript) on the form to make it send; until then it is a
+           prototype. What it sends and expects: README, "The join form". -->
+      <form class="join-main" id="join-form" method="post" novalidate aria-labelledby="page-title">
         <p class="form-alert" id="form-alert" role="alert" hidden><bsh-icon name="alert"></bsh-icon><span></span></p>
 
         <fieldset>
@@ -120,6 +130,7 @@
         <div class="form-foot">
           <button class="btn btn-lg" type="submit">Join the community <bsh-icon name="arrow"></bsh-icon></button>
           <p class="small" data-prototype-note>Design prototype: this form doesn’t send anything yet.</p>
+          <noscript><p class="small">This form needs JavaScript. You can also email <a href="mailto:founders@berkeleysummithouse.org">founders@berkeleysummithouse.org</a>.</p></noscript>
         </div>
       </form>
 

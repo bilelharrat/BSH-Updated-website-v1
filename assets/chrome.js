@@ -32,6 +32,7 @@
   const ext = (href, html, cls) =>
     `<a${cls ? ` class="${cls}"` : ''} href="${href}" target="_blank" rel="noopener">${html}<span class="sr"> (opens in a new tab)</span></a>`;
   const JOIN = `<a class="btn" href="join.html">Join the community ${icon('arrow')}</a>`;
+  const list = items => `<ul>${items.map(i => `<li>${i}</li>`).join('')}</ul>`;
 
   // Every page, with the color that marks it across the site.
   const PAGES = [
@@ -41,10 +42,13 @@
     { key: 'foundation', label: 'Foundation', note: 'Pathways for ages 15 to 35', tone: 'gold' },
     { key: 'events', label: 'Events', note: 'Dinners, retreats and roundtables', tone: 'ink' },
   ];
+  const ROLES = [['founder', 'Join as a founder'], ['investor', 'Invest with us'], ['young-leader', 'Join as a young leader'],
+    ['scholar', 'Join as a scholar'], ['scout', 'Become a scout']];
 
-  // Each element renders once: moved around the page later, it keeps its state.
+  // Each element renders once, over any no-script fallback inside it; moved
+  // around the page later, it keeps its state.
   const define = (name, render) => customElements.define(name, class extends HTMLElement {
-    connectedCallback() { if (!this.firstElementChild) this.innerHTML = render(this); }
+    connectedCallback() { if (!this.done) this.innerHTML = render(this, this.done = true); }
   });
 
   /* <bsh-icon name="arrow"> */
@@ -54,17 +58,17 @@
   define('bsh-header', el => {
     const current = el.getAttribute('current');
     const cur = key => (key === current ? ' aria-current="page"' : '');
-    const nav = PAGES.map(p =>
-      `<li><a class="nav-link" href="${p.key}.html" data-tone="${p.tone}"${cur(p.key)}><i class="tri"></i>${p.label}</a></li>`).join('');
+    const link = (p, cls, html) => `<a class="${cls}" href="${p.key}.html" data-tone="${p.tone}"${cur(p.key)}>${html}</a>`;
+    const nav = list(PAGES.map(p => link(p, 'nav-link', `<i class="tri"></i>${p.label}`)));
     // The spaces, unseen in the grid, keep screen readers from running the words together.
-    const menu = PAGES.map((p, n) =>
-      `<li><a class="menu-link" href="${p.key}.html" data-tone="${p.tone}"${cur(p.key)}><span class="menu-num">0${n + 1}</span> <span class="menu-name">${p.label}</span> <span class="menu-note">${p.note}</span></a></li>`).join('');
+    const menu = list(PAGES.map((p, n) =>
+      link(p, 'menu-link', `<span class="menu-num">0${n + 1}</span> <span class="menu-name">${p.label}</span> <span class="menu-note">${p.note}</span>`)));
     return `
       <a class="skip" href="#main">Skip to content</a>
-      <header class="hdr" data-hdr>
+      <header class="hdr">
         <div class="hdr-in">
           ${brand(cur('home'))}
-          <nav class="hdr-nav" aria-label="Main"><ul>${nav}</ul></nav>
+          <nav class="hdr-nav" aria-label="Main">${nav}</nav>
           <div class="hdr-end">
             <a class="btn btn-sm hdr-join" href="join.html"${cur('join')}>Join</a>
             <button class="hdr-menu" type="button" aria-expanded="false" aria-controls="site-menu">
@@ -73,7 +77,7 @@
           </div>
         </div>
         <div class="menu" id="site-menu" hidden>
-          <nav aria-label="Main, mobile"><ul>${menu}</ul></nav>
+          <nav aria-label="Main, mobile">${menu}</nav>
           <div class="menu-foot">
             ${JOIN}
             <a class="menu-mail" href="mailto:${EMAIL}">${EMAIL}</a>
@@ -86,7 +90,7 @@
   define('bsh-footer', el => {
     const cta = !el.hasAttribute('no-cta');
     return `
-      <footer class="ftr f-night${cta ? '' : ' ftr--short'}" data-terrain-wrap>
+      <footer class="ftr f-night${cta ? '' : ' ftr--short'}">
         <canvas class="ftr-terrain" data-terrain data-seed="29" data-step=".08" data-peaks="a:.84,.3,.9,.16;b:.62,.12,.5,.1" data-peaks-narrow="a:.8,.18,.8,.3" aria-hidden="true"></canvas>
         ${cta ? `<div class="ftr-cta wrap">
           <p class="label">Join the community</p>
@@ -99,19 +103,13 @@
             ${brand()}
             <p class="ftr-motto">Dream. Build. Grow.</p>
           </div>
-          <nav class="ftr-col" aria-label="Explore"><p class="label">Explore</p><ul>${PAGES.map(p => `<li><a href="${p.key}.html">${p.label}</a></li>`).join('')}</ul></nav>
-          <nav class="ftr-col" aria-label="Get involved"><p class="label">Get involved</p><ul>
-            <li><a href="join.html#founder">Join as a founder</a></li>
-            <li><a href="join.html#investor">Invest with us</a></li>
-            <li><a href="join.html#young-leader">Join as a young leader</a></li>
-            <li><a href="join.html#scholar">Join as a scholar</a></li>
-            <li><a href="join.html#scout">Become a scout</a></li>
-          </ul></nav>
-          <div class="ftr-col"><p class="label">Connect</p><ul>
-            <li>${ext(LUMA, 'Luma calendar')}</li>
-            <li>${ext('https://www.linkedin.com/company/berkeley-summit-house/', 'LinkedIn')}</li>
-            <li>${ext('https://www.youtube.com/@berkeleysummithouse', 'YouTube')}</li>
-          </ul>
+          <nav class="ftr-col" aria-label="Explore"><p class="label">Explore</p>${list(PAGES.map(p => `<a href="${p.key}.html">${p.label}</a>`))}</nav>
+          <nav class="ftr-col" aria-label="Get involved"><p class="label">Get involved</p>${list(ROLES.map(([k, t]) => `<a href="join.html#${k}">${t}</a>`))}</nav>
+          <div class="ftr-col"><p class="label">Connect</p>${list([
+            ext(LUMA, 'Luma calendar'),
+            ext('https://www.linkedin.com/company/berkeley-summit-house/', 'LinkedIn'),
+            ext('https://www.youtube.com/@berkeleysummithouse', 'YouTube'),
+          ])}
           <p class="ftr-mail"><a href="mailto:${EMAIL}">${EMAIL}</a>
             <button class="copy-btn" type="button" data-copy="${EMAIL}" aria-label="Copy email address">${icon('copy')}<span class="copy-done" aria-hidden="true">Copied</span></button></p>
           </div>

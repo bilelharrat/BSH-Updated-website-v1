@@ -15,7 +15,7 @@
   --stone: #F1F1EE;
   --ink: #131417;
   --ink-2: #4E5159;
-  --ink-3: #7C7F87;
+  --ink-3: #6B6D74;
   --line: #E3E3DF;
   --line-2: #CACAC4;
   --night: #111316;
@@ -30,7 +30,7 @@
   --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
   --max: 1360px;
-  --gut: clamp(16px, 4vw, 56px);
+  --gut: max(clamp(16px, 4vw, 56px), env(safe-area-inset-left), env(safe-area-inset-right));
   --edge: max(var(--gut), calc((100vw - var(--max)) / 2 + var(--gut)));
   --hdr: 68px;
   --r: 6px;
@@ -64,13 +64,13 @@
   --terrain: #A7ADB8; --t-minor: .2; --t-major: .46;
 }
 .f-cobalt {
-  --bg: var(--cobalt); --fg: #FFF; --fg-2: rgb(255 255 255 / .84); --fg-3: rgb(255 255 255 / .68);
+  --bg: var(--cobalt); --fg: #FFF; --fg-2: rgb(255 255 255 / .84); --fg-3: rgb(255 255 255 / .74);
   --rule: rgb(255 255 255 / .24); --rule-2: rgb(255 255 255 / .44); --card: rgb(255 255 255 / .1);
   --btn-bg: #FFF; --btn-fg: var(--cobalt-deep);
   --terrain: #FFF; --t-minor: .22; --t-major: .5;
 }
 .f-poppy {
-  --bg: var(--poppy); --fg: #16100D; --fg-2: rgb(22 16 13 / .82); --fg-3: rgb(22 16 13 / .66);
+  --bg: var(--poppy); --fg: #16100D; --fg-2: rgb(22 16 13 / .9); --fg-3: rgb(22 16 13 / .86);
   --rule: rgb(22 16 13 / .2); --rule-2: rgb(22 16 13 / .4); --card: rgb(255 255 255 / .16);
   --btn-bg: #16100D; --btn-fg: #FFF;
   --terrain: #16100D; --t-minor: .2; --t-major: .46;
@@ -229,8 +229,8 @@ bsh-icon > .i { width: 100%; height: 100%; }
   white-space: nowrap;
   transition: background-color .2s, color .2s, box-shadow .2s, transform .2s var(--ease);
 }
-.btn .i, .link .i { transition: transform .3s var(--ease); }
-.btn:hover .i, .link:hover .i { transform: translateX(3px); }
+.btn .i, .link .i, .summit-ground .i, .pillar-go .i { transition: transform .3s var(--ease); }
+.btn:hover .i, .link:hover .i, .summit-ground a:hover .i { transform: translateX(3px); }
 .btn:active { transform: scale(.98); }
 .btn:disabled { cursor: progress; }
 .btn-ghost {
@@ -329,9 +329,8 @@ html.menu-open .hdr { transform: none; background: var(--paper); }
   align-items: center;
   gap: 12px;
   text-decoration: none;
-  flex: none;
 }
-.brand-mark { width: 34px; }
+.brand-mark { width: 34px; flex: none; }
 .brand-name {
   font: 600 17px/1 var(--display);
   letter-spacing: -.015em;
@@ -424,7 +423,7 @@ html.menu-open .hdr { transform: none; background: var(--paper); }
   .hdr-end { margin-left: auto; }
   .hdr-menu { display: inline-flex; }
 }
-@media (max-width: 440px) {
+@media (max-width: 480px) {
   .brand-name { font-size: 15px; }
   .hdr-join { display: none; }
   .hdr-in { gap: 12px; }
@@ -434,6 +433,9 @@ html.menu-open .hdr { transform: none; background: var(--paper); }
   .hdr-menu-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 }
 @media (min-width: 1061px) { .menu { display: none !important; } }
+
+/* Without JavaScript the header is a plain row of links. */
+.nojs-nav { display: flex; flex-wrap: wrap; gap: 8px 20px; padding: 16px var(--gut); }
 
 /* 8 · Footer ---------------------------------------------------------------- */
 .ftr {
@@ -561,7 +563,6 @@ canvas[data-terrain] {
 .region--incubator:hover path { fill: var(--poppy); }
 .summit:has(.pin--foundation:is(:hover, :focus-visible)) .region--foundation path,
 .region--foundation:hover path { fill: var(--gold); }
-.region--ventures:hover path { fill: var(--cobalt); }
 
 /* A pin: legend card, stem, and a ringed dot planted on the peak. */
 .pin {
@@ -634,8 +635,7 @@ canvas[data-terrain] {
 }
 .summit-ground a { display: inline-flex; align-items: center; gap: 8px; color: var(--ink-2); text-decoration: none; transition: color .2s; }
 .summit-ground a:hover { color: var(--ink); }
-.summit-ground .i { width: 14px; height: 14px; transition: transform .3s var(--ease); }
-.summit-ground a:hover .i { transform: translateX(3px); }
+.summit-ground .i { width: 14px; height: 14px; }
 .summit-ground .tri { width: 9px; height: 8px; background: currentColor; }
 
 @media (max-width: 860px) {
@@ -651,6 +651,10 @@ canvas[data-terrain] {
 /* On the narrowest phones the side labels would touch; lift the Foundation's. */
 @media (max-width: 400px) {
   .pin--foundation .pin-stem { height: 58px; }
+  .pin--foundation .peak-card { translate: -30% 0; }
+}
+@media (max-width: 300px) {
+  .pin--incubator .pin-stem { height: 18px; }
 }
 
 /* Pillars */
@@ -678,7 +682,6 @@ canvas[data-terrain] {
   font-weight: 500;
   margin-top: 4px;
 }
-.pillar-go .i { transition: transform .3s var(--ease); }
 .pillar:hover .pillar-go .i { transform: translateX(4px); }
 .pillar-photo {
   margin-top: auto;
@@ -696,7 +699,7 @@ canvas[data-terrain] {
 }
 @media (max-width: 640px) {
   .pillar { display: flex; }
-  .pillar-photo { aspect-ratio: 16 / 10; margin-top: 8px; }
+  .pillar-photo { aspect-ratio: 16 / 10; margin-top: 8px; min-height: 0; }
 }
 
 /* Find your way in */
@@ -816,7 +819,7 @@ canvas[data-terrain] {
 .strip figure { display: grid; gap: 14px; }
 .strip img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 10px; background: var(--stone); }
 .strip figcaption { display: grid; gap: 4px; }
-.strip figcaption .mono { color: var(--fg-3); text-transform: uppercase; letter-spacing: .08em; font-size: 11.5px; }
+.strip figcaption .mono, .names .mono, .album .mono { color: var(--fg-3); text-transform: uppercase; letter-spacing: .08em; font-size: 11.5px; }
 .strip figcaption b { font: 500 19px/1.25 var(--display); letter-spacing: -.01em; }
 .strip-ctrl { display: flex; gap: 10px; align-items: center; }
 .strip-ctrl .link { margin-left: 12px; }
@@ -852,7 +855,7 @@ canvas[data-terrain] {
 }
 .ph-facts div { display: grid; gap: 4px; }
 .ph-facts dt { font: 500 11.5px/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--fg-3); }
-.ph-facts dd { font: 500 20px/1.25 var(--display); letter-spacing: -.01em; }
+.ph-facts dd, .album b { font: 500 20px/1.25 var(--display); letter-spacing: -.01em; }
 @media (max-width: 700px) {
   .page-hero canvas { mask-image: linear-gradient(180deg, rgb(0 0 0 / .3), #000 85%); }
 }
@@ -875,6 +878,7 @@ canvas[data-terrain] {
   background: var(--card);
 }
 .duo-card .actions { margin-top: 12px; }
+.duo-card .btn { white-space: normal; }
 
 /* 12 · Story ---------------------------------------------------------------- */
 .story-hero {
@@ -944,8 +948,8 @@ canvas[data-terrain] {
 .ascent li:nth-child(1) { padding-top: 240px; }
 .ascent li:nth-child(2) { padding-top: 120px; }
 .ascent .yr { color: var(--fg); font: 500 clamp(48px, 5.6vw, 84px)/1 var(--display); letter-spacing: -.04em; }
-.ascent .dot { width: 18px; height: 18px; border-radius: 50%; background: var(--fg); box-shadow: 0 0 0 5px var(--bg), 0 0 0 6px var(--fg); margin-bottom: 10px; }
-.ascent li:last-child .dot { background: var(--gold); box-shadow: 0 0 0 5px var(--bg), 0 0 0 6px var(--gold); }
+.ascent .dot { --c: var(--fg); width: 18px; height: 18px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 5px var(--bg), 0 0 0 6px var(--c); margin-bottom: 10px; }
+.ascent li:last-child .dot { --c: var(--gold); }
 .ascent p { color: var(--fg-2); max-width: 22em; }
 @media (max-width: 860px) {
   .ascent svg { display: none; }
@@ -965,15 +969,12 @@ canvas[data-terrain] {
 }
 .value .tri { width: 20px; height: 18px; margin-bottom: 36px; }
 .value p { color: var(--fg-2); }
-@media (max-width: 1020px) { .values { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 560px) { .values { grid-template-columns: 1fr; } }
 
 /* 13 · Ventures ------------------------------------------------------------- */
 .ways { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .way { gap: 18px; }
 .way-num { font: 500 13px/1 var(--mono); color: var(--cobalt); letter-spacing: .08em; }
 .way p { color: var(--fg-2); max-width: 30em; }
-@media (max-width: 760px) { .ways { grid-template-columns: 1fr; } }
 
 .figures {
   display: grid;
@@ -1000,7 +1001,6 @@ canvas[data-terrain] {
   border-bottom: 1px solid var(--rule);
 }
 .names .nm { font: 500 clamp(30px, 3.6vw, 52px)/1.05 var(--display); letter-spacing: -.03em; }
-.names .mono { color: var(--fg-3); text-transform: uppercase; letter-spacing: .08em; font-size: 11.5px; }
 .names--two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 48px; border-top: 0; }
 .names--two li:nth-child(-n + 2) { border-top: 1px solid var(--rule); }
 .names--two .nm { font-size: clamp(22px, 2.2vw, 30px); }
@@ -1016,8 +1016,7 @@ canvas[data-terrain] {
 .criteria { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; }
 .criterion { display: grid; gap: 12px; align-content: start; padding-top: 22px; border-top: 1.5px solid var(--fg); }
 .criterion p { color: var(--fg-2); }
-@media (max-width: 1020px) { .criteria { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 560px) { .criteria { grid-template-columns: 1fr; } }
+@media (max-width: 1020px) { .values, .criteria { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 /* 14 · Incubator ------------------------------------------------------------ */
 .areas { border-top: 1px solid var(--rule); }
@@ -1122,7 +1121,6 @@ canvas[data-terrain] {
 .program-body p { color: var(--fg-2); }
 .program-past { padding-top: 16px; border-top: 1px solid var(--rule); font-size: 14.5px; }
 .program-past .mono { display: block; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .08em; font-size: 11px; color: var(--fg-3); }
-@media (max-width: 760px) { .programs { grid-template-columns: 1fr; } }
 
 /* 16 · Events --------------------------------------------------------------- */
 .next {
@@ -1138,7 +1136,7 @@ canvas[data-terrain] {
 }
 .next canvas { z-index: -1; mask-image: linear-gradient(90deg, rgb(0 0 0 / .3) 25%, #000 80%); }
 .next > div { display: grid; gap: 16px; justify-items: start; }
-@media (max-width: 760px) { .next { grid-template-columns: 1fr; } }
+@media (max-width: 760px) { .ways, .programs, .next { grid-template-columns: 1fr; } }
 
 .log-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 20px; }
 .log-count { color: var(--fg-3); }
@@ -1225,11 +1223,8 @@ canvas[data-terrain] {
   backdrop-filter: blur(8px);
 }
 .album-count .i { width: 14px; height: 14px; }
-.album b { font: 500 20px/1.25 var(--display); letter-spacing: -.01em; }
-.album .mono { color: var(--fg-3); text-transform: uppercase; letter-spacing: .08em; font-size: 11.5px; }
 .album-text { display: grid; gap: 4px; }
 @media (max-width: 900px) { .albums { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 560px) { .albums { grid-template-columns: 1fr; } }
 
 .lightbox {
   width: 100vw;
@@ -1253,7 +1248,7 @@ canvas[data-terrain] {
 }
 .lb-bar { padding: 16px var(--gut) calc(20px + env(safe-area-inset-bottom)); }
 .lb-top .mono { color: #9A9EA6; }
-.lb-stage { display: grid; place-items: center; padding: 0 var(--gut); min-height: 0; }
+.lb-stage { display: grid; grid-template-rows: minmax(0, 1fr); place-items: center; padding: 0 var(--gut); min-height: 0; }
 .lb-stage img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 6px; }
 .lb-cap { display: grid; gap: 4px; }
 .lb-cap b { font: 500 19px/1.25 var(--display); }
@@ -1348,13 +1343,13 @@ canvas[data-terrain] {
   background: var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234E5159' stroke-width='1.6' stroke-linecap='round'%3E%3Cpath d='M6 9.5l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center / 18px;
 }
 .fld :is(input, select, textarea):hover { border-color: var(--ink-3); }
-.fld :is(input, select, textarea):focus { outline: none; border-color: var(--cobalt); box-shadow: 0 0 0 3px rgb(39 67 214 / .18); }
+.fld :is(input, select, textarea):focus { outline: 2px solid transparent; outline-offset: 0; border-color: var(--cobalt); box-shadow: 0 0 0 3px rgb(39 67 214 / .18); }
 .fld.is-invalid input { border-color: var(--danger); }
 .fld.is-invalid input:focus { box-shadow: 0 0 0 3px rgb(180 35 24 / .16); }
 .err { display: flex; align-items: center; gap: 6px; color: var(--danger); font-size: 14px; }
 .err .i { width: 16px; height: 16px; }
 .phone { display: grid; grid-template-columns: minmax(0, 190px) minmax(0, 1fr); gap: 8px; }
-@media (max-width: 560px) { .roles, .fields, .phone { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { .values, .criteria, .albums, .roles, .fields, .phone { grid-template-columns: 1fr; } }
 .form-alert {
   display: flex;
   gap: 10px;
@@ -1369,19 +1364,30 @@ canvas[data-terrain] {
 .form-foot .small { max-width: 26em; }
 .success { display: grid; gap: 20px; justify-items: start; padding-top: 12px; }
 .success:focus { outline: none; }
+.success .h2 { overflow-wrap: anywhere; }
 .success-mark { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: var(--ink); color: #FFF; }
 .success-mark .i { width: 30px; height: 30px; stroke-width: 2; }
 @media (max-width: 900px) {
   .join { grid-template-columns: 1fr; }
   .join-side { position: relative; top: 0; min-height: 0; }
 }
+/* Sticky panels stick only in windows tall enough to show them whole. */
+@media (max-height: 799px) { .join-side { position: relative; top: 0; } }
+@media (max-height: 640px) { .router-a { position: static; } }
 
 /* 18 · Motion ----------------------------------------------------------------
    Nothing waits on script to be visible. Only blocks that start below the
    fold are held back, and they ease up once as they arrive. */
 .rv.armed { opacity: 0; transform: translateY(28px); }
 .rv.in { opacity: 1; transform: none; transition: opacity .9s var(--ease) var(--d, 0s), transform 1s var(--ease) var(--d, 0s); }
+/* Cards in a row arrive left to right. */
+:is(.pillars, .teaser, .values, .ways, .figures, .criteria, .steps) > :nth-child(2), .programs > :nth-child(even) { --d: .08s; }
+:is(.pillars, .values, .figures, .criteria, .steps) > :nth-child(3) { --d: .16s; }
+:is(.values, .criteria) > :nth-child(4) { --d: .24s; }
+.albums > :nth-child(3n + 2) { --d: .06s; }
+.albums > :nth-child(3n) { --d: .12s; }
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
-  .rv.armed { opacity: 1; transform: none; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
+/* Print never scrolls, so held-back blocks show at once there too. */
+@media print, (prefers-reduced-motion: reduce) { .rv.armed { opacity: 1; transform: none; } }

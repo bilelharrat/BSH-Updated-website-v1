@@ -62,6 +62,7 @@ Google Fonts.
 | `foundation.html` | Ages 15 to 35 on a ruler; the four programs with photos from past gatherings |
 | `events.html` | Upcoming (Luma), a logbook of past gatherings with a year filter and photo previews, albums with a photo viewer |
 | `join.html` | Choose your role (pre-selected from links like `join.html#investor`), your details, and what happens next |
+| `404.html` | "Off the map": served for unknown URLs, with the header, footer and a way home. It uses `<base href="/">`, so it works at any depth |
 
 | File | What it holds |
 | --- | --- |
@@ -70,6 +71,11 @@ Google Fonts.
 | `assets/chrome.js` | Header, mobile menu, footer and icons, as custom elements |
 | `assets/app.js` | Header behaviour, the way-in picker, photo strip, story rail and timeline, events filter and previews, photo viewer, join form |
 | `assets/photos/` | Self-hosted WebP photos at several widths, picked by each image's `srcset` and `sizes` |
+| `robots.txt`, `sitemap.xml`, `assets/og.jpg`, `assets/apple-touch-icon.png` | Search and sharing: every page also has a canonical link, Open Graph and Twitter card tags |
+
+Without JavaScript every page still shows a plain row of links in place of
+the header (a `<noscript>` inside `<bsh-header>`), and the join form says
+it needs JavaScript and gives the email address.
 
 ## Photos
 
@@ -97,8 +103,12 @@ prototype" notes say so.
 To make it live, set one attribute on the form in `join.html`:
 
 ```html
-<form class="join-main" id="join-form" data-endpoint="https://formspree.io/f/your-form-id" novalidate …>
+<form class="join-main" id="join-form" method="post" action="https://formspree.io/f/your-form-id" data-endpoint="https://formspree.io/f/your-form-id" novalidate …>
 ```
+
+`action` (the same URL) is for visitors without JavaScript: their browser
+posts the form there itself. The form is always `method="post"`, so typed
+details never end up in a URL.
 
 From then on both prototype notes are hidden, and a valid submit POSTs the
 form as `multipart/form-data` with `Accept: application/json`:
@@ -169,6 +179,12 @@ npm run metrics -- <label> [--compare <other-label>]   # file sizes, load and sc
    pull them from Luma or update the list after each event.
 5. **The terrain is stylised.** It is generated, not surveyed. The
    coordinates in the footer are central Berkeley's, not the house's.
+6. **Domain and URLs.** The canonical links, Open Graph URLs,
+   `sitemap.xml` and `robots.txt` assume `https://berkeleysummithouse.org/`
+   at the root with `.html` paths; change them if the domain or URL style
+   differs. `assets/og.jpg` (the sharing card) is cut from the house photo;
+   swap in a branded card if wanted. The host must serve `404.html` for
+   missing paths (Netlify and Cloudflare Pages do this on their own).
 
 ## Porting to the production (Next.js) site
 

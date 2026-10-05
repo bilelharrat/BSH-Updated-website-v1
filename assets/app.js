@@ -8,8 +8,12 @@
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
   const behavior = () => (reduce.matches ? 'auto' : 'smooth');
 
+  /* 404.html sets <base href="/"> for the links, which would send the skip
+     link home; point in-page links back at this page. */
+  if ($('base')) $$('a[href^="#"]').forEach(a => { a.href = location.pathname + a.getAttribute('href'); });
+
   /* Header: tucks away while you read down, returns when you scroll up. */
-  const hdr = $('[data-hdr]');
+  const hdr = $('.hdr');
   if (hdr) {
     let lastY = scrollY;
     addEventListener('scroll', () => {
@@ -31,13 +35,21 @@
       text.textContent = open ? 'Close' : 'Menu';
       menu.hidden = !open;
       root.classList.toggle('menu-open', open);
+      // The menu covers the page: keep focus and screen readers out of it.
+      for (const el of [...document.body.children, $('.skip')]) if (el) el.inert = open && !el.contains(menu);
       if (open) $('a', menu)?.focus();
     };
     menuBtn.addEventListener('click', () => setMenu(menu.hidden));
     addEventListener('keydown', e => {
       if (e.key === 'Escape' && !menu.hidden) { setMenu(false); menuBtn.focus(); }
     });
-    matchMedia('(min-width: 1061px)').addEventListener('change', e => { if (e.matches) setMenu(false); });
+    // Widened past the menu, focus goes to the visible twin of its link, or home.
+    matchMedia('(min-width: 1061px)').addEventListener('change', e => {
+      if (!e.matches || menu.hidden) return;
+      const a = document.activeElement; // body if the hidden link was already blurred
+      setMenu(false);
+      if (a === document.body || menu.contains(a) || a === menuBtn) ($(`.hdr-in a[href="${a.getAttribute('href')}"]`) || $('.brand')).focus();
+    });
   }
 
   /* Copy the email address */
@@ -241,7 +253,7 @@
     });
     lb.addEventListener('click', e => { if (e.target === lb || e.target === stage || e.target.closest('[data-lb-close]')) lb.close(); });
     lb.addEventListener('close', () => {
-      root.classList.remove('menu-open');
+      root.classList.toggle('menu-open', menu?.hidden === false); // the menu shares the lock
       opener?.focus();
     });
   }
@@ -262,10 +274,11 @@
     preset();
     addEventListener('hashchange', preset);
 
+    const need = msg => v => (v.trim() ? '' : msg);
     const RULES = {
-      'first-name': v => (v.trim() ? '' : 'Enter your first name.'),
-      'last-name': v => (v.trim() ? '' : 'Enter your last name.'),
-      organization: v => (v.trim() ? '' : 'Enter your organization. Independent is fine.'),
+      'first-name': need('Enter your first name.'),
+      'last-name': need('Enter your last name.'),
+      organization: need('Enter your organization. Independent is fine.'),
       email: v => (/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) ? '' : 'Enter a valid email address.'),
       phone: v => (v.replace(/\D/g, '').length >= 6 ? '' : 'Enter a phone number so we can schedule a call.'),
       linkedin: v => (/linkedin\.com\/.+/i.test(v.trim()) ? '' : 'Enter your LinkedIn profile URL.'),
@@ -273,7 +286,7 @@
     const setErr = (el, msg) => {
       if (el.textContent === msg) return; // unchanged: don't rebuild it on every keystroke
       el.hidden = !msg;
-      el.innerHTML = msg ? `${window.BSH.icon('alert')}<span></span>` : '';
+      el.innerHTML = msg ? `${window.BSH?.icon('alert') ?? ''}<span></span>` : '';
       if (msg) el.lastChild.textContent = msg;
     };
     const fields = Object.entries(RULES).map(([id, rule]) => ({ rule, input: $(`#${id}`, form), err: $(`#${id}-error`, form) }));
@@ -345,7 +358,7 @@
         const ok = await send(url);
         busy(false);
         if (!ok) {
-          say(`We couldn’t send your details. Check your connection and try again, or email ${window.BSH.EMAIL}.`);
+          say(`We couldn’t send your details. Check your connection and try again, or email ${window.BSH?.EMAIL ?? 'founders@berkeleysummithouse.org'}.`);
           alertBox.scrollIntoView({ block: 'center', behavior: behavior() });
           // Disabling the button dropped its focus; give it back so Enter retries.
           if (document.activeElement === document.body) btn.focus({ preventScroll: true });
