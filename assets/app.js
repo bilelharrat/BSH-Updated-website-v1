@@ -9,8 +9,16 @@
   const behavior = () => (reduce.matches ? 'auto' : 'smooth');
 
   /* 404.html sets <base href="/"> for the links, which would send the skip
-     link home; point in-page links back at this page. */
-  if ($('base')) $$('a[href^="#"]').forEach(a => { a.href = location.pathname + a.getAttribute('href'); });
+     link home; point in-page links back at this page, resolved against its
+     own URL so a //host path or a query can't take them elsewhere. */
+  if ($('base')) $$('a[href^="#"]').forEach(a => { a.href = new URL(a.getAttribute('href'), location).href; });
+
+  /* Incubator: <details name> keeps one area open; Safari before 17.2 ignores
+     the attribute, so close the rest of the group here. toggle doesn't bubble. */
+  if (!('name' in HTMLDetailsElement.prototype)) document.addEventListener('toggle', ({ target: d }) => {
+    const n = d.open && d.localName === 'details' && d.getAttribute('name');
+    if (n) $$('details[open]').forEach(o => { if (o !== d && o.getAttribute('name') === n) o.open = false; });
+  }, true);
 
   /* Header: tucks away while you read down, returns when you scroll up. */
   const hdr = $('.hdr');
@@ -330,6 +338,8 @@
     };
     preset();
     addEventListener('hashchange', preset);
+    // A link to the hash the URL already has fires no hashchange.
+    addEventListener('click', e => { if (e.target.closest?.('a')?.href === location.href) preset(e); });
 
     // data-endpoint on the form makes it live; until then it stays a prototype.
     const notes = $$('[data-prototype-note]');

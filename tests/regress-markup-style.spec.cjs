@@ -330,8 +330,9 @@ test.describe('round 2', () => {
     }));
     await page.goto('join.html');
     await page.locator('label.role', { hasText: 'Founder' }).first().click();
-    const ticks = await page.locator('.role-check .i').evaluateAll(els => els.map(el => getComputedStyle(el).visibility));
-    expect(ticks.filter(v => v === 'visible')).toHaveLength(1);
+    // The tick's visibility transition reads "hidden" at its very first frame, so poll.
+    await expect.poll(() => page.locator('.role-check .i').evaluateAll(els =>
+      els.filter(el => getComputedStyle(el).visibility === 'visible').length)).toBe(1);
     const cards = await look(page, '.role-card');
     expect(new Set(cards).size, 'checked card differs').toBe(2);
     await page.goto('events.html');
@@ -350,5 +351,161 @@ test.describe('round 2', () => {
   test('the foundation ages read "15 to 35" to screen readers', async ({ page }) => {
     await page.goto('foundation.html');
     await expect(page.locator('.ages-range')).toMatchAriaSnapshot('- paragraph: 15 to 35');
+  });
+});
+
+/* ---------- Round 3 stress findings ----------------------------------------- */
+test.describe('round 3', () => {
+  /* WCAG relative-luminance contrast of two computed rgb()/rgba() colours. */
+  const contrast = (a, b) => {
+    const lum = c => {
+      const [r, g, b2] = c.match(/[\d.]+/g).slice(0, 3).map(Number).map(v => v / 255)
+        .map(v => (v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4));
+      return .2126 * r + .7152 * g + .0722 * b2;
+    };
+    const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
+    return (hi + .05) / (lo + .05);
+  };
+  const forced = async (browser, site, colorScheme) => {
+    const context = await browser.newContext({ baseURL: site, forcedColors: 'active', colorScheme, reducedMotion: 'reduce' });
+    const page = await context.newPage();
+    await hermetic(page, site);
+    return { context, page };
+  };
+  const canvasColor = page => page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+
+  test('the photo viewer fits photo, caption and Previous/Next on landscape phones', async ({ browser, site }) => {
+    const { devices } = require('@playwright/test');
+    for (const name of ['iPhone SE landscape', 'iPhone 15 Pro landscape', 'Pixel 7 landscape']) {
+      const context = await browser.newContext({ ...devices[name], baseURL: site, reducedMotion: 'reduce' });
+      const page = await context.newPage();
+      await hermetic(page, site);
+      await page.goto('events.html');
+      await settle(page);
+      const albums = await page.locator('[data-album]').count();
+      for (let a = 0; a < albums; a++) {
+        await page.locator('[data-album]').nth(a).evaluate(b => b.click());
+        await expect(page.locator('.lb-stage img')).toBeVisible();
+        await finished(page);
+        const r = await page.evaluate(() => {
+          const q = s => document.querySelector(s).getBoundingClientRect();
+          return { vh: innerHeight, next: q('[data-lb-step="1"]').bottom, cap: q('.lb-cap').bottom, img: q('.lb-stage img').height };
+        });
+        expect(r.next, `Next button, album ${a} on ${name}`).toBeLessThanOrEqual(r.vh + 1);
+        expect(r.cap, `caption, album ${a} on ${name}`).toBeLessThanOrEqual(r.vh + 1);
+        expect(r.img, `photo, album ${a} on ${name}`).toBeGreaterThanOrEqual(100);
+        await page.keyboard.press('Escape');
+      }
+      await context.close();
+    }
+  });
+
+  test('with classic scrollbars the home photo strip starts on the page column', async ({ playwright, site }) => {
+    const browser = await playwright.chromium.launch({ ignoreDefaultArgs: ['--hide-scrollbars'] });
+    const page = await browser.newPage({ baseURL: site, reducedMotion: 'reduce' });
+    await hermetic(page, site);
+    for (const width of [1600, 1920]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto('index.html');
+      await page.addStyleTag({ content: '::-webkit-scrollbar { width: 15px; height: 15px; } ::-webkit-scrollbar-thumb { background: #999; }' });
+      await settle(page);
+      const r = await page.evaluate(() => {
+        const strip = document.querySelector('[data-strip]');
+        return {
+          bar: innerWidth - document.documentElement.clientWidth,
+          heading: strip.closest('section').querySelector('h2').getBoundingClientRect().left,
+          photo: strip.firstElementChild.getBoundingClientRect().left,
+        };
+      });
+      expect(r.bar, 'a classic scrollbar takes space').toBeGreaterThan(0);
+      expect(Math.abs(r.photo - r.heading), `first photo vs heading @${width}`).toBeLessThanOrEqual(1);
+    }
+    await browser.close();
+  });
+
+  test('print: the hero shares page 1 with the header and the skip link never prints', async ({ page }) => {
+    await page.emulateMedia({ media: 'print' });
+    for (const [file, grid] of [['index.html', '.home-grid'], ['story.html', '.story-hero']]) {
+      await page.goto(file);
+      // Chromium moves a whole grid to the next sheet when its stacked rows overflow page 1.
+      expect(await page.locator(grid).evaluate(el => getComputedStyle(el).display), file).not.toMatch(/grid/);
+      await expect(page.locator('.skip'), file).toBeHidden();
+    }
+  });
+
+  for (const scheme of ['dark', 'light']) {
+    test(`forced colours (${scheme}): the mountain, pins and legend cards stay drawn`, async ({ browser, site }) => {
+      const { context, page } = await forced(browser, site, scheme);
+      await page.goto('index.html');
+      await settle(page);
+      const canvas = await canvasColor(page);
+      const s = await page.evaluate(() => ({
+        base: getComputedStyle(document.querySelector('.summit-base')).fill,
+        stems: [...document.querySelectorAll('.pin-stem, .pin-dot')].map(el => getComputedStyle(el).backgroundColor),
+        cards: [...document.querySelectorAll('.peak-card')].map(el => [getComputedStyle(el).outlineStyle, parseFloat(getComputedStyle(el).outlineWidth)]),
+      }));
+      expect(contrast(s.base, canvas), `mountain ${s.base} on ${canvas}`).toBeGreaterThanOrEqual(3);
+      for (const c of s.stems) expect(contrast(c, canvas), `stem/dot ${c} on ${canvas}`).toBeGreaterThanOrEqual(3);
+      for (const [style, width] of s.cards) {
+        expect(style).not.toBe('none');
+        expect(width).toBeGreaterThanOrEqual(1);
+      }
+      await context.close();
+    });
+
+    test(`forced colours (${scheme}): current page, current chapter and button edges stay visible`, async ({ browser, site }) => {
+      const { context, page } = await forced(browser, site, scheme);
+      await page.setViewportSize({ width: 1280, height: 800 });
+      await page.goto('story.html');
+      await settle(page);
+      await page.locator('.chapter').nth(1).scrollIntoViewIfNeeded();
+      await expect(page.locator('.rail a[aria-current="true"]')).toHaveCount(1);
+      const canvas = await canvasColor(page);
+      const s = await page.evaluate(() => {
+        const pseudo = (sel, p) => getComputedStyle(document.querySelector(sel), p).backgroundColor;
+        const look = el => { const cs = getComputedStyle(el), b = getComputedStyle(el.querySelector('b'));
+          return [cs.color, b.color, b.textDecorationLine, b.fontWeight].join(' '); };
+        return {
+          navMark: pseudo('.nav-link[aria-current="page"]', '::after'),
+          railTrack: pseudo('.rail ol', '::before'),
+          railProgress: pseudo('.rail ol', '::after'),
+          current: look(document.querySelector('.rail a[aria-current="true"]')),
+          others: [...document.querySelectorAll('.rail a:not([aria-current="true"])')].map(look),
+          btns: [...document.querySelectorAll('.btn')].map(el => [getComputedStyle(el).borderTopStyle, parseFloat(getComputedStyle(el).borderTopWidth)]),
+        };
+      });
+      expect(contrast(s.navMark, canvas), `header current-page mark ${s.navMark}`).toBeGreaterThanOrEqual(3);
+      expect(contrast(s.railProgress, canvas), `rail progress ${s.railProgress}`).toBeGreaterThanOrEqual(3);
+      expect(s.railProgress, 'progress differs from the track').not.toBe(s.railTrack);
+      for (const o of s.others) expect(o, 'current chapter differs').not.toBe(s.current);
+      expect(s.btns.length).toBeGreaterThan(0);
+      for (const [style, width] of s.btns) {
+        expect(style).not.toBe('none');
+        expect(width).toBeGreaterThanOrEqual(1);
+      }
+      await context.close();
+    });
+  }
+
+  test('the mobile menu numbers meet 4.5:1 contrast', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('index.html');
+    const bg = await page.locator('.menu').evaluate(el => getComputedStyle(el).backgroundColor);
+    const nums = await page.locator('.menu-num').evaluateAll(els => els.map(el => [el.textContent, getComputedStyle(el).color]));
+    expect(nums).toHaveLength(5);
+    for (const [n, c] of nums) expect(contrast(c, bg), `${n} ${c} on ${bg}`).toBeGreaterThanOrEqual(4.5);
+  });
+
+  test('incubator: closed areas hold no animation, and opening one plays the fade', async ({ page }) => {
+    await page.goto('incubator.html');
+    await settle(page);
+    await page.waitForTimeout(800); // past the .45s fade; a fade inside a closed area never finishes, so don't await it
+    const lingering = await page.evaluate(() => document.getAnimations()
+      .filter(a => a.effect && a.effect.target && a.effect.target.closest('details:not([open])')).length);
+    expect(lingering, 'animations kept alive inside closed areas').toBe(0);
+    await page.locator('details.area:not([open]) summary').first().click();
+    const playing = await page.locator('details.area[open] .area-body').evaluate(el =>
+      new Promise(r => requestAnimationFrame(() => r(el.getAnimations().map(a => a.playState)))));
+    expect(playing, 'the opened area fades up').toContain('running');
   });
 });

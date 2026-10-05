@@ -191,3 +191,49 @@ test('paging the home photo strip to either end keeps keyboard focus on a strip 
     await expect(to).toBeFocused();
   }
 });
+
+test.describe('the 404 skip link', () => {
+  test.use({ allowErrors: true });
+  test.afterEach(({ errors }) => {
+    expect(errors.filter(e => !/^(HTTP 404 |console: .*status of 404)/.test(e))).toEqual([]);
+  });
+
+  test('stays on this site when the path starts with //', async ({ page, site }) => {
+    await page.route('http://evil.example/**', r => r.fulfill({ contentType: 'text/html', body: 'off-site' }));
+    const origin = new URL(site).origin;
+    expect((await page.goto(`${origin}//evil.example/phish`)).status()).toBe(404);
+    await settle(page);
+    expect(await page.locator('a.skip').evaluate(a => a.href)).toBe(`${origin}//evil.example/phish#main`);
+    await page.locator('a.skip').focus();
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(`${origin}//evil.example/phish#main`);
+  });
+
+  test('keeps the query and jumps into the page without reloading it', async ({ page }) => {
+    await page.goto('old-page?utm_source=newsletter');
+    await settle(page);
+    await page.evaluate(() => { window.sameDocument = true; });
+    await page.keyboard.press('Tab');
+    await expect(page.locator('a.skip')).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/\/old-page\?utm_source=newsletter#main$/);
+    expect(await page.evaluate(() => window.sameDocument)).toBe(true);
+    await page.keyboard.press('Tab');
+    expect(await page.evaluate(() => Boolean(document.activeElement.closest('main')))).toBe(true);
+  });
+});
+
+test('a footer role link whose hash the join page already has still picks that role', async ({ page }) => {
+  await page.goto('index.html');
+  await settle(page);
+  await page.locator('.ftr a', { hasText: 'Invest with us' }).click();
+  await expect(page).toHaveURL(/join\.html#investor$/);
+  await settle(page);
+  const investor = page.locator('input[name="role"][value="investor"]');
+  await expect(investor).toBeChecked();
+  await page.locator('input[name="role"][value="founder"]').check({ force: true });
+  await page.locator('.ftr a', { hasText: 'Invest with us' }).click();
+  await expect(investor).toBeChecked();
+  await expect(investor).toBeFocused();
+  await expect(investor).toBeInViewport();
+});

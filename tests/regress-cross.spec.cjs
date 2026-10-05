@@ -133,3 +133,22 @@ test('the photo viewer fetches files sized for the screen', async ({ browser, si
   expect(sizes.phone).toEqual(['1-800', '2-800', '3-1600']);
   expect(sizes.desktop).toEqual(['1-1600', '2-1600', '3-1600']);
 });
+
+test('incubator areas stay one-at-a-time where <details name> is unsupported (Safari < 17.2)', async ({ page }) => {
+  // An old engine: no name property, so app.js adds its fallback.
+  await page.addInitScript(() => { delete HTMLDetailsElement.prototype.name; });
+  await page.goto('incubator.html');
+  await settle(page);
+  // ...and no native group: a namespaced name attribute is invisible to the
+  // engine's exclusivity but still what getAttribute('name') reads.
+  await page.$$eval('details[name]', ds => ds.forEach(d => {
+    const n = d.getAttribute('name');
+    d.removeAttribute('name');
+    d.setAttributeNS('urn:old-engine', 'name', n);
+  }));
+  const open = () => page.$$eval('details.area', ds => ds.filter(d => d.open).map(d => d.querySelector('.area-name').textContent));
+  for (const name of ['Wellbeing', 'Legal', 'Arts']) {
+    await page.locator('.area summary', { hasText: name }).click();
+    await expect.poll(open).toEqual([name]);
+  }
+});

@@ -31,7 +31,8 @@
 
   --max: 1360px;
   --gut: max(clamp(16px, 4vw, 56px), env(safe-area-inset-left), env(safe-area-inset-right));
-  --edge: max(var(--gut), calc((100vw - var(--max)) / 2 + var(--gut)));
+  /* % resolves where it is used (the full-bleed strip), which, unlike 100vw, excludes a classic scrollbar. */
+  --edge: max(var(--gut), calc((100% - var(--max)) / 2 + var(--gut)));
   --hdr: 68px;
   --r: 6px;
   --r-lg: 14px;
@@ -413,6 +414,9 @@ html.menu-open .hdr { transform: none; background: var(--paper); }
 }
 .menu-num { font: 500 12px/1 var(--mono); color: var(--tone); }
 .menu-link[data-tone="ink"] .menu-num { color: var(--ink-3); }
+/* Poppy and gold are fill colours; as 12px text they need deeper shades of the same hue (5.5:1, 5.3:1). */
+.menu-link[data-tone="poppy"] .menu-num { color: #B8401A; }
+.menu-link[data-tone="gold"] .menu-num { color: #8A6508; }
 .menu-name { font: 500 clamp(30px, 8vw, 40px)/1.05 var(--display); letter-spacing: -.03em; }
 .menu-note { grid-column: 2; font-size: 15px; color: var(--ink-3); margin-top: 4px; }
 .menu-link[aria-current="page"] .menu-name { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 6px; text-decoration-color: var(--tone); }
@@ -1053,7 +1057,9 @@ canvas[data-terrain] {
 .area[open] .area-toggle { transform: rotate(45deg); background: var(--ink); border-color: var(--ink); color: #FFF; }
 .area summary:hover .area-toggle { border-color: var(--fg); }
 .area:not([open]) summary:hover .area-name { color: var(--poppy); }
-.area-body { padding-bottom: 40px; animation: fade-up .45s var(--ease); }
+.area-body { padding-bottom: 40px; }
+/* Only an open area animates: a closed one's body would run (and keep) the fade unseen. */
+.area[open] .area-body { animation: fade-up .45s var(--ease); }
 .area-copy { grid-column: 2; display: grid; gap: 18px; align-content: start; justify-items: start; }
 .area-copy p { color: var(--fg-2); font-size: 18px; max-width: 30em; }
 .area-art { grid-column: 3 / span 2; position: relative; border-radius: var(--r-lg); overflow: hidden; min-height: 260px; }
@@ -1245,7 +1251,8 @@ canvas[data-terrain] {
   color: #FFF;
 }
 .lightbox::backdrop { background: #0B0C0E; }
-.lightbox[open] { display: grid; grid-template-rows: auto minmax(min(240px, 70dvh), 1fr) auto; overflow-y: auto; animation: fade-up .3s var(--ease); }
+/* The photo's floor is what the two bars (~180px) leave, between 140px and 240px, so landscape phones fit it all. */
+.lightbox[open] { display: grid; grid-template-rows: auto minmax(clamp(140px, 100dvh - 180px - env(safe-area-inset-top) - env(safe-area-inset-bottom), 240px), 1fr) auto; overflow-y: auto; animation: fade-up .3s var(--ease); }
 .lb-top, .lb-bar {
   display: flex;
   align-items: center;
@@ -1402,9 +1409,24 @@ canvas[data-terrain] {
     forced-color-adjust: none; background: Highlight; color: HighlightText;
   }
   .tri, .label::before { forced-color-adjust: none; background: CanvasText; }
+  /* The mountain mark: an SVG fill isn't forced, and shadows (pin rings, card edges) are dropped. */
+  .summit-base { fill: GrayText; }
+  .pin-stem, .pin-dot { forced-color-adjust: none; background: CanvasText; }
+  .peak-card { outline: 1px solid CanvasText; }
+  /* "You are here" marks and button edges are drawn with backgrounds, which are forced to Canvas. */
+  .nav-link[aria-current="page"]::after, .rail ol::after { forced-color-adjust: none; background: Highlight; }
+  .rail ol::before { forced-color-adjust: none; background: GrayText; }
+  .rail a[aria-current="true"] b { text-decoration: underline; }
+  .btn { border: 1px solid; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
 /* Print never scrolls, so held-back blocks show at once there too. */
 @media print, (prefers-reduced-motion: reduce) { .rv.armed { opacity: 1; transform: none; } }
+@media print {
+  .skip { display: none; } /* fixed boxes repeat on every sheet */
+  /* A grid fragments as one box: with the art stacked under the copy, Chromium pushed the whole hero to sheet 2. */
+  .home-grid, .story-hero { display: block; }
+  .story-hero figure { margin-top: 24px; } /* .summit already has its own top padding */
+}
