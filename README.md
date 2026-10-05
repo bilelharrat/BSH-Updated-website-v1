@@ -21,14 +21,16 @@ Google Fonts.
 
 ## The idea
 
-- **Three doors.** The home page hero sets the pitch beside three doors,
-  one per pillar (Ventures, the Incubator, the Foundation), each edged in its
-  pillar's color. Our Story and Events sit on the line below them.
+- **The mark is the map.** The home page hero is the BSH mountain mark,
+  drawn large, and each of its three peaks is a pillar: Ventures on the
+  summit, the Incubator on the right shoulder, the Foundation on the small
+  peak. A pin on each peak links to that page, and pointing at a peak fills it
+  with the pillar's color. Our Story and Events sit on the ground line below.
 - **Terrain.** Generated contour lines run behind the page heroes, the pillar
   cards, the Incubator's focus areas and the footer. Every fifth line is
   heavier, the way index contours are on a real map.
 - **Color is wayfinding.** Each pillar owns one color everywhere it
-  appears: in the nav, on the home page doors, in labels, on its page, and
+  appears: in the nav, on the map pins, in labels, on its page, and
   on the join form's role cards. The three colors come from the house photo: the
   Berkeley sky (cobalt, Ventures), the tile roof (poppy, Incubator) and the
   summer hills (gold, Foundation). Everything else is white, stone and ink.
@@ -53,7 +55,7 @@ Google Fonts.
 
 | Page | What's on it |
 | --- | --- |
-| `index.html` | The pitch and three doors, one per pillar; the three pillars; the story in short; "Find your way in"; a strip of photos from gatherings |
+| `index.html` | The mountain mark, one peak per pillar; the three pillars; the story in short; "Find your way in"; a strip of photos from gatherings |
 | `story.html` | The origin story in four chapters, with a rail that follows your reading; "born in 2024"; a timeline that climbs; mission; values |
 | `ventures.html` | Thesis, two ways we invest, key figures, portfolio, GP partners, what we look for |
 | `incubator.html` | The four focus areas as an accordion, each with its own terrain; how we work |

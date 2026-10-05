@@ -333,13 +333,35 @@ test.describe('home', () => {
     expect(new Set(sizes).size).toBe(1);
   });
 
-  test('the doors lead to the three pillars, the story and events', async ({ page }) => {
+  test('the mountain hero: one pin per pillar, the story and events on the ground line', async ({ page }) => {
     await page.goto('index.html');
     await settle(page);
-    const hrefs = await page.locator('.doors a').evaluateAll(as => as.map(a => a.getAttribute('href')));
-    expect(hrefs).toEqual(['ventures.html', 'incubator.html', 'foundation.html', 'story.html', 'events.html']);
+    const pins = page.locator('.summit .pin');
+    expect(await pins.evaluateAll(as => as.map(a => a.getAttribute('href')))).toEqual(['ventures.html', 'incubator.html', 'foundation.html']);
+    for (const pin of await pins.all()) await expect(pin).toBeVisible();
+    expect(await page.locator('.summit-ground a').evaluateAll(as => as.map(a => a.getAttribute('href')))).toEqual(['story.html', 'events.html']);
+    // The regions repeat the pins for pointer users only.
+    for (const r of await page.locator('.summit .region').all()) await expect(r).toHaveAttribute('tabindex', '-1');
     const pillars = await page.locator('.pillar').evaluateAll(as => as.map(a => a.getAttribute('href')));
     expect(pillars).toEqual(['ventures.html', 'incubator.html', 'foundation.html']);
+  });
+
+  test('pointing at a pin or its peak fills the peak with the pillar color', async ({ page }) => {
+    await page.goto('index.html');
+    await settle(page);
+    const fill = name => page.locator(`.region--${name} path`).evaluate(p => getComputedStyle(p).fill);
+    const COLORS = { ventures: 'rgb(39, 67, 214)', incubator: 'rgb(232, 90, 46)', foundation: 'rgb(237, 180, 49)' };
+    for (const [name, color] of Object.entries(COLORS)) {
+      await page.locator(`.pin--${name}`).hover();
+      await expect.poll(() => fill(name)).toBe(color);
+      await page.mouse.move(2, 2);
+      await expect.poll(() => fill(name)).not.toBe(color);
+    }
+    await page.locator('.pin--incubator').focus();
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Tab');
+    await expect(page.locator('.pin--incubator')).toBeFocused();
+    await expect.poll(() => fill('incubator')).toBe(COLORS.incubator);
   });
 });
 
