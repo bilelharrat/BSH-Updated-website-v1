@@ -37,6 +37,8 @@
     </aside>
 
     <div class="join-form-wrap">
+      <!-- Set data-endpoint="https://…" on the form to make it send; until then
+           it is a prototype. What it sends and expects: README, "The join form". -->
       <form class="join-main" id="join-form" novalidate aria-labelledby="page-title">
         <p class="form-alert" id="form-alert" role="alert" hidden><bsh-icon name="alert"></bsh-icon><span></span></p>
 
@@ -114,9 +116,11 @@
           </div>
         </fieldset>
 
+        <div class="sr" aria-hidden="true"><input name="_gotcha" tabindex="-1" autocomplete="off"></div>
+
         <div class="form-foot">
           <button class="btn btn-lg" type="submit">Join the community <bsh-icon name="arrow"></bsh-icon></button>
-          <p class="small">Design prototype: this form doesn’t send anything yet.</p>
+          <p class="small" data-prototype-note>Design prototype: this form doesn’t send anything yet.</p>
         </div>
       </form>
 
@@ -124,7 +128,7 @@
         <span class="success-mark"><bsh-icon name="check"></bsh-icon></span>
         <h2 class="h2">Thank you, <span data-first-name></span>.</h2>
         <p class="lede">We’ve noted your interest in joining as <span data-role-name></span>. We’ll review it and schedule a call shortly.</p>
-        <p class="small">Design prototype: nothing was sent.</p>
+        <p class="small" data-prototype-note>Design prototype: nothing was sent.</p>
         <div class="actions">
           <a class="btn" href="events.html">See events <bsh-icon name="arrow"></bsh-icon></a>
           <a class="btn btn-ghost" href="index.html">Back to home</a>

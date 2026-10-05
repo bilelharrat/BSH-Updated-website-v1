@@ -88,6 +88,70 @@ and colour profiles are stripped (the originals were all sRGB).
   give it the same markup as the photos beside it. `tests/photos.spec.cjs`
   fails on a photo that is hotlinked, missing or has no `width`/`height`.
 
+## The join form
+
+Out of the box the form is a design prototype. It checks what people type,
+thanks them by name and role, and sends nothing; two small "Design
+prototype" notes say so.
+
+To make it live, set one attribute on the form in `join.html`:
+
+```html
+<form class="join-main" id="join-form" data-endpoint="https://formspree.io/f/your-form-id" novalidate …>
+```
+
+From then on both prototype notes are hidden, and a valid submit POSTs the
+form as `multipart/form-data` with `Accept: application/json`:
+
+| Field | Value |
+| --- | --- |
+| `role` | `founder`, `cxo`, `investor`, `scout`, `scholar` or `young-leader` |
+| `first-name`, `last-name`, `organization`, `email`, `phone`, `linkedin` | As typed |
+| `phone-country` | Dial code and country, for example `1\|United States` |
+| `note` | As typed; may be empty |
+| `_gotcha` | Spam trap; always empty when a person fills in the form |
+
+- **Replies.** Any 2xx reply shows the thank-you, worded from what was sent.
+  A non-2xx reply, a network error, or no reply within 15 seconds keeps the
+  form and everything typed, says "We couldn't send your details. Check your
+  connection and try again, or email founders@berkeleysummithouse.org." and
+  lets the person try again. While sending, the button reads "Sending…" at
+  its usual width and further submits are ignored.
+- **The endpoint must allow the site's origin.** It has to reply with an
+  `Access-Control-Allow-Origin` header that covers the site, and answer with
+  JSON rather than a redirect: a reply the browser can't read counts as a
+  failure, and the person is asked to try again (the endpoint may still
+  have received it). No preflight is sent, so no OPTIONS handler is needed.
+  Formspree and similar form services meet all of this.
+- **Spam.** `_gotcha` is hidden from people, screen readers and the Tab key.
+  If it is filled, the page shows the thank-you and sends nothing. Bots that
+  post straight to the endpoint never load the page, so the endpoint should
+  also discard any submission with `_gotcha` filled; Formspree does this for
+  that field name on its own.
+
+## Tests
+
+Browser tests (Playwright, Chromium) pin down every page's behaviour,
+content and look. From this folder:
+
+```sh
+npm i && npx playwright install chromium   # once
+npm test                # behaviour and content: every spec except the visual one
+npm run test:visual     # full-page pixels at 390, 820, 1280 and 1920 wide, plus interactive states
+npm run baseline        # re-take the visual and content baselines; only from a known-good commit
+npm run metrics -- <label> [--compare <other-label>]   # file sizes, load and scroll cost, layout shift
+```
+
+- Baselines live in `tests/.snapshots` and run output in `tests/.artifacts`;
+  both are local and gitignored, so take baselines once (`npm run baseline`)
+  on a commit you trust before changing anything.
+- Tests run hermetically: photos are a neutral stand-in, web fonts are
+  blocked and off-site requests get an empty answer, so the pictures depend
+  only on this code. A page error, a console error or a failed request to
+  the site fails the test. The visual project runs with reduced motion.
+- The live join form is covered by `tests/join-endpoint.spec.cjs`, the
+  photos and the album viewer by `tests/photos.spec.cjs`.
+
 ## Before launch: things to confirm
 
 1. **New copy.** The headlines are new ("Where dreamers come to build.",
@@ -98,8 +162,9 @@ and colour profiles are stripped (the originals were all sRGB).
 2. **Logos.** Portfolio companies and GP partners are listed by name. Add
    real logos if wanted. The current Ventures page also has two logos with no
    names (`portfolio-logo-3`, `portfolio-logo-5`) that need adding.
-3. **The join form isn't connected.** Wire it to the current submission
-   endpoint. The optional "What are you building?" field is new.
+3. **Connect the join form.** Set `data-endpoint` on the form to the
+   submission endpoint; see "The join form". The optional "What are you
+   building?" field is new.
 4. **Events were copied from Luma by hand** on 2026-09-24. In production,
    pull them from Luma or update the list after each event.
 5. **The map is stylised.** Its terrain is generated, not surveyed, and the

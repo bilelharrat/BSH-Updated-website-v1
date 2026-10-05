@@ -307,24 +307,61 @@
     });
     form.addEventListener('change', e => { if (tried && e.target.name === 'role') checkRole(); });
 
+    // data-endpoint on the form makes it live; until then it stays a prototype.
+    const notes = $$('[data-prototype-note]');
+    const endpoint = () => {
+      const url = form.dataset.endpoint?.trim() || '';
+      notes.forEach(n => { n.hidden = Boolean(url); });
+      return url;
+    };
+    endpoint();
+    const btn = $('[type="submit"]', form);
+    const idle = [...btn.childNodes];
+    const busy = on => {
+      // Hold the layout width (unscaled by :active) so "Sending…" can't shrink it.
+      btn.style.minWidth = on ? getComputedStyle(btn).width : '';
+      btn.disabled = on;
+      if (on) { btn.setAttribute('aria-busy', 'true'); btn.textContent = 'Sending…'; }
+      else { btn.removeAttribute('aria-busy'); btn.replaceChildren(...idle); }
+    };
+    // True on a 2xx; false on any other status, a network error or 15s of silence.
+    const send = url => fetch(url, {
+      method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(15000),
+    }).then(res => res.ok, () => false);
+
     const alertBox = $('#form-alert', form);
-    form.addEventListener('submit', e => {
+    const say = msg => { alertBox.hidden = false; alertBox.lastElementChild.textContent = msg; };
+    form.addEventListener('submit', async e => {
       e.preventDefault();
+      if (btn.disabled) return;
       tried = true;
       const roleOk = checkRole();
       const bad = Object.keys(RULES).filter(id => !check(id));
       const count = bad.length + (roleOk ? 0 : 1);
       if (count) {
-        alertBox.hidden = false;
-        alertBox.lastElementChild.textContent = count === 1 ? 'One thing needs your attention below.' : `${count} things need your attention below.`;
+        say(count === 1 ? 'One thing needs your attention below.' : `${count} things need your attention below.`);
         (roleOk ? $(`#${bad[0]}`, form) : form.querySelector('input[name="role"]')).focus();
         return;
       }
       alertBox.hidden = true;
+      // Word the thanks now, so edits made while sending can't change it.
       const done = $('#join-success');
       $('[data-first-name]', done).textContent = $('#first-name', form).value.trim();
-      const role = form.querySelector('input[name="role"]:checked');
-      $('[data-role-name]', done).textContent = role.dataset.phrase;
+      $('[data-role-name]', done).textContent = form.querySelector('input[name="role"]:checked').dataset.phrase;
+      const url = endpoint();
+      // Only bots fill the hidden _gotcha field: thank them and send nothing.
+      if (url && !form.elements._gotcha.value) {
+        busy(true);
+        const ok = await send(url);
+        busy(false);
+        if (!ok) {
+          say(`We couldn’t send your details. Check your connection and try again, or email ${window.BSH.EMAIL}.`);
+          alertBox.scrollIntoView({ block: 'center', behavior: reduce.matches ? 'auto' : 'smooth' });
+          // Disabling the button dropped its focus; give it back so Enter retries.
+          if (document.activeElement === document.body) btn.focus({ preventScroll: true });
+          return;
+        }
+      }
       form.hidden = true;
       done.hidden = false;
       done.focus();
