@@ -522,8 +522,16 @@ canvas[data-terrain] {
 }
 
 /* 10 · Home -----------------------------------------------------------------
-   The hero pairs the pitch with three doors, one per pillar, each edged in
-   its pillar's color. */
+   The hero's right half is the BSH mark, one peak per pillar: Ventures on the
+   summit, the Incubator on the right shoulder, the Foundation on the small
+   peak. Each peak carries a pin; pointing at a peak or its pin fills that part
+   of the mountain with the pillar's color. */
+.home-hero {
+  display: flex;
+  align-items: center;
+  min-height: clamp(640px, calc(100vh - var(--hdr)), 860px);
+  overflow: hidden;
+}
 .home-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -534,54 +542,116 @@ canvas[data-terrain] {
 .home-copy { display: grid; gap: 26px; justify-items: start; }
 .home-copy > * { max-width: 620px; }
 .home-copy .actions { margin-top: 6px; }
-@media (max-width: 860px) {
-  .home-grid { grid-template-columns: 1fr; gap: 24px; padding-block: 48px 56px; }
-}
 
-.doors { display: grid; gap: 10px; }
-.door {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: 14px;
+.summit { padding-top: 88px; }
+.summit-art { position: relative; aspect-ratio: 101 / 67; }
+.summit-mark {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  animation: summit-rise 1.1s var(--ease) both;
+}
+@keyframes summit-rise { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0); } }
+.summit-base { fill: var(--ink); }
+.region path { fill: transparent; transition: fill .35s var(--ease); }
+.region:hover path,
+.summit:has(.pin--ventures:is(:hover, :focus-visible)) .region--ventures path { fill: var(--cobalt); }
+.summit:has(.pin--incubator:is(:hover, :focus-visible)) .region--incubator path,
+.region--incubator:hover path { fill: var(--poppy); }
+.summit:has(.pin--foundation:is(:hover, :focus-visible)) .region--foundation path,
+.region--foundation:hover path { fill: var(--gold); }
+.region--ventures:hover path { fill: var(--cobalt); }
+
+/* A pin: legend card, stem, and a ringed dot planted on the peak. */
+.pin {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  padding: 16px 16px 16px 14px;
-  border: 1px solid var(--line);
-  border-left: 4px solid var(--tone);
-  border-radius: 16px;
-  background: var(--paper);
+  translate: -50% calc(-100% + 9px);
+  color: var(--ink);
   text-decoration: none;
-  transition: background .2s, transform .2s var(--ease);
+  animation: pin-drop .6s var(--ease) both;
 }
-.door:hover { background: var(--stone); transform: translateX(3px); }
-.door-num {
-  font: 500 12px/1 var(--mono);
-  letter-spacing: .08em;
-  color: var(--tone);
+.pin--ventures { animation-delay: .7s; }
+.pin--incubator { animation-delay: .82s; }
+.pin--foundation { animation-delay: .94s; }
+@keyframes pin-drop { from { opacity: 0; transform: translateY(-10px); } }
+.pin--end { align-items: flex-end; translate: calc(-100% + 9px) calc(-100% + 9px); }
+.pin-stem { width: 1.5px; height: 30px; background: var(--ink); }
+.pin--ventures .pin-stem { height: 40px; }
+.pin-dot {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--tone);
+  box-shadow: 0 0 0 3px var(--paper), 0 0 0 4.5px var(--ink);
+  transition: transform .3s var(--ease);
 }
-.door-body { display: grid; gap: 3px; min-width: 0; }
-.door-title { font: 500 22px/1.15 var(--display); letter-spacing: -.02em; }
-.door-note { color: var(--ink-2); font-size: 15px; line-height: 1.4; }
-.door .i { width: 18px; height: 18px; color: var(--ink-3); transition: transform .25s var(--ease), color .2s; }
-.door:hover .i { transform: translateX(3px); color: var(--ink); }
-.door-foot {
+.pin:hover .pin-dot, .pin:focus-visible .pin-dot { transform: scale(1.2); }
+.pin:focus-visible { outline: none; }
+.pin:focus-visible .peak-card { outline: 2px solid var(--cobalt); outline-offset: 3px; }
+
+.peak-card {
+  display: grid;
+  gap: 2px;
+  padding: 9px 12px 10px;
+  border-radius: var(--r);
+  background: var(--paper);
+  box-shadow: 0 0 0 1px var(--line), 0 10px 24px -14px rgb(19 20 23 / .4);
+  white-space: nowrap;
+  transition: box-shadow .25s;
+}
+.peak-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 500 16px/1.2 var(--display);
+  letter-spacing: -.01em;
+}
+.peak-name .i { width: 15px; height: 15px; color: var(--ink-3); transition: transform .3s var(--ease), color .2s; }
+.peak-note { font: 500 11px/1.3 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+.pin:hover .peak-card, .summit:has(.region--ventures:hover) .pin--ventures .peak-card,
+.summit:has(.region--incubator:hover) .pin--incubator .peak-card,
+.summit:has(.region--foundation:hover) .pin--foundation .peak-card {
+  box-shadow: 0 0 0 1.5px var(--tone), 0 14px 28px -14px rgb(19 20 23 / .45);
+}
+.pin:hover .peak-name .i { transform: translateX(3px); color: var(--ink); }
+
+.summit-ground {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 8px 16px;
-  padding: 4px 4px 0;
+  gap: 8px 24px;
+  padding-top: 14px;
+  border-top: 1.5px solid var(--ink);
   font: 500 12px/1.3 var(--mono);
   letter-spacing: .08em;
   text-transform: uppercase;
 }
-.door-foot a {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--ink-2);
-  text-decoration: none;
+.summit-ground a { display: inline-flex; align-items: center; gap: 8px; color: var(--ink-2); text-decoration: none; transition: color .2s; }
+.summit-ground a:hover { color: var(--ink); }
+.summit-ground .i { width: 14px; height: 14px; transition: transform .3s var(--ease); }
+.summit-ground a:hover .i { transform: translateX(3px); }
+.summit-ground .tri { width: 9px; height: 8px; background: currentColor; }
+
+@media (max-width: 860px) {
+  .home-hero { min-height: 0; }
+  .home-grid { grid-template-columns: 1fr; gap: 24px; padding-block: 48px 56px; }
+  .summit { padding-top: 76px; }
+  .peak-card { padding: 7px 10px 8px; }
+  .peak-name { font-size: 15px; }
+  .peak-note { display: none; }
+  .pin-stem { height: 22px; }
+  .pin--ventures .pin-stem { height: 30px; }
 }
-.door-foot a:hover { color: var(--ink); }
-.door-foot .i { width: 14px; height: 14px; }
+/* On the narrowest phones the side labels would touch; lift the Foundation's. */
+@media (max-width: 400px) {
+  .pin--foundation .pin-stem { height: 58px; }
+}
 
 /* Pillars */
 .pillars { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }

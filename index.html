@@ -9,7 +9,7 @@
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400;500;600&family=Funnel+Sans:wght@400;500;600&family=Geist+Mono:wght@500&display=swap">
-<link rel="stylesheet" href="assets/style.css?v=3">
+<link rel="stylesheet" href="assets/style.css?v=4">
 <script src="assets/chrome.js?v=3"></script>
 <script src="assets/terrain.js?v=3" defer></script>
 <script src="assets/app.js?v=3" defer></script>
@@ -30,33 +30,40 @@
         </div>
       </div>
 
-      <nav class="doors" aria-label="The three pillars">
-        <a class="door" href="ventures.html" data-tone="cobalt">
-          <span class="door-num">01</span>
-          <span class="door-body">
-            <span class="door-title">Ventures</span>
-            <span class="door-note">Investing in exceptional founders at critical growth stages.</span>
-          </span>
-          <bsh-icon name="arrow"></bsh-icon>
-        </a>
-        <a class="door" href="incubator.html" data-tone="poppy">
-          <span class="door-num">02</span>
-          <span class="door-body">
-            <span class="door-title">Incubator</span>
-            <span class="door-note">Co-developing consumer-first AI so more people can use it.</span>
-          </span>
-          <bsh-icon name="arrow"></bsh-icon>
-        </a>
-        <a class="door" href="foundation.html" data-tone="gold">
-          <span class="door-num">03</span>
-          <span class="door-body">
-            <span class="door-title">Foundation</span>
-            <span class="door-note">Community, capital and resources for leaders aged 15 to 35.</span>
-          </span>
-          <bsh-icon name="arrow"></bsh-icon>
-        </a>
-        <div class="door-foot">
-          <a href="story.html">The house · our story <bsh-icon name="arrow"></bsh-icon></a>
+      <!-- The BSH mark, one peak per pillar. The pins are the links; the
+           mountain regions repeat them for pointer users and light up in
+           the pillar's color. -->
+      <nav class="summit" aria-label="The three pillars">
+        <div class="summit-art">
+          <svg class="summit-mark" viewBox="0 -2 101 67" aria-hidden="true" focusable="false">
+            <defs>
+              <clipPath id="clip-ventures"><rect x="-1" y="-3" width="76" height="70"/></clipPath>
+              <clipPath id="clip-incubator"><rect x="75" y="-3" width="30" height="70"/></clipPath>
+            </defs>
+            <path class="summit-base" d="M54.2302 10.179L73.2761 44.8541C73.974 46.119 75.5732 46.5843 76.8381 45.8573L89.6323 38.5733C91.0426 37.7737 92.8309 38.4425 93.3688 39.9836L100.609 60.876C101.191 62.5625 99.9404 64.3217 98.1521 64.3217H38.9499C37.2488 64.3217 36.013 62.7224 36.4346 61.0795L49.4469 10.7751C50.0285 8.49246 53.1107 8.11445 54.2302 10.179Z"/>
+            <path class="summit-base" d="M36.202 40.3179L29.0925 62.5333C28.7436 63.6091 27.755 64.3361 26.6209 64.3361H3.48961C0.974389 64.3361 -0.0724086 61.1375 1.94849 59.6546L32.1893 37.4392C34.2102 35.9562 36.9726 37.9335 36.202 40.3179Z"/>
+            <a class="region region--ventures" href="ventures.html" tabindex="-1"><path d="M54.2302 10.179L73.2761 44.8541C73.974 46.119 75.5732 46.5843 76.8381 45.8573L89.6323 38.5733C91.0426 37.7737 92.8309 38.4425 93.3688 39.9836L100.609 60.876C101.191 62.5625 99.9404 64.3217 98.1521 64.3217H38.9499C37.2488 64.3217 36.013 62.7224 36.4346 61.0795L49.4469 10.7751C50.0285 8.49246 53.1107 8.11445 54.2302 10.179Z" clip-path="url(#clip-ventures)"/></a>
+            <a class="region region--incubator" href="incubator.html" tabindex="-1"><path d="M54.2302 10.179L73.2761 44.8541C73.974 46.119 75.5732 46.5843 76.8381 45.8573L89.6323 38.5733C91.0426 37.7737 92.8309 38.4425 93.3688 39.9836L100.609 60.876C101.191 62.5625 99.9404 64.3217 98.1521 64.3217H38.9499C37.2488 64.3217 36.013 62.7224 36.4346 61.0795L49.4469 10.7751C50.0285 8.49246 53.1107 8.11445 54.2302 10.179Z" clip-path="url(#clip-incubator)"/></a>
+            <a class="region region--foundation" href="foundation.html" tabindex="-1"><path d="M36.202 40.3179L29.0925 62.5333C28.7436 63.6091 27.755 64.3361 26.6209 64.3361H3.48961C0.974389 64.3361 -0.0724086 61.1375 1.94849 59.6546L32.1893 37.4392C34.2102 35.9562 36.9726 37.9335 36.202 40.3179Z"/></a>
+          </svg>
+          <a class="pin pin--ventures" data-tone="cobalt" href="ventures.html" style="left:51.4%;top:16.1%">
+            <span class="peak-card"><span class="peak-name">Ventures <bsh-icon name="arrow"></bsh-icon></span><span class="peak-note">Human-centered AI</span></span>
+            <span class="pin-stem" aria-hidden="true"></span>
+            <span class="pin-dot" aria-hidden="true"></span>
+          </a>
+          <a class="pin pin--incubator pin--end" data-tone="poppy" href="incubator.html" style="left:90.5%;top:60.1%">
+            <span class="peak-card"><span class="peak-name">Incubator <bsh-icon name="arrow"></bsh-icon></span><span class="peak-note">Consumer-first AI</span></span>
+            <span class="pin-stem" aria-hidden="true"></span>
+            <span class="pin-dot" aria-hidden="true"></span>
+          </a>
+          <a class="pin pin--foundation" data-tone="gold" href="foundation.html" style="left:34%;top:58.7%">
+            <span class="peak-card"><span class="peak-name">Foundation <bsh-icon name="arrow"></bsh-icon></span><span class="peak-note">Ages 15 to 35</span></span>
+            <span class="pin-stem" aria-hidden="true"></span>
+            <span class="pin-dot" aria-hidden="true"></span>
+          </a>
+        </div>
+        <div class="summit-ground">
+          <a href="story.html"><i class="tri" aria-hidden="true"></i>The House · Our story <bsh-icon name="arrow"></bsh-icon></a>
           <a href="events.html">Events <bsh-icon name="arrow"></bsh-icon></a>
         </div>
       </nav>
