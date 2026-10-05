@@ -43,10 +43,7 @@
 /* 2 · Fields ---------------------------------------------------------------
    A field is a surface plus everything that sits on it. Components only read
    these variables, so any block can sit on any field. */
-.f-paper, .f-stone, .f-night, .f-cobalt, .f-poppy, .f-gold {
-  background: var(--bg);
-  color: var(--fg);
-}
+.f-paper, .f-stone, .f-night, .f-cobalt, .f-poppy, .f-gold { background: var(--bg); color: var(--fg); }
 :root, .f-paper, .f-stone {
   --bg: var(--paper); --fg: var(--ink); --fg-2: var(--ink-2); --fg-3: var(--ink-3);
   --rule: var(--line); --rule-2: var(--line-2); --card: var(--stone);
@@ -118,7 +115,7 @@ ol, ul { padding: 0; list-style: none; }
 fieldset { border: 0; padding: 0; min-width: 0; }
 [hidden] { display: none !important; }
 :focus-visible { outline: 2px solid var(--cobalt); outline-offset: 3px; border-radius: 3px; }
-.f-cobalt :focus-visible, .f-night :focus-visible { outline-color: #FFF; }
+.f-cobalt :focus-visible, .f-night :focus-visible, .lightbox :focus-visible { outline-color: #FFF; }
 .f-poppy :focus-visible, .f-gold :focus-visible { outline-color: var(--fg); }
 ::selection { background: var(--gold); color: var(--ink); }
 .sr {
@@ -138,21 +135,11 @@ bsh-icon { display: inline-flex; }
 bsh-icon > .i { width: 100%; height: 100%; }
 
 /* 4 · Layout ---------------------------------------------------------------- */
-.wrap {
-  width: 100%;
-  max-width: var(--max);
-  margin-inline: auto;
-  padding-inline: var(--gut);
-}
+.wrap { width: 100%; max-width: var(--max); margin-inline: auto; padding-inline: var(--gut); }
 .sec { padding-block: clamp(80px, 10vw, 152px); position: relative; }
 .sec--tight { padding-block: clamp(56px, 7vw, 96px); }
 .sec--flush-top { padding-top: 0; }
-.sec-hd {
-  display: grid;
-  gap: 18px;
-  max-width: 820px;
-  margin-bottom: clamp(40px, 5vw, 72px);
-}
+.sec-hd { display: grid; gap: 18px; max-width: 820px; margin-bottom: clamp(40px, 5vw, 72px); }
 .sec-hd--row {
   display: flex;
   max-width: var(--max); /* it is also the .wrap on the home page */
@@ -162,17 +149,13 @@ bsh-icon > .i { width: 100%; height: 100%; }
   flex-wrap: wrap;
 }
 .sec-hd--row > :first-child { display: grid; gap: 18px; max-width: 760px; }
-.duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.duo, .ways, .programs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 @media (max-width: 900px) { .duo { grid-template-columns: 1fr; } }
 
 /* 5 · Type ------------------------------------------------------------------
    Funnel Display for headlines, Funnel Sans for reading, Geist Mono for the
    map-legend details: labels, dates, places and coordinates. */
-.d-xl, .d-l, .h2, .h3, .h4, .statement {
-  font-family: var(--display);
-  font-weight: 500;
-  color: var(--fg);
-}
+.d-xl, .d-l, .h2, .h3, .h4, .statement { font-family: var(--display); font-weight: 500; color: var(--fg); }
 .d-xl { font-size: clamp(46px, 7.4vw, 116px); line-height: .96; letter-spacing: -.04em; }
 .d-l { font-size: clamp(40px, 5.6vw, 84px); line-height: 1; letter-spacing: -.035em; }
 .h2 { font-size: clamp(34px, 4vw, 58px); line-height: 1.04; letter-spacing: -.03em; }
@@ -235,11 +218,7 @@ bsh-icon > .i { width: 100%; height: 100%; }
 .btn:hover .i, .link:hover .i, .summit-ground a:hover .i { transform: translateX(3px); }
 .btn:active { transform: scale(.98); }
 .btn:disabled { cursor: progress; }
-.btn-ghost {
-  background: transparent;
-  color: var(--fg);
-  box-shadow: inset 0 0 0 1px var(--rule-2);
-}
+.btn-ghost { background: transparent; color: var(--fg); box-shadow: inset 0 0 0 1px var(--rule-2); }
 .btn-ghost:hover { box-shadow: inset 0 0 0 1px var(--fg); }
 .btn-sm { min-height: 40px; padding: 0 18px; font-size: 15px; }
 .btn-lg { min-height: 58px; padding: 0 30px; font-size: 17px; }
@@ -281,16 +260,10 @@ bsh-icon > .i { width: 100%; height: 100%; }
   color: var(--fg-2);
   white-space: nowrap;
 }
-.badge .tri { width: 8px; height: 7px; }
+.badge .tri, .nav-link .tri { width: 8px; height: 7px; }
 
 /* Segmented filter */
-.seg {
-  display: inline-flex;
-  padding: 4px;
-  gap: 2px;
-  border-radius: calc(var(--r) + 4px);
-  background: var(--card);
-}
+.seg { display: inline-flex; padding: 4px; gap: 2px; border-radius: calc(var(--r) + 4px); background: var(--card); }
 .seg button {
   min-height: 38px;
   padding: 0 16px;
@@ -326,17 +299,9 @@ html.menu-open .hdr { transform: none; background: var(--paper); }
   margin-inline: auto;
   padding-inline: var(--gut);
 }
-.brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
-}
+.brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; }
 .brand-mark { width: 34px; flex: none; }
-.brand-name {
-  font: 600 17px/1 var(--display);
-  letter-spacing: -.015em;
-}
+.brand-name { font: 600 17px/1 var(--display); letter-spacing: -.015em; }
 .hdr-nav { margin-inline: auto; }
 .hdr-nav ul { display: flex; gap: 4px; }
 .nav-link {
@@ -352,7 +317,6 @@ html.menu-open .hdr { transform: none; background: var(--paper); }
   text-decoration: none;
   transition: color .2s, background-color .2s;
 }
-.nav-link .tri { width: 8px; height: 7px; }
 .nav-link[data-tone="ink"] .tri { display: none; }
 .nav-link:hover { color: var(--ink); background: var(--stone); }
 .nav-link[aria-current="page"] { color: var(--ink); }
@@ -513,20 +477,12 @@ html.menu-open .hdr { transform: none; background: var(--paper); }
   .ftr-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .ftr-brand { grid-column: 1 / -1; }
 }
-@media (max-width: 520px) {
-  .ftr-grid { grid-template-columns: 1fr; }
-}
+@media (max-width: 520px) { .ftr-grid { grid-template-columns: 1fr; } }
 
 /* 9 · Terrain ---------------------------------------------------------------
    Every terrain canvas fills its positioned wrap; terrain.js draws its lines
    in the canvas's color. */
-canvas[data-terrain] {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  color: var(--terrain);
-}
+canvas[data-terrain] { position: absolute; inset: 0; width: 100%; height: 100%; color: var(--terrain); }
 
 /* 10 · Home -----------------------------------------------------------------
    The hero's right half is the BSH mark, one peak per pillar: Ventures on the
@@ -561,13 +517,10 @@ canvas[data-terrain] {
 }
 @keyframes summit-rise { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0); } }
 .summit-base { fill: var(--ink); }
-.region path { fill: transparent; transition: fill .35s var(--ease); }
-.region:hover path,
-.summit:has(.pin--ventures:is(:hover, :focus-visible)) .region--ventures path { fill: var(--cobalt); }
-.summit:has(.pin--incubator:is(:hover, :focus-visible)) .region--incubator path,
-.region--incubator:hover path { fill: var(--poppy); }
-.summit:has(.pin--foundation:is(:hover, :focus-visible)) .region--foundation path,
-.region--foundation:hover path { fill: var(--gold); }
+.region { fill: transparent; transition: fill .35s var(--ease); }
+.region--ventures:hover, .summit:has(.pin--ventures:is(:hover, :focus-visible)) .region--ventures { fill: var(--cobalt); }
+.region--incubator:hover, .summit:has(.pin--incubator:is(:hover, :focus-visible)) .region--incubator { fill: var(--poppy); }
+.region--foundation:hover, .summit:has(.pin--foundation:is(:hover, :focus-visible)) .region--foundation { fill: var(--gold); }
 
 /* A pin: legend card, stem, and a ringed dot planted on the peak. */
 .pin {
@@ -611,13 +564,7 @@ canvas[data-terrain] {
   white-space: nowrap;
   transition: box-shadow .25s;
 }
-.peak-name {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font: 500 16px/1.2 var(--display);
-  letter-spacing: -.01em;
-}
+.peak-name { display: flex; align-items: center; gap: 8px; font: 500 16px/1.2 var(--display); letter-spacing: -.01em; }
 .peak-name .i { width: 15px; height: 15px; color: var(--ink-3); transition: transform .3s var(--ease), color .2s; }
 .peak-note { font: 500 11px/1.3 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
 .pin:hover .peak-card, .summit:has(.region--ventures:hover) .pin--ventures .peak-card,
@@ -625,7 +572,7 @@ canvas[data-terrain] {
 .summit:has(.region--foundation:hover) .pin--foundation .peak-card {
   box-shadow: 0 0 0 1.5px var(--tone), 0 14px 28px -14px rgb(19 20 23 / .45);
 }
-.pin:hover .peak-name .i { transform: translateX(3px); color: var(--ink); }
+.pin:hover .peak-name .i, .trail a:hover .i { transform: translateX(3px); color: var(--ink); }
 
 .summit-ground {
   display: flex;
@@ -658,9 +605,7 @@ canvas[data-terrain] {
   .pin--foundation .pin-stem { height: 58px; }
   .pin--foundation .peak-card { translate: -30% 0; }
 }
-@media (max-width: 300px) {
-  .pin--incubator .pin-stem { height: 18px; }
-}
+@media (max-width: 300px) { .pin--incubator .pin-stem { height: 18px; } }
 
 /* Pillars */
 .pillars { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
@@ -680,20 +625,9 @@ canvas[data-terrain] {
 .pillar .label { color: var(--fg); }
 .pillar-title { font: 500 clamp(30px, 2.8vw, 40px)/1.04 var(--display); letter-spacing: -.03em; text-wrap: balance; }
 .pillar-copy { color: var(--fg-2); max-width: 26em; }
-.pillar-go {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 500;
-  margin-top: 4px;
-}
+.pillar-go { display: inline-flex; align-items: center; gap: 8px; font-weight: 500; margin-top: 4px; }
 .pillar:hover .pillar-go .i { transform: translateX(4px); }
-.pillar-photo {
-  margin-top: auto;
-  border-radius: 8px;
-  overflow: hidden;
-  aspect-ratio: 4 / 3;
-}
+.pillar-photo { margin-top: auto; border-radius: 8px; overflow: hidden; aspect-ratio: 4 / 3; }
 .pillar-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
 .pillar:hover .pillar-photo img { transform: scale(1.045); }
 @media (max-width: 1020px) {
@@ -701,10 +635,6 @@ canvas[data-terrain] {
   .pillar { min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 32px; align-content: start; }
   .pillar > :not(.pillar-photo, canvas) { grid-column: 1; }
   .pillar-photo { grid-column: 2; grid-row: 1 / span 5; margin-top: 0; aspect-ratio: auto; min-height: 100%; }
-}
-@media (max-width: 640px) {
-  .pillar { display: flex; }
-  .pillar-photo { aspect-ratio: 16 / 10; margin-top: 8px; min-height: 0; }
 }
 
 /* Find your way in */
@@ -774,7 +704,6 @@ canvas[data-terrain] {
 .trail b { font: 500 20px/1.2 var(--display); letter-spacing: -.01em; }
 .trail span.what { grid-column: 2; color: var(--ink-2); font-size: 15.5px; line-height: 1.45; }
 .trail .i { grid-row: 1 / span 2; grid-column: 3; color: var(--ink-3); transition: transform .3s var(--ease), color .2s; }
-.trail a:hover .i { transform: translateX(3px); color: var(--ink); }
 .trail a:hover b { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
 @media (max-width: 900px) {
   .router { grid-template-columns: 1fr; }
@@ -821,7 +750,7 @@ canvas[data-terrain] {
 .strip::-webkit-scrollbar { display: none; }
 .strip > li { flex: none; width: clamp(260px, 30vw, 440px); scroll-snap-align: start; }
 .strip > li:nth-child(even) { margin-top: clamp(0px, 4vw, 56px); }
-.strip figure { display: grid; gap: 14px; }
+.strip figure, .band figure { display: grid; gap: 14px; }
 .strip img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 10px; background: var(--stone); }
 .strip figcaption { display: grid; gap: 4px; }
 .strip figcaption .mono, .names .mono, .album .mono { color: var(--fg-3); text-transform: uppercase; letter-spacing: .08em; font-size: 11.5px; }
@@ -829,6 +758,8 @@ canvas[data-terrain] {
 .strip-ctrl { display: flex; gap: 10px; align-items: center; }
 .strip-ctrl .link { margin-left: 12px; }
 @media (max-width: 640px) {
+  .pillar { display: flex; }
+  .pillar-photo { aspect-ratio: 16 / 10; margin-top: 8px; min-height: 0; }
   .strip > li { width: 78vw; }
   .strip > li:nth-child(even) { margin-top: 0; }
   .strip-ctrl .round-btn { display: none; }
@@ -842,11 +773,7 @@ canvas[data-terrain] {
 }
 
 /* 11 · Page heroes ---------------------------------------------------------- */
-.page-hero {
-  position: relative;
-  overflow: hidden;
-  padding-block: clamp(72px, 9vw, 132px) clamp(56px, 7vw, 104px);
-}
+.page-hero { position: relative; overflow: hidden; padding-block: clamp(72px, 9vw, 132px) clamp(56px, 7vw, 104px); }
 /* The land goes quiet behind the copy on the left and the facts along the bottom. */
 .page-hero canvas {
   mask-image: linear-gradient(90deg, rgb(0 0 0 / .25) 0, rgb(0 0 0 / .35) 40%, #000 72%), linear-gradient(180deg, #000 55%, rgb(0 0 0 / .3));
@@ -872,7 +799,6 @@ canvas[data-terrain] {
 }
 
 /* Photo band */
-.band figure { display: grid; gap: 14px; }
 .band img { width: 100%; aspect-ratio: 21 / 9; object-fit: cover; border-radius: var(--r-lg); }
 .band figcaption { color: var(--fg-3); }
 @media (max-width: 700px) { .band img { aspect-ratio: 4 / 3; } }
@@ -902,11 +828,7 @@ canvas[data-terrain] {
 .story-hero figcaption { margin-top: 12px; color: var(--fg-3); }
 @media (max-width: 860px) { .story-hero { grid-template-columns: 1fr; } .story-hero figure img { aspect-ratio: 4 / 3; } }
 
-.chapters {
-  display: grid;
-  grid-template-columns: 240px minmax(0, 1fr);
-  gap: clamp(32px, 7vw, 128px);
-}
+.chapters { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: clamp(32px, 7vw, 128px); }
 .rail { position: sticky; top: calc(var(--hdr) + 48px); align-self: start; }
 .rail ol { position: relative; display: grid; gap: 4px; padding-left: 22px; }
 .rail ol::before, .rail ol::after {
@@ -920,14 +842,7 @@ canvas[data-terrain] {
 }
 /* The progress line scales rather than grows, so following the reading costs no layout. */
 .rail ol::after { background: var(--ink); transform: scaleY(var(--p, 0)); transform-origin: top; transition: transform .2s linear; }
-.rail a {
-  display: grid;
-  gap: 2px;
-  padding: 8px 0;
-  color: var(--fg-3);
-  text-decoration: none;
-  transition: color .2s;
-}
+.rail a { display: grid; gap: 2px; padding: 8px 0; color: var(--fg-3); text-decoration: none; transition: color .2s; }
 .rail a .mono { font-size: 11.5px; letter-spacing: .08em; }
 .rail a b { font: 500 18px/1.2 var(--display); }
 .rail a[aria-current="true"], .rail a:hover { color: var(--fg); }
@@ -946,10 +861,6 @@ canvas[data-terrain] {
 .mission { margin-top: 24px; max-width: 15em; }
 .hl { background: linear-gradient(var(--gold), var(--gold)) 0 90% / 100% .12em no-repeat; }
 .born-year .tri { width: .14em; height: .12em; margin-top: .02em; background: var(--poppy); }
-@media (max-width: 860px) {
-  .chapters { grid-template-columns: minmax(0, 1fr); }
-  .rail { display: none; }
-}
 
 /* Ascent: the timeline climbs as the years go on. */
 .ascent { position: relative; }
@@ -964,6 +875,8 @@ canvas[data-terrain] {
 .ascent li:last-child .dot { --c: var(--gold); }
 .ascent p { color: var(--fg-2); max-width: 22em; }
 @media (max-width: 860px) {
+  .chapters { grid-template-columns: minmax(0, 1fr); }
+  .rail { display: none; }
   .ascent svg { display: none; }
   .ascent ol { grid-template-columns: 1fr; gap: 40px; border-left: 1.5px dashed var(--rule-2); padding-left: 24px; }
   .ascent li:nth-child(n) { padding-top: 0; }
@@ -983,16 +896,11 @@ canvas[data-terrain] {
 .value p { color: var(--fg-2); }
 
 /* 13 · Ventures ------------------------------------------------------------- */
-.ways { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .way { gap: 18px; }
 .way-num { font: 500 13px/1 var(--mono); color: var(--cobalt); letter-spacing: .08em; }
 .way p { color: var(--fg-2); max-width: 30em; }
 
-.figures {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  border-top: 1px solid var(--rule);
-}
+.figures { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--rule); }
 .figure { display: grid; gap: 10px; padding: 28px 24px 0 0; }
 .figure + .figure { padding-left: 24px; border-left: 1px solid var(--rule); }
 .figure b { font: 500 clamp(64px, 8vw, 120px)/.9 var(--display); letter-spacing: -.05em; color: var(--tone, var(--fg)); font-variant-numeric: tabular-nums; }
@@ -1034,11 +942,7 @@ canvas[data-terrain] {
 .areas { border-top: 1px solid var(--rule); }
 .area { border-bottom: 1px solid var(--rule); }
 /* The open body keeps to the summary's columns. */
-.area summary, .area-body {
-  display: grid;
-  grid-template-columns: 64px minmax(0, 1fr) minmax(0, 1fr) 48px;
-  gap: 16px;
-}
+.area summary, .area-body { display: grid; grid-template-columns: 64px minmax(0, 1fr) minmax(0, 1fr) 48px; gap: 16px; }
 .area summary { align-items: center; padding: 28px 0; cursor: pointer; list-style: none; }
 .area summary::-webkit-details-marker { display: none; }
 .area-num { font: 500 13px/1 var(--mono); color: var(--fg-3); letter-spacing: .08em; }
@@ -1121,7 +1025,6 @@ canvas[data-terrain] {
 .ruler li:last-child { justify-content: flex-end; }
 .ages .small { color: var(--fg-2); }
 
-.programs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .program {
   display: grid;
   grid-template-rows: auto 1fr;
@@ -1210,14 +1113,7 @@ canvas[data-terrain] {
 .peek img { width: 100%; height: 100%; object-fit: cover; }
 
 .albums { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 16px; }
-.album {
-  display: grid;
-  gap: 14px;
-  padding: 0;
-  border: 0;
-  background: none;
-  text-align: left;
-}
+.album { display: grid; gap: 14px; padding: 0; border: 0; background: none; text-align: left; }
 .album-media { position: relative; border-radius: 10px; overflow: hidden; aspect-ratio: 4 / 3; background: var(--stone); }
 .album-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.1s var(--ease); }
 .album:hover .album-media img { transform: scale(1.04); }
@@ -1254,13 +1150,8 @@ canvas[data-terrain] {
 .lightbox::backdrop { background: #0B0C0E; }
 /* The photo's floor is what the two bars (~180px) leave, between 140px and 240px, so landscape phones fit it all. */
 .lightbox[open] { display: grid; grid-template-rows: auto minmax(clamp(140px, 100dvh - 180px - env(safe-area-inset-top) - env(safe-area-inset-bottom), 240px), 1fr) auto; overflow-y: auto; animation: fade-up .3s var(--ease); }
-.lb-top, .lb-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: calc(14px + env(safe-area-inset-top)) var(--gut) 14px;
-}
+.lb-top, .lb-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.lb-top { padding: calc(14px + env(safe-area-inset-top)) var(--gut) 14px; }
 .lb-bar { padding: 16px var(--gut) calc(20px + env(safe-area-inset-bottom)); }
 .lb-top .mono { color: #9A9EA6; }
 .lb-stage { display: grid; grid-template-rows: minmax(0, 1fr); place-items: center; padding: 0 var(--gut); min-height: 0; }
@@ -1269,7 +1160,6 @@ canvas[data-terrain] {
 .lb-cap b { font: 500 19px/1.25 var(--display); }
 .lb-cap span { color: #9A9EA6; font-size: 14.5px; }
 .lb-ctrl { display: flex; gap: 10px; }
-.lightbox :focus-visible { outline-color: #FFF; }
 .lightbox .round-btn { border-color: #3A3D44; color: #FFF; }
 .lightbox .round-btn:hover { border-color: #FFF; }
 
@@ -1300,8 +1190,7 @@ canvas[data-terrain] {
 .join-contact { display: grid; gap: 10px; margin-top: auto; padding-top: 24px; border-top: 1px solid var(--rule); font-size: 15px; color: var(--fg-2); }
 .join-contact a { color: var(--fg); overflow-wrap: anywhere; }
 .join-main { display: grid; gap: 48px; padding-top: 12px; }
-.join-main .step-hd { display: flex; align-items: baseline; gap: 14px; margin-bottom: 20px; }
-.join-main legend { padding: 0; }
+.join-main .step-hd { display: flex; align-items: baseline; gap: 14px; margin-bottom: 20px; padding: 0; }
 .join-main .step-hd .mono { color: var(--fg-3); }
 .roles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .role { position: relative; display: block; }

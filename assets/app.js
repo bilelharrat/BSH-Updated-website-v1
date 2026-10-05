@@ -25,9 +25,8 @@
   if (hdr) {
     let lastY = scrollY;
     addEventListener('scroll', () => {
-      const y = scrollY;
-      if (!root.classList.contains('menu-open')) hdr.classList.toggle('is-hidden', y > lastY && y > 240);
-      lastY = y;
+      if (!root.classList.contains('menu-open')) hdr.classList.toggle('is-hidden', scrollY > lastY && scrollY > 240);
+      lastY = scrollY;
     }, { passive: true });
     hdr.addEventListener('focusin', () => hdr.classList.remove('is-hidden'));
   }
@@ -38,7 +37,6 @@
   if (menuBtn && menu) {
     const text = $('.hdr-menu-text', menuBtn);
     const setMenu = open => {
-      if (menu.hidden === !open) return; // already so: keep the photo viewer's scroll lock
       menuBtn.setAttribute('aria-expanded', open);
       text.textContent = open ? 'Close' : 'Menu';
       menu.hidden = !open;
@@ -48,9 +46,7 @@
       if (open) $('a', menu)?.focus();
     };
     menuBtn.addEventListener('click', () => setMenu(menu.hidden));
-    addEventListener('keydown', e => {
-      if (e.key === 'Escape' && !menu.hidden) { setMenu(false); menuBtn.focus(); }
-    });
+    addEventListener('keydown', e => { if (e.key === 'Escape' && !menu.hidden) { setMenu(false); menuBtn.focus(); } });
     // Widened past the menu, focus goes to the visible twin of its link, or home.
     matchMedia('(min-width: 1061px)').addEventListener('change', e => {
       if (!e.matches || menu.hidden) return;
@@ -65,10 +61,7 @@
     let timer;
     btn.addEventListener('click', async () => {
       try { await navigator.clipboard.writeText(btn.dataset.copy); }
-      catch {
-        getSelection().selectAllChildren(btn.previousElementSibling || btn);
-        return;
-      }
+      catch { return getSelection().selectAllChildren(btn.previousElementSibling || btn); }
       btn.classList.add('is-copied');
       btn.setAttribute('aria-label', 'Copied');
       clearTimeout(timer);
@@ -79,15 +72,10 @@
   /* Reveals: only blocks that start below the fold are held back. */
   if (!reduce.matches) {
     const io = new IntersectionObserver(entries => entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      e.target.classList.add('in');
-      io.unobserve(e.target);
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
     }), { rootMargin: '0px 0px -8% 0px', threshold: .08 });
     // Every read before any write.
-    $$('.rv').filter(el => el.getBoundingClientRect().top > innerHeight).forEach(el => {
-      el.classList.add('armed');
-      io.observe(el);
-    });
+    $$('.rv').filter(el => el.getBoundingClientRect().top > innerHeight).forEach(el => { el.classList.add('armed'); io.observe(el); });
   }
 
   /* Find your way in: pick who you are, see where to start. */
@@ -192,11 +180,9 @@
       const btn = e.target.closest('button');
       if (!btn) return;
       btns.forEach(b => b.setAttribute('aria-pressed', b === btn));
-      let shown = 0;
-      rows.forEach(r => {
-        r.hidden = btn.dataset.value !== 'all' && r.dataset.year !== btn.dataset.value;
-        if (!r.hidden) shown++;
-      });
+      const year = btn.dataset.value;
+      rows.forEach(r => { r.hidden = year !== 'all' && r.dataset.year !== year; });
+      const shown = rows.filter(r => !r.hidden).length;
       if (count) count.textContent = `${shown} gathering${shown === 1 ? '' : 's'}`;
     });
   }
@@ -231,24 +217,23 @@
     const meta = $('[data-lb-meta]', lb);
     const pos = $('[data-lb-pos]', lb);
     const steps = $$('[data-lb-step]', lb);
-    let album = null, i = 0, opener = null;
+    let album, i = 0, opener;
     // Each photo is its own <img>, kept once fetched, and both neighbours are
     // fetched ahead. Reusing one <img> left the last photo beside a new
     // caption until the next file arrived. An entry's optional third item
     // lists the smaller files beside the 1600px one, so phones fetch less.
     const photos = new Map();
     const photo = ([src, , ws]) => {
-      if (!photos.has(src)) {
-        const p = new Image();
-        p.onerror = () => photos.delete(src); // try again next time
-        if (ws) {
-          p.sizes = 'min(100vw, 1600px)';
-          p.srcset = [...ws, 1600].map(w => `${src.replace('-1600.', `-${w}.`)} ${w}w`).join();
-        }
-        p.src = src;
-        photos.set(src, p);
+      if (photos.has(src)) return photos.get(src);
+      const p = new Image();
+      p.onerror = () => photos.delete(src); // try again next time
+      if (ws) {
+        p.sizes = 'min(100vw, 1600px)';
+        p.srcset = [...ws, 1600].map(w => `${src.replace('-1600.', `-${w}.`)} ${w}w`).join();
       }
-      return photos.get(src);
+      p.src = src;
+      photos.set(src, p);
+      return p;
     };
     const show = () => {
       const n = album.photos.length;
@@ -358,10 +343,6 @@
       if (on) { btn.setAttribute('aria-busy', 'true'); btn.textContent = 'Sending…'; }
       else { btn.removeAttribute('aria-busy'); btn.replaceChildren(...idle); }
     };
-    // True on a 2xx; false on any other status, a network error or 15s of silence.
-    const send = url => fetch(url, {
-      method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(15000),
-    }).then(res => res.ok, () => false);
 
     const alertBox = $('#form-alert', form);
     const say = msg => { alertBox.hidden = false; alertBox.lastElementChild.textContent = msg; };
@@ -386,7 +367,10 @@
       // Only bots fill the hidden _gotcha field: thank them and send nothing.
       if (url && !form.elements._gotcha.value) {
         busy(true);
-        const ok = await send(url);
+        // True on a 2xx; false on any other status, a network error or 15s of silence.
+        const ok = await fetch(url, {
+          method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(15000),
+        }).then(res => res.ok, () => false);
         busy(false);
         if (!ok) {
           say(`We couldn’t send your details. Check your connection and try again, or email ${window.BSH?.EMAIL ?? 'founders@berkeleysummithouse.org'}.`);

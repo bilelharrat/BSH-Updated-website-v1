@@ -36,20 +36,18 @@
     const perm = new Uint8Array(512).map((_, i) => p[i & 255]);
     const G = [1, 1, -1, 1, 1, -1, -1, -1, 1, 0, -1, 0, 0, 1, 0, -1];
     const F2 = 0.5 * (Math.sqrt(3) - 1), G2 = (3 - Math.sqrt(3)) / 6;
+    // One corner's share: its falloff t⁴ times its gradient (picked by hash h) · its offset.
+    const corner = (x, y, h) => {
+      const t = 0.5 - x * x - y * y, g = (h & 7) * 2;
+      return t > 0 ? t * t * (t * t) * (G[g] * x + G[g + 1] * y) : 0;
+    };
     return (x, y) => {
       const s = (x + y) * F2, i = Math.floor(x + s), j = Math.floor(y + s), t = (i + j) * G2;
       const x0 = x - i + t, y0 = y - j + t;
       const i1 = x0 > y0 ? 1 : 0, j1 = 1 - i1;
       const x1 = x0 - i1 + G2, y1 = y0 - j1 + G2, x2 = x0 - 1 + 2 * G2, y2 = y0 - 1 + 2 * G2;
       const ii = i & 255, jj = j & 255;
-      let n = 0, g;
-      let t0 = 0.5 - x0 * x0 - y0 * y0;
-      if (t0 > 0) { g = (perm[ii + perm[jj]] & 7) * 2; t0 *= t0; n += t0 * t0 * (G[g] * x0 + G[g + 1] * y0); }
-      let t1 = 0.5 - x1 * x1 - y1 * y1;
-      if (t1 > 0) { g = (perm[ii + i1 + perm[jj + j1]] & 7) * 2; t1 *= t1; n += t1 * t1 * (G[g] * x1 + G[g + 1] * y1); }
-      let t2 = 0.5 - x2 * x2 - y2 * y2;
-      if (t2 > 0) { g = (perm[ii + 1 + perm[jj + 1]] & 7) * 2; t2 *= t2; n += t2 * t2 * (G[g] * x2 + G[g + 1] * y2); }
-      return 70 * n;
+      return 70 * (corner(x0, y0, perm[ii + perm[jj]]) + corner(x1, y1, perm[ii + i1 + perm[jj + j1]]) + corner(x2, y2, perm[ii + 1 + perm[jj + 1]]));
     };
   }
 
@@ -117,7 +115,7 @@
     resize({ width: w, height: h }) {
       const { c, ctx } = this, dpr = Math.min(devicePixelRatio || 1, 2);
       if (!w || !h || (w === this.w && h === this.h && dpr === this.dpr)) return;
-      this.dpr = dpr;
+      Object.assign(this, { w, h, dpr });
       c.width = Math.round(w * dpr);
       c.height = Math.round(h * dpr);
       // Resizing the canvas resets its context, so the fixed styles go here.
@@ -129,8 +127,6 @@
       this.majorAlpha = parseFloat(cs.getPropertyValue('--t-major')) || 0.62;
       const cell = this.cell = w < 700 ? 7 : 9;
       const cols = this.cols = Math.ceil(w / cell) + 1, rows = this.rows = Math.ceil(h / cell) + 1;
-      this.w = w;
-      this.h = h;
       this.field = new Float32Array(cols * rows);
       // The peaks stay put while the noise drifts: sum them once per size, not per frame.
       const S = Math.max(w, h);
@@ -191,12 +187,8 @@
         }
       }
       ctx.clearRect(0, 0, this.w, this.h);
-      ctx.globalAlpha = this.minorAlpha;
-      ctx.lineWidth = 0.9;
-      ctx.stroke(minor);
-      ctx.globalAlpha = this.majorAlpha;
-      ctx.lineWidth = 1.5;
-      ctx.stroke(major);
+      ctx.globalAlpha = this.minorAlpha; ctx.lineWidth = 0.9; ctx.stroke(minor);
+      ctx.globalAlpha = this.majorAlpha; ctx.lineWidth = 1.5; ctx.stroke(major);
     }
 
     get live() { return this.visible && !document.hidden && !reduce.matches && !root.classList.contains('menu-open'); }

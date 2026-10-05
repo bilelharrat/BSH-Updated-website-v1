@@ -348,9 +348,9 @@ test.describe('round 2', () => {
     await context.close();
   });
 
-  test('the foundation ages read "15 to 35" to screen readers', async ({ page }) => {
+  test('the foundation ages read "Ages 15 to 35" to screen readers', async ({ page }) => {
     await page.goto('foundation.html');
-    await expect(page.locator('.ages-range')).toMatchAriaSnapshot('- paragraph: 15 to 35');
+    await expect(page.locator('.ages-range')).toMatchAriaSnapshot('- paragraph: Ages 15 to 35');
   });
 });
 
